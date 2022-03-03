@@ -5,6 +5,7 @@ const MONGODB_URL = ''
 const path = require('path');
 const multer = require('multer');
 
+//For WINDOWS image handling
 const { v4: uuidv4 } = require('uuid');
  
 const storage = multer.diskStorage({
@@ -25,7 +26,9 @@ const fileFilter = (req, file, cb) => {
     }
 }
 
-const feedRoutes = require('./routes/feed');
+const inventoryRoutes = require('./routes/inventory');
+const adminRoutes = require('./routes/admin');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 
@@ -43,7 +46,9 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/feed', feedRoutes);
+app.use('/inventory', inventoryRoutes);
+app.use('/admin', adminRoutes);
+app.use('/auth', authRoutes);
 
 app.use((error, req, res, next ) => {
     console.log(error);
