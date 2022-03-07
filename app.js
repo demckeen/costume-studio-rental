@@ -1,9 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
-
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
+
+const mongoose = require('mongoose');
+const MONGODB_URL = 'mongodb+srv://costume_studio_admin:bPiLgHostqBFVRoJ@costume-studio-rentals.aozvg.mongodb.net/test'
 const path = require('path');
 const multer = require('multer');
 
