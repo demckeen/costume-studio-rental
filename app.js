@@ -1,5 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const swaggerUI = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
+
 const mongoose = require('mongoose');
 const MONGODB_URL = 'mongodb+srv://costume_studio_admin:bPiLgHostqBFVRoJ@costume-studio-rentals.aozvg.mongodb.net/test'
 const path = require('path');
@@ -26,11 +29,34 @@ const fileFilter = (req, file, cb) => {
     }
 }
 
+// Swagger set up
+const options = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "Costume Studio Rentals API",
+            version: "1.0.0",
+            description: "A simple app to view and rent costumes."
+        },
+        servers: [
+            {
+                url: "http://localhost:8080"
+            }
+        ],
+    },
+    apis: ["./routes/*.js"]
+};
+
+const specs = swaggerJsDoc(options);
+
 const inventoryRoutes = require('./routes/inventory');
 const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
 
 const app = express();
+
+//view api contract at localhost:8080/api-docs
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 // app.use(bodyParser.urlencoded()); // x-www-form-urlencoded <form>
 app.use(bodyParser.json()); // application/json
