@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const mongoose = require('mongoose');
-//const MONGODB_URL = ''
+
+
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const path = require('path');
@@ -82,9 +82,7 @@ app.use((error, req, res, next ) => {
     res.status(status).json({message: message});
 })
 
-// mongoose.connect(MONGODB_URL)
-//     .then(result => {
-// app.listen(8080)})
-//     .catch(err => console.log(err))
-
-app.listen(8080);
+mongoose.connect(MONGODB_URL)
+    .then(result => {
+app.listen(8080)})
+    .catch(err => console.log(err))
