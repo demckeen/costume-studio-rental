@@ -1,9 +1,13 @@
 const express = require('express');
-const {body, check} = require('express-validator');
- 
+const {
+    body,
+    check
+} = require('express-validator');
+
 const inventoryController = require('../controllers/inventory');
 
 const router = express.Router();
+
 
 /**
  * Define a schema for inventory
