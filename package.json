@@ -1,6 +1,7 @@
-{ "name": "costume-studio-rental",
+{
+  "name": "costume-studio-rental",
   "description": "REST API project for costume inventory management - CSE341 Project",
-  "main":"app.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js"
@@ -9,8 +10,14 @@
     "type": "git",
     "url": ""
   },
-  "author": {"name":"Kate Clark","name2":"Jen Lebaron","name3":"Dana McKeen","name4":"Hailey Mundt",
-    "name5":"Jamie Peck","name6":"Jennifer Thomas"},
+  "author": {
+    "name": "Kate Clark",
+    "name2": "Jen Lebaron",
+    "name3": "Dana McKeen",
+    "name4": "Hailey Mundt",
+    "name5": "Jamie Peck",
+    "name6": "Jennifer Thomas"
+  },
   "dependencies": {
     "body-parser": "^1.19.2",
     "express": "^4.17.3",
