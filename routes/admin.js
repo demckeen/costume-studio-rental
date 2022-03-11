@@ -208,6 +208,25 @@ const router = express.Router();
  *                  description: There was a server error
  */
 
+/**
+ * DELETE routes
+ * @swagger
+ * 
+ * admin/delete-costume/{costumeId}:
+ *      delete:
+ *          summary: delete costume that admin has created by id
+ *          tags: [Admin]
+ *          responses:
+ *              204:
+ *                  description: Deleted
+ *              404:
+ *                  description: id not found
+ *              401:
+ *                  description: Unauthorized
+ *              500:
+ *                  description: there was a server error
+ * 
+ */
 //Place routes here
 
 
