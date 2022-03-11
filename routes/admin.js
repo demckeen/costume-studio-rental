@@ -5,51 +5,72 @@ const adminController = require('../controllers/admin');
 
 const router = express.Router();
 /**
- * Define a schema for inventory
+ * Define a schema for Rentals
  * @swagger
  * components:
  *  schemas:
- *      Costume:
+ *      Rentals:
  *          type: object
  *          required:
- *              -category
- *              -costumeName
- *              -rentalFee
- *              -size
- *              -image
- *              -description
+ *              -orderId
+ *              -orderDate
+ *              -userId
+ *              -rentals
  *          properties:
- *              id:
+ *              orderId:
  *                  type: String
- *                  description: The auto-generated id of the costume
- *              category:
+ *                  description: The auto-generated id of the order
+ *              orderDate:
+ *                  type: Date
+ *                  description: date the order was placed
+ *              userId:
  *                  type: String
- *                  description: The costume category
+ *                  description: id of user who placed the order
+ *              rentals:
+ *                  type: Array
+ *                  description: list of rentals in order
+ *          example:
+ *              orderId: 4367489
+ *              orderDate: 10/31/2022
+ *              userId: 4326
+ *              rentals: [Gandalf the Grey, Tin Man, Queen Elizabeth]          
+ */
+
+/**
+ * Define a schema for Rental
+ * @swagger
+ * components:
+ *  schemas:
+ *      Rental:
+ *          type: object
+ *          required:
+ *              -rentalId
+ *              -returnDate
+ *              -userId
+ *              -costumeId
+ *              -costumeName
+ *          properties:
+ *              rentalId:
+ *                  type: String
+ *                  description: The auto-generated id of the rental
+ *              returnDate:
+ *                  type: Date
+ *                  description: date the order was placed
+ *              userId:
+ *                  type: String
+ *                  description: id of user who has the rental
+ *              costumeId:
+ *                  type: String
+ *                  description: id of costume in rental
  *              costumeName:
  *                  type: String
- *                  description: The costume name
- *              rentalFee:
- *                  type: Number
- *                  description: The fee for costume rental
- *              size:
- *                  type: String
- *                  description: The costume size
- *              image:
- *                  type: String
- *                  description: The image URL
- *              description:
- *                  type: String
- *                  description: The costume description
+ *                  description: name of the costume in rental
  *          example:
- *              id: 43256
- *              category: Fantasy
- *              costumeName: Gandalf the Grey
- *              rentalFee: 50.00
- *              size: Adult Medium
- *              image: https://unsplash.com/photos/jXl5-4pia3U
- *              description: Summon your inner wizard with this realistic version of Gandalf's Costume.         
- *                  
- *          
+ *              rentalId: 94830495
+ *              returnDate: 11/31/2022
+ *              userId: 4326
+ *              costumeId: 43256
+ *              costumeName: Gandalf the Grey      
  */
 
 /**
