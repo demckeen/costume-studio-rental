@@ -216,6 +216,13 @@ const router = express.Router();
  *      delete:
  *          summary: delete costume that admin has created by id
  *          tags: [Admin]
+ *          parameters:
+ *            - in: path
+ *              name: costumeId
+ *              schema:
+ *                  type: string
+ *              required: true
+ *              description: This is the costume id
  *          responses:
  *              204:
  *                  description: Deleted
