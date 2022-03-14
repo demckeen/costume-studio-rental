@@ -1,5 +1,5 @@
-const express = require('express');
 const path = require('path');
+const express = require('express');
 const {body, check} = require('express-validator');
  
 const adminController = require('../controllers/admin');
@@ -15,28 +15,28 @@ router.get('/costumes', isAuth, adminController.getCostumes);
 
 // /admin/add-costume => POST
 router.post(
-  '/add-costume',
-  [
-    body('category')
-      .isString()
-      .isLength({ min: 3 })
-      .trim(),
-    body('costumeName')
-      .isString()
-      .isLength({ min: 3 })
-      .trim(),
-    body('rentalFee').isFloat(),
-    body('size')
-        .isString()
-        .isLength({ min: 1 })
-        .trim(),
-    body('image').isURL(),
-    body('description')
-      .isLength({ min: 5, max: 400 })
-      .trim()
-  ],
-  isAuth,
-  adminController.postAddCostume
+	'/add-costume',
+	[
+	body('category')
+		.isString()
+		.isLength({ min: 3 })
+		.trim(),
+	body('costumeName')
+		.isString()
+		.isLength({ min: 3 })
+		.trim(),
+	body('rentalFee').isFloat(),
+	body('size')
+		.isString()
+		.isLength({ min: 1 })
+		.trim(),
+	body('image').isURL(),
+	body('description')
+		.isLength({ min: 5, max: 400 })
+		.trim()
+	],
+	isAuth,
+	adminController.postAddCostume
 );
 
 // /admin/edit-costume/:costumeId => GET
@@ -44,28 +44,28 @@ router.get('/edit-costume/:costumeId', isAuth, adminController.getEditCostume);
 
 // /admin/edit-costume => POST
 router.post(
-  '/edit-costume',
-  [
+	'/edit-costume',
+	[
 	body('category')
-      .isString()
-      .isLength({ min: 3 })
-      .trim(),
-    body('costumeName')
-      .isString()
-      .isLength({ min: 3 })
-      .trim(),
-    body('rentalFee').isFloat(),
-    body('size')
-        .isString()
-        .isLength({ min: 1 })
-        .trim(),
-    body('image').isURL(),
-    body('description')
-      .isLength({ min: 5, max: 400 })
-      .trim()
-  ],
-  isAuth,
-  adminController.postEditCostume
+		.isString()
+		.isLength({ min: 3 })
+		.trim(),
+	body('costumeName')
+		.isString()
+		.isLength({ min: 3 })
+		.trim(),
+	body('rentalFee').isFloat(),
+	body('size')
+		.isString()
+		.isLength({ min: 1 })
+		.trim(),
+	body('image').isURL(),
+	body('description')
+		.isLength({ min: 5, max: 400 })
+		.trim()
+	],
+	isAuth,
+	adminController.postEditCostume
 );
 
 // /admin/delete-costume => POST
