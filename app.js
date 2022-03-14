@@ -49,7 +49,7 @@ const options = {
 
 const specs = swaggerJsDoc(options);
 
-const inventoryRoutes = require('./routes/inventory');
+const inventoryRoutes = require('./routes/costume');
 const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
 
