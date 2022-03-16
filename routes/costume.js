@@ -267,5 +267,11 @@ router.get('/orders/:orderId', isAuth, inventoryController.getInvoice);
 
 //Place routes here
 
+//Post routes
+router.post('/cart', isAuth, inventoryController.postCart);
+router.post('/cancel-rental', isAuth, inventoryController.postCartDeleteProduct);
+router.post('/create-rental', isAuth, inventoryController.postOrder);
+router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
+
 
 module.exports = router;
