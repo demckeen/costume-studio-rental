@@ -73,34 +73,16 @@ exports.login = async (req, res, next) => {
   }
 }
 
-exports.postLogout = (req, res, next) => {
-  req.session.destroy(err => {
-    console.log(err);
-    res.redirect('/');
-  });
-};
-
-exports.getReset = (req, res, next) => {
-  let message = req.flash('error');
-  if (message.length > 0) {
-    message = message[0];
-  } else {
-    message = null;
-  }
-  res.render('auth/reset', {
-    path: '/reset',
-    pageTitle: 'Reset Password',
-    errorMessage: message
-  });
-};
+// Add to blacklist? 
+// https://medium.com/devgorilla/how-to-log-out-when-using-jwt-a8c7823e8a6
+// exports.postLogout = (req, res, next) => {
+//   req.session.destroy(err => {
+//     console.log(err);
+//     res.redirect('/');
+//   });
+// };
 
 exports.postReset = async (req, res, next) => {
-  crypto.randomBytes(32, (err, buffer) => {
-    if (err) {
-      console.log(err);
-      return res.redirect('/reset');
-    }
-    const token = buffer.toString('hex');
     try {
       const user = await User.findOne({email: req.body.email});
       if (!user) {
@@ -108,72 +90,73 @@ exports.postReset = async (req, res, next) => {
         error.statusCode = 404;
         throw error;
       } 
-      user.resetToken = token;
-      user.resetTokenExpiration = Date.now() + 3600000;
+      const currentPass = user.password;
+      const token = jwt.sign(
+        { 
+          email: loadedUser.email, 
+          userId: loadedUser._id.toString()
+        }, 
+        `secretpasswordsauce${currentPass}`, 
+        { expiresIn: '20m' }
+      );
 
-      await user.save();
-      res.redirect(`/reset/${token}`);
+      //send email? link provided will be http://localhost:3000/reset/${token}
+
+      res.status(200).json({ message: 'Password reset request authorized', userId: loadedUser._id.toString() });
     } catch (err) {
       if (!err.statusCode) {
         err.statusCode = 500;
       }
       next(err);
     }
-  });
-};
-
-exports.getNewPassword = async (req, res, next) => {
-  const token = req.params.token;
-
-  try {
-    const user = await User.findOne({resetToken: token, resetTokenExpiration: {$gt: Date.now()}});
-      let message = req.flash('error');
-      if (message.length > 0) {
-        message = message[0];
-      } else {
-        message = null;
-      }
-      // if (!user) {
-      //   const error = new Error('User not found.');
-      //   error.statusCode = 404;
-      //   throw error;
-      // } 
-      res.render('auth/new-password', {
-        path: '/new-password',
-        pageTitle: 'New Password',
-        errorMessage: message,
-        userId: user._id.toString(),
-        passwordToken: token
-      });
-  } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
   }
-};
+
+//prior to rendering reset password form, frontend is verifying status of url parameter, :tokenId
+exports.isPassLinkAuth = async (req, res, next) => {
+  const token = tokenId;
+  const userId  = await jwt.decode(token.userId);
+  
+  try {
+    const passUser = await User.findById(userId);
+    if(!passUser) {
+      const error = new Error('No user found.');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const currentPass = passUser.password;
+    const decodedToken = jwt.verify(token, `secretpasswordsauce${currentPass}`)
+    if(!decodedToken) {
+      const error = new Error('Not authenticated.');
+      error.statusCode = 401;
+      throw error;
+    }
+
+    //authentication reply allows frontend to render "set password" form with added layer of security
+    res.status(200).json({message: 'User authenticated.', userId: req.userId.toString()})}
+    
+    catch {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    }
+  };
 
 exports.postNewPassword = async (req, res, next) => {
   const newPassword = req.body.password;
   const userId = req.body.userId;
-  const passwordToken = req.body.passwordToken;
-  let resetUser;
 
   try {
-    const user = await User.findOne({
-      resetToken: passwordToken, 
-      resetTokenExpiration: { $gt: Date.now() },
+    const resetUser = await User.findOne({
       _id: userId
     });
-    resetUser = user;
 
     const hashedPassword = await bcrypt.hash(newPassword, 12);
     resetUser.password = hashedPassword;
-    resetUser.resetToken = undefined;
-    resetUser.resetTokenExpiration = undefined;
 
     await resetUser.save();
-    res.redirect('/login');
+    res.status(200).json({ message: 'Password reset successfully', userId: resetUser._id.toString() });
   } catch {
     if (!err.statusCode) {
       err.statusCode = 500;

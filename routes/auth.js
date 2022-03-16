@@ -3,6 +3,8 @@ const {body, check} = require('express-validator');
  
 const User = require('../models/user');
 const authController = require('../controllers/auth');
+const isAuth = require('../middleware/is-auth');
+const isPassAuth = require('../middleware/is-pass-auth');
 
 const router = express.Router();
 
@@ -191,14 +193,13 @@ router.post('/login',
   ],
   authController.login);
 
-router.post('/logout', authController.postLogout);
+// commenting out unless we want to handle blacklisting jwt
+// router.post('/logout', authController.postLogout);
 
-router.get('/reset', authController.getReset);
+router.post('/reset', isPassAuth, authController.postReset);
 
-router.post('/reset', authController.postReset);
+router.post('/reset/:token', authController.isPassLinkAuth);
 
-router.get('/reset/:token', authController.getNewPassword);
-
-router.post('/new-password', authController.postNewPassword);
+router.post('/new-password', isPassAuth, authController.postNewPassword);
 
 module.exports = router;
