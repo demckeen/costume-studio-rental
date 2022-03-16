@@ -5,80 +5,72 @@ const { validationResult } = require('express-validator');
 const Costume = require('../models/costume');
 
 //Place Controller functions here - exports.get/post/etc
-exports.postCart = (req, res, next) => {
+exports.postCart = async (req, res, next) => {
   const costumeId = req.body.costumeId;
-  Product.findById(costumeId)
-    .then(costume => {
-      return req.user.addToCart(costume);
-    })
-    .then(result => {
-      console.log(result);
-      res.redirect('/cart');
-    })
-    .catch(err => {
+
+  try {
+  const costume = await Product.findById(costumeId)
+       await req.user.addToCart(costume);
+       res.status(200).json({message: 'Costume added to cart', costumeId: costumeId, userId: req.userId})
+    }
+    catch(err) {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      return next(error);
-    });
+      throw error;
+    }
 };
 
-exports.postCartDeleteProduct = (req, res, next) => {
+exports.postCartDeleteProduct = async (req, res, next) => {
   const costumeId = req.body.costumeId;
-  req.user
-    .removeFromCart(costumeId)
-    .then(result => {
-      res.redirect('/cart');
-    })
-    .catch(err => {
+  try { await  req.user.removeFromCart(costumeId);
+        res.status(200).json({message: 'Costume deleted from cart', costumeId: costumeId, userId: userId})
+  }
+    catch(err) {
       const error = new Error(err);
       error.httpStatusCode = 500;
-      return next(error);
-    });
+      throw error;
+    }
 };
 
-exports.postOrder = (req, res, next) => {
-  req.user
-    .populate('cart.items.costumeId')
-    //.execPopulate()
-    .then(user => {
-      const costumes = user.cart.items.map(i => {
+exports.postOrder = async (req, res, next) => {
+  try {
+  const cart = await req.user.populate('cart.items.costumeId')
+  const costumes = cart.items.map(i => {
         return { quantity: i.quantity, costume: { ...i.costumeId._doc } };
       });
-      const order = new Order({
+  const order = new Order({
         user: {
           name: req.user.name,
-          userId: req.user
+          userId: req.userId
         },
         costumes: costumes
       });
-      return order.save();
-    })
-    .then(result => {
-      return req.user.clearCart();
-    })
-    .then(() => {
-      res.redirect('/rentals');
-    })
-    .catch(err => {
+  await order.save();
+  const result = await req.user.clearCart(); 
+      res.status(200).json({message: 'Order placed successfully!'})
+  }
+    catch(err) {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
-    });
+    }
 };
 
-exports.postCancelOrder = (req, res, next) => {
-	const costumeId = req.body.costumeId;
-	Order.deleteOne({ costumeId: costumeId, userId: req.user._id })
-		.then(() => {
-			console.log('Order Cancelled');
-			res.redirect('/rentals');
-		})
-		.catch(err => {
-			const error = new Error(err);
-			error.httpStatusCode = 500;
-			return next(error);
-		});
-};
+
+// admin Delete function? need function to send message to admin to delete?
+// exports.postCancelOrder = async (req, res, next) => {
+// 	const orderId = req.body.orderId;
+
+//   try {
+// 	await Order.deleteOne({ orderId: orderId, userId: req.userId })
+// 			res.status(200).json({message: 'order has been deleted', orderId: orderId, userId: req.userId});
+// 		}
+// 		catch(err) {
+// 			const error = new Error(err);
+// 			error.httpStatusCode = 500;
+// 			return next(error);
+// 		}
+// };
 
 exports.getCostumes = async (req, res, next) => {
 
