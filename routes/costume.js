@@ -13,7 +13,7 @@ const isAuth = require('../middleware/is-auth');
 const router = express.Router();
 
 //get costumes
-router.get('/costumes', isAuth, inventoryController.getCostumes);
+router.get('/costumes', inventoryController.getCostumes);
 
 router.get('/costumes/:costumeId', inventoryController.getCostume);
 
@@ -21,9 +21,9 @@ router.get('/cart', isAuth, inventoryController.getCart);
 
 router.get('/checkout', isAuth, inventoryController.getCheckout);
 
-router.get('/checkout/success', inventoryController.getCheckoutSuccess);
+// router.get('/checkout/success', isAuth, inventoryController.getCheckoutSuccess);
 
-router.get('/checkout/cancel', inventoryController.getCheckout);
+// router.post('/checkout/cancel', isAuth, inventoryController.cancelCheckout);
 
 router.get('/orders', isAuth, inventoryController.getOrders);
 
