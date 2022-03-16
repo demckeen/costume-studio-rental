@@ -12,12 +12,13 @@ const router = express.Router();
  *      Rentals:
  *          type: object
  *          required:
- *              -orderId
+ *              -rentalId
  *              -orderDate
  *              -userId
  *              -rentals
+ *              -returnDate
  *          properties:
- *              orderId:
+ *              rentalId:
  *                  type: String
  *                  description: The auto-generated id of the order
  *              orderDate:
@@ -29,48 +30,19 @@ const router = express.Router();
  *              rentals:
  *                  type: Array
  *                  description: list of rentals in order
- *          example:
- *              orderId: 4367489
- *              orderDate: 10/31/2022
- *              userId: 4326
- *              rentals: [Gandalf the Grey, Tin Man, Queen Elizabeth]          
- */
-
-/**
- * Define a schema for Rental
- * @swagger
- * components:
- *  schemas:
- *      Rental:
- *          type: object
- *          required:
- *              -rentalId
- *              -returnDate
- *              -userId
- *              -costumeId
- *              -costumeName
- *          properties:
- *              rentalId:
- *                  type: String
- *                  description: The auto-generated id of the rental
  *              returnDate:
  *                  type: Date
- *                  description: date the order was placed
+ *                  description: date the rental is due
  *              userId:
  *                  type: String
  *                  description: id of user who has the rental
- *              costumeId:
- *                  type: String
- *                  description: id of costume in rental
- *              costumeName:
- *                  type: String
- *                  description: name of the costume in rental
  *          example:
- *              rentalId: 94830495
- *              returnDate: 11/31/2022
+ *              rentalId: 4367489
+ *              orderDate: 10/31/2022
  *              userId: 4326
- *              costumeId: 43256
- *              costumeName: Gandalf the Grey      
+ *              rentals: [Gandalf the Grey, Tin Man, Queen Elizabeth]
+ *              returnDate: 11/31/2022
+ *                 
  */
 
 /**
