@@ -8,10 +8,10 @@ const isAuth = require('../middleware/is-auth');
 const router = express.Router();
 
 // /admin/add-costume => GET
-//router.get('/add-costume', isAuth, adminController.getAddCostume);
+router.get('/add-costume', isAuth, adminController.getAddCostume);
 
 // /admin/costumes => GET
-//router.get('/costumes', isAuth, adminController.getCostumes);
+router.get('/costumes', isAuth, adminController.getCostumes);
 
 // /admin/add-costume => POST
 router.post(
