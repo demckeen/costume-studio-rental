@@ -1,13 +1,33 @@
+const path = require('path');
+
 const express = require('express');
-const {
+
+const { 
     body,
     check
 } = require('express-validator');
 
 const inventoryController = require('../controllers/costume');
+const isAuth = require('../middleware/is-auth');
 
 const router = express.Router();
 
+//get costumes
+router.get('/costumes', isAuth, inventoryController.getCostumes);
+
+router.get('/costumes/:costumeId', inventoryController.getCostume);
+
+router.get('/cart', isAuth, inventoryController.getCart);
+
+router.get('/checkout', isAuth, inventoryController.getCheckout);
+
+router.get('/checkout/success', inventoryController.getCheckoutSuccess);
+
+router.get('/checkout/cancel', inventoryController.getCheckout);
+
+router.get('/orders', isAuth, inventoryController.getOrders);
+
+router.get('/orders/:orderId', isAuth, inventoryController.getInvoice);
 
 /**
  * Define a schema for inventory

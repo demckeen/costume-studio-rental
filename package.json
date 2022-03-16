@@ -11,9 +11,14 @@
     "type": "git",
     "url": ""
   },
-  "author": {"name":"Kate Clark","name2":"Jen Lebaron","name3":"Dana McKeen","name4":"Hailey Mundt",
-    "name5":"Jamie Peck","name6":"Jennifer Thomas"},
-
+  "author": {
+    "name": "Kate Clark",
+    "name2": "Jen Lebaron",
+    "name3": "Dana McKeen",
+    "name4": "Hailey Mundt",
+    "name5": "Jamie Peck",
+    "name6": "Jennifer Thomas"
+  },
   "dependencies": {
     "body-parser": "^1.19.2",
     "express": "^4.17.3",
