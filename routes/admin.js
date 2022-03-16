@@ -40,7 +40,7 @@ router.post(
 );
 
 // /admin/edit-costume/:costumeId => GET
-//router.get('/edit-costume/:costumeId', isAuth, adminController.getEditCostume);
+router.get('/edit-costume/:costumeId', isAuth, adminController.getEditCostume);
 
 // /admin/edit-costume => POST
 router.post(
