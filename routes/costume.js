@@ -27,7 +27,6 @@ router.get('/checkout', isAuth, inventoryController.getCheckout);
 
 router.get('/orders', isAuth, inventoryController.getOrders);
 
-router.get('/orders/:orderId', isAuth, inventoryController.getInvoice);
 
 //Post routes
 router.post('/cart', isAuth, inventoryController.postCart);
