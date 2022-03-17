@@ -21,13 +21,8 @@ router.get('/cart', isAuth, inventoryController.getCart);
 
 router.get('/checkout', isAuth, inventoryController.getCheckout);
 
-router.get('/checkout/success', inventoryController.getCheckoutSuccess);
-
-router.get('/checkout/cancel', inventoryController.getCheckout);
-
 router.get('/orders', isAuth, inventoryController.getOrders);
 
-router.get('/orders/:orderId', isAuth, inventoryController.getInvoice);
 
 /**
  * Define a schema for inventory
