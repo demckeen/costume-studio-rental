@@ -34,8 +34,8 @@ exports.postCartDeleteProduct = async (req, res, next) => {
 
 exports.postOrder = async (req, res, next) => {
   try {
-  const cart = await req.user.populate('cart.items.costumeId')
-  const costumes = cart.items.map(i => {
+  const user = await req.user.populate('cart.items.costumeId')
+  const costumes = user.cart.items.map(i => {
         return { quantity: i.quantity, costume: { ...i.costumeId._doc } };
         
       });
@@ -77,57 +77,57 @@ exports.getCostumes = async (req, res, next) => {
       }
   };
 
-exports.getCostume = (req, res, next) => {
+exports.getCostume = async (req, res, next) => {
   const costumeId = req.params.costumeId;
-  Costume.findById(costumeId)
-    .then(costume => {
+
+  try {
+    const costume = await Costume.findById(costumeId)
       if (!costume) {
         const error = new Error('Could not find costume');
         error.statusCode = 404;
         throw error;
       }
       res.status(200).json({ message: 'Costume Found', costume: costume });
-    })
-    .catch(err => {
+    }
+    catch(err) {
       if (!err.statusCode) {
         err.statusCode = 500;
       }
       next(err);
-    });
-};
+    }
+}
 
-exports.getCart = (req, res, next) => {
-  req.user
-    .populate('cart.items.productId')
-    .then(user => {
-      const costumes = user.cart.items;
+exports.getCart = async (req, res, next) => {
+  try {
+  const user = await req.user.populate('cart.items.productId')
+  const costumes = user.cart.items;
       res.status(200)({ 
         pageTitle: 'Your Cart',
         costumes: costumes
       });
-    })
-    .catch(err => {
+    }
+    catch(err) {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
-    });
-};
+    }
+}
 
 //Checkout needs fixed-please help:)
-exports.getCheckout = (req, res, next) => {
-  let products;
+exports.getCheckout = async (req, res, next) => {
   let total = 0;
-  req.user
-    .populate('cart.items.productId')
-    .execPopulate()
-    .then(user => {
-      products = user.cart.items;
-      total = 0;
-      products.forEach(p => {
+
+  try {
+  const user = await req.user.populate('cart.items.productId').execPopulate()
+  const products = user.cart.items;
+  const checkoutTotal =  products.forEach(p => {
         total += p.quantity * p.productId.price;
       });
 
-      return stripe.checkout.sessions.create({
+  // - Dana here -- I still need to do the payments unit, I don't see where the total of
+  // the order cost is getting into the checkout session? Does it need to? Where should this go?
+
+  const paymentResult = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: products.map(p => {
           return {
@@ -139,37 +139,31 @@ exports.getCheckout = (req, res, next) => {
           };
         }),
         success_url: req.protocol + '://' + req.get('host') + '/checkout/success', // => http://localhost:3000
-        cancel_url: req.protocol + '://' + req.get('host') + '/checkout/cancel'
-      });
-    })
-    .then(session => {
-      res.render('shop/checkout', {
-        path: '/checkout',
-        pageTitle: 'Checkout',
-        products: products,
-        totalSum: total,
-        sessionId: session.id
-      });
-    })
-    .catch(err => {
+        cancel_url: req.protocol + '://' + req.get('host') + '/checkout/cancel'})
+      
+      res.status(200).json({message: 'Payment processed', result: paymentResult}) 
+    }
+    catch(err) {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
-    });
+    }
 };
 
-exports.getOrders = (req, res, next) => {
-  Order.find({ 'user.userId': req.user._id })
-    .then(orders => {
+exports.getOrders = async (req, res, next) => {
+  try {
+    const orders = Order.find({ 'user.userId': req.user._id });
+
       res.status(200)({ 
         pageTitle: 'Your Orders',
-        orders: orders})
-    .catch(err => {
+        orders: orders}) }
+
+    catch(err) {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
-    });
-});}
+    }
+}
 
 
 // admin Delete function? need function to send message to admin to delete?
