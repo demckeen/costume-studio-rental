@@ -30,7 +30,7 @@ router.get('/orders', isAuth, inventoryController.getOrders);
 
 //Post routes
 router.post('/cart', isAuth, inventoryController.postCart);
-router.post('/cancel-rental', isAuth, inventoryController.postCartDeleteProduct);
+router.post('/cancel-rental', isAuth, inventoryController.postCartDeleteCostume);
 router.post('/create-rental', isAuth, inventoryController.postOrder);
 router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
 

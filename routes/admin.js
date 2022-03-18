@@ -69,7 +69,7 @@ router.post(
 );
 
 // /admin/delete-costume => DELETE
-// router.delete('/delete-costume/:costumeId', isAuth, adminController.deleteCostume);
+router.delete('/delete-costume/:costumeId', isAuth, adminController.deleteCostume);
 
 
 /**
