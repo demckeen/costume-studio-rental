@@ -4,7 +4,7 @@ const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 
 const mongoose = require('mongoose');
-const MONGODB_URL = 'mongodb+srv://costume_studio_admin:bPiLgHostqBFVRoJ@costume-studio-rentals.aozvg.mongodb.net/test'
+const MONGODB_URL = process.env.MONGODB_URI;
 const path = require('path');
 const multer = require('multer');
 
