@@ -1,8 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const swaggerUI = require("swagger-ui-express");
-const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUI = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc');
 
 const mongoose = require('mongoose');
 const MONGODB_URL = process.env.MONGODB_URI;
@@ -33,19 +33,19 @@ const fileFilter = (req, file, cb) => {
 // Swagger set up
 const options = {
     definition: {
-        openapi: "3.0.0",
+        openapi: '3.0.0',
         info: {
-            title: "Costume Studio Rentals API",
-            version: "1.0.0",
-            description: "A simple app to view and rent costumes."
+            title: 'Costume Studio Rentals API',
+            version: '1.0.0',
+            description: 'A simple app to view and rent costumes.'
         },
         servers: [
             {
-                url: "http://localhost:8080"
+                url: 'http://localhost:8080'
             }
         ],
     },
-    apis: ["./routes/*.js"]
+    apis: ['./routes/*.js']
 };
 
 const specs = swaggerJsDoc(options);
@@ -57,7 +57,7 @@ const authRoutes = require('./routes/auth');
 const app = express();
 
 //view api contract at localhost:8080/api-docs
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 
 // app.use(bodyParser.urlencoded()); // x-www-form-urlencoded <form>
 app.use(bodyParser.json()); // application/json
@@ -89,8 +89,8 @@ mongoose.connect(MONGODB_URL)
         const server = app.listen(8080);
         const io = require('./socket').init(server, {
             cors: {
-            origin: "*",
-            methods: ["GET", "POST", "DELTE", "PUT"]
+            origin: '*',
+            methods: ['GET', 'POST', 'DELTE', 'PUT']
            }});
         io.on('connection', socket => {
             console.log('Client connected');

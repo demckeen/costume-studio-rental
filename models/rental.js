@@ -16,4 +16,4 @@ const rentalSchema = new Schema({
 
 //Do we need rental methods? 
 
-module.exports = mongoose.model('Retnal', rentalSchema);
+module.exports = mongoose.model('Rental', rentalSchema);
