@@ -73,7 +73,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/costumes', inventoryRoutes);
+app.use('/costume', inventoryRoutes);
 app.use('/admin', adminRoutes);
 app.use('/auth', authRoutes);
 
