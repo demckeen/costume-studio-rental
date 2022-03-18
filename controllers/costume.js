@@ -167,19 +167,19 @@ exports.getOrders = async (req, res, next) => {
 
 
 // admin Delete function? need function to send message to admin to delete?
-// exports.postCancelOrder = async (req, res, next) => {
-// 	const orderId = req.body.orderId;
+exports.postCancelOrder = async (req, res, next) => {
+	const orderId = req.body.orderId;
 
-//   try {
-// 	await Order.deleteOne({ orderId: orderId, userId: req.userId })
-// 			res.status(200).json({message: 'order has been deleted', orderId: orderId, userId: req.userId});
-// 		}
-// 		catch(err) {
-// 			const error = new Error(err);
-// 			error.httpStatusCode = 500;
-// 			return next(error);
-// 		}
-// };
+  try {
+	await Order.deleteOne({ orderId: orderId, userId: req.userId })
+			res.status(200).json({message: 'order has been deleted', orderId: orderId, userId: req.userId});
+		}
+		catch(err) {
+			const error = new Error(err);
+			error.httpStatusCode = 500;
+			return next(error);
+		}
+};
 
 exports.getCostumes = async (req, res, next) => {
 
