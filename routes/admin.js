@@ -8,7 +8,7 @@ const isAuth = require('../middleware/is-auth');
 const router = express.Router();
 
 // /admin/add-costume => GET
-router.get('/add-costume', isAuth, adminController.getAddCostume);
+// router.get('/add-costume', isAuth, adminController.getAddCostume);
 
 // /admin/costumes => GET
 router.get('/costumes', isAuth, adminController.getCostumes);
@@ -69,7 +69,7 @@ router.post(
 );
 
 // /admin/delete-costume => POST
-router.post('/delete-costume', isAuth, adminController.postDeleteCostume);
+router.post('/delete-costume/:costumeId', isAuth, adminController.postDeleteCostume);
 
 
 /**

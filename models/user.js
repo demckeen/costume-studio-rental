@@ -6,14 +6,22 @@ const userSchema = new Schema ({
     // Following is modeled from shop project - including address/etc - we can decide what 
     // we really want to include or add from this point.
 
-    // email: {
-    //     type: String,
-    //     required: true,
-    // },
-    // password: {
-    //     type: String,
-    //     required: true,
-    // },
+    name: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    cart: [{
+        type: Object,
+        required: false
+    }]
     
     // address: {
     //     details: [{

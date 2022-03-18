@@ -3,8 +3,37 @@ const Schema = mongoose.Schema;
 
 const costumeSchema = new Schema (
     //Schema Definition for Costume Model Inventory Management
-
-)
+    {
+      category: {
+        type: String,
+        required: true
+      },
+      name: {
+        type: String,
+        required: true
+      },
+      rentalFee: {
+        type: Number,
+        required: true
+      },
+      size: {
+        type: String,
+        required: true
+      },
+      imageUrl: {
+        type: String,
+        required: true
+      },
+      description: {
+        type: String,
+        required: true
+      },
+      userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+      }
+    })
 
 //Do we need costume methods?
 
