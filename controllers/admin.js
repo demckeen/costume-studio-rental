@@ -207,43 +207,43 @@ exports.getCostumes = async (req, res, next) => {
 
 
 // This one should likely be replaced with something similar to "deletePost" below and used as a "DELETE" route
-exports.postDeleteCostume = async (req, res, next) => {
-  const costId = req.body.costumeId;
-  try {
-    await Costume.deleteOne({ _id: costId, userId: req.user._id })
-    res.status(200).json({message: 'Costume deleted.'})
-  } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-};
+// exports.postDeleteCostume = async (req, res, next) => {
+//   const costId = req.body.costumeId;
+//   try {
+//     await Costume.deleteOne({ _id: costId, userId: req.user._id })
+//     res.status(200).json({message: 'Costume deleted.'})
+//   } catch (err) {
+//     if (!err.statusCode) {
+//       err.statusCode = 500;
+//     }
+//     next(err);
+//   }
+// };
 
 // TODO: Modify for our project (change post to costume and postId to costId), 
 exports.deletePost = async (req, res, next) => {
-  const postId = req.params.postId;
+  const costId = req.params.postId;
   try {
-    const post = await Post.findById(postId)
-    if (!post) {
-      const error = new Error('Could not find post.');
+    const costume = await Post.findById(costId)
+    if (!costume) {
+      const error = new Error('Could not find costume.');
       error.statusCode = 404;
       throw error;
     }
-    if (post.creator.toString() !== req.userId) {
+    if (costume.creator.toString() !== req.userId) {
       const error = new Error('Not authorized!');
       error.statusCode = 403;
       throw error;
     }
     // Check logged in user
-    clearImage(post.imageUrl);
-    await Post.findByIdAndRemove(postId);
+    clearImage(costume.imageUrl);
+    await Post.findByIdAndRemove(costId);
 
     const user = await User.findById(req.userId);
-    user.posts.pull(postId);
+    user.costumes.pull(costId);
 
     await user.save();
-    io.getIO().emit('posts', { action: 'delete', post: postId });
+    // io.getIO().emit('costumes', { action: 'delete', costume: costId });
     res.status(200).json({ message: 'Deleted post.' });
   } catch {
     if (!err.statusCode) {

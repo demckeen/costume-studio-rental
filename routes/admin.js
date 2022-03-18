@@ -68,8 +68,8 @@ router.post(
 	adminController.postEditCostume
 );
 
-// /admin/delete-costume => POST
-router.post('/delete-costume/:costumeId', isAuth, adminController.postDeleteCostume);
+// /admin/delete-costume => DELETE
+// router.delete('/delete-costume/:costumeId', isAuth, adminController.deleteCostume);
 
 
 /**
@@ -101,9 +101,6 @@ router.post('/delete-costume/:costumeId', isAuth, adminController.postDeleteCost
  *              returnDate:
  *                  type: Date
  *                  description: date the rental is due
- *              userId:
- *                  type: String
- *                  description: id of user who has the rental
  *          example:
  *              rentalId: 4367489
  *              orderDate: 10/31/2022
