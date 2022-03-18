@@ -220,6 +220,7 @@ exports.postDeleteCostume = async (req, res, next) => {
   }
 };
 
+// TODO: Modify for our project (change post to costume and postId to costId), 
 exports.deletePost = async (req, res, next) => {
   const postId = req.params.postId;
   try {
