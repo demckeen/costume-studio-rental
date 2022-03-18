@@ -7,6 +7,7 @@ const {
 
 const User = require('../models/user');
 const Costume = require('../models/costume');
+const user = require('../models/user');
 
 // TODO: Remove page rendering 
 
@@ -69,7 +70,7 @@ exports.postAddCostume = async (req, res, next) => {
     // });
     res.status(201).json({
       message: 'Costume added!',
-      costumeId: result._id
+      costume: result._doc, creator: { _id: req.userId, name: user.name }
     });
   } catch (err) {
     if (!err.statusCode) {

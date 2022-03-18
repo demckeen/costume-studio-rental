@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { validationResult } = require('express-validator');
+const io = require('../socket');
 
 const Costume = require('../models/costume');
 
@@ -59,13 +60,18 @@ exports.postOrder = async (req, res, next) => {
 
 exports.getCostumes = async (req, res, next) => {
   const page = +req.query.page || 1;
+  const perPage = 1;
   try {
-    const totalItems = await Costume.find()
-        .countDocuments()
-    const costumes = Costume.find()
-          .skip((page - 1) * ITEMS_PER_PAGE)
-          .limit(ITEMS_PER_PAGE);
-  
+    const totalItems = await Costume.find().countDocuments()
+      if(!totalItems) {
+        return res.status(404).json({message: 'No costumes found!'})
+      }
+    const costumes = await Costume.find()
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+      if(!costumes) {
+            return res.status(404).json({message: 'No costumes found!'})
+          }
         res.status(200).json({
           costumes: costumes,
           totalItems: totalItems
@@ -184,17 +190,16 @@ exports.postCancelOrder = async (req, res, next) => {
 exports.getCostumes = async (req, res, next) => {
 
   const page = +req.query.page || 1;
-
+  const perPage = 9;
   try {
-  const totalItems = await Costume.find()
+  const totalItemsv = await Costume.find()
       .countDocuments()
-  const constmes = Costume.find()
-        .skip((page - 1) * ITEMS_PER_PAGE)
-        .limit(ITEMS_PER_PAGE);
+  const costumesv = await Costume.find()
+        .skip((page - 1) * perPage)
+        .limit(perPage);
 
-      res.status(200).json({
-        costumes: costumes,
-        totalItems: totalItems
+      res.status(200)
+        .json({ message: 'Costumes found!', costumes: costumesv, totalItems: totalItemsv
       })}
   catch (err) {
       const error = new Error(err);
