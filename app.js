@@ -1,4 +1,5 @@
 require('dotenv').config();
+const PORT = process.env.PORT || 3000;
 const express = require('express');
 const bodyParser = require('body-parser');
 const swaggerUI = require('swagger-ui-express');
@@ -81,16 +82,16 @@ app.use((error, req, res, next ) => {
     console.log(error);
     const status = error.statusCode || 500;
     const message = error.message;
-    res.status(status).json({message: message});
+    res.status(status).json({message: message, data: data});
 })
 
 mongoose.connect(MONGODB_URL)
     .then(result => {
-        const server = app.listen(8080);
+        const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
         const io = require('./socket').init(server, {
             cors: {
             origin: '*',
-            methods: ['GET', 'POST', 'DELTE', 'PUT']
+            methods: ['GET', 'POST', 'DELETE', 'PUT']
            }});
         io.on('connection', socket => {
             console.log('Client connected');

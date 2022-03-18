@@ -1,28 +1,13 @@
 const fs = require('fs');
 const path = require('path');
-const mongoose = require('mongoose');
-const {
-  validationResult
-} = require('express-validator');
+const { validationResult } = require('express-validator');
 
+const io = require('../socket');
 const User = require('../models/user');
 const Costume = require('../models/costume');
-const user = require('../models/user');
+// const user = require('../models/user');
 
 // TODO: Remove page rendering 
-
-// TODO:Do we need this one since it just renders a view?
-// exports.getAddCostume = (req, res, next) => {
-//   res.render('admin/edit-costume', {
-//     pageTitle: 'Add Costume',
-//     path: '/admin/add-costume',
-//     editing: false,
-//     hasError: false,
-//     errorMessage: null,
-//     validationErrors: []
-//   });
-// };
-
 
 // This is similar to createPost in the REST API backend feed controller
 // TODO: Add image upload/download
@@ -45,7 +30,7 @@ exports.postAddCostume = async (req, res, next) => {
   const costumeName = req.body.costumeName;
   const rentalFee = req.body.rentalFee;
   const size = req.body.size;
-  const image = req.body.image;
+  const imageUrl = req.file.path.replace("\\" ,"/");
   const description = req.body.description;
 
   const costume = new Costume({
@@ -53,24 +38,24 @@ exports.postAddCostume = async (req, res, next) => {
     costumeName: costumeName,
     rentalFee: rentalFee,
     size: size,
-    image: image,
+    image: imageUrl,
     description: description,
-    userId: req.user
+    userId: req.userId
   });
   try {
     await costume.save();
     // TODO: are the next 3 lines needed?
-    // const user = await User.findById(req.userId);
-    // user.posts.push(post);
-    // await user.save();
-    // TODO: Stretch: add websockets
-    // io.getIO().emit('posts', {
-    //   action: 'create',
-    //   post: { ...post._doc, creator: { _id: req.userId, name: user.name } }
-    // });
+    const user = await User.findById(req.userId);
+    user.costumes.push(costume);
+    await user.save();
+    // TODO: Stretch: add websockets. This may need to be tweaked more.
+    io.getIO().emit('costumes', {
+      action: 'create',
+      costume: costId
+    });
     res.status(201).json({
       message: 'Costume added!',
-      costume: result._doc, creator: { _id: req.userId, name: user.name }
+      costume: result._doc, userId: { _id: req.userId, name: user.name }
     });
   } catch (err) {
     if (!err.statusCode) {
@@ -177,26 +162,28 @@ exports.postEditCostume = async (req, res, next) => {
 };
 
 // This is similar to getPosts in the REST API backend feed controller
-// TODO: This one may not be needed. It was only rendering a view prior to async/await changes but may need for pagination
+// TODO: This one may not be needed in admin. It was only rendering a view prior to async/await changes but may need for pagination
 exports.getCostumes = async (req, res, next) => {
   // TODO: Stretch: add pagination
-  // const currentPage = req.query.page || 1;
-  // const perPage = 2;
+  const currentPage = req.query.page || 1;
+  const perPage = 3;
   try {
-    await Costume.find({ userId: req.user._id });
-    res.status(200).json({message: 'Retrieved costumes!'})
+    // await Costume.find({ userId: req.user._id });
+    // res.status(200).json({message: 'Retrieved costumes!'})
 
     // TODO: Stretch: add pagination - this may be what replaces the two lines above
-    // const totalItems = await Costume.find().countDocuments()
-    // const costumes = await Costume.find()
-    //   .populate('creator')
-    //   .sort({ createdAt: -1 })
-    //   .skip((currentPage - 1) * perPage)
-    //   .limit(perPage);
-    // res.status(200).json({ 
-    //   message: 'Fetched costumes successfully.', 
-    //   costumes: costumes,
-    //   totalItems: totalItems
+    const totalItems = await Costume.find().countDocuments();
+    if(!totalItems) {
+      return res.status(404).json({message: 'No costumes found!'})
+    }
+    const costumes = await Costume.find()
+      .skip((currentPage - 1) * perPage)
+      .limit(perPage);
+    res.status(200).json({ 
+      message: 'Fetched costumes successfully.', 
+      costumes: costumes,
+      totalItems: totalItems
+    }); 
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -205,45 +192,31 @@ exports.getCostumes = async (req, res, next) => {
   }
 };
 
-
-// This one should likely be replaced with something similar to "deletePost" below and used as a "DELETE" route
-// exports.postDeleteCostume = async (req, res, next) => {
-//   const costId = req.body.costumeId;
-//   try {
-//     await Costume.deleteOne({ _id: costId, userId: req.user._id })
-//     res.status(200).json({message: 'Costume deleted.'})
-//   } catch (err) {
-//     if (!err.statusCode) {
-//       err.statusCode = 500;
-//     }
-//     next(err);
-//   }
-// };
-
-// TODO: Modify for our project (change post to costume and postId to costId), 
-exports.deletePost = async (req, res, next) => {
+// This is similar to deletePost in the REST API backend feed controller
+// TODO: Stretch: add websockets
+exports.deleteCostume = async (req, res, next) => {
   const costId = req.params.postId;
   try {
-    const costume = await Post.findById(costId)
+    const costume = await Costume.findById(costId)
     if (!costume) {
       const error = new Error('Could not find costume.');
       error.statusCode = 404;
       throw error;
     }
-    if (costume.creator.toString() !== req.userId) {
+    if (costume.userId.toString() !== req.userId) {
       const error = new Error('Not authorized!');
       error.statusCode = 403;
       throw error;
     }
     // Check logged in user
-    clearImage(costume.imageUrl);
-    await Post.findByIdAndRemove(costId);
+    clearImage(costume.image);
+    await Costume.findByIdAndRemove(costId);
 
     const user = await User.findById(req.userId);
     user.costumes.pull(costId);
 
     await user.save();
-    // io.getIO().emit('costumes', { action: 'delete', costume: costId });
+    io.getIO().emit('costumes', { action: 'delete', costume: costId });
     res.status(200).json({ message: 'Deleted post.' });
   } catch {
     if (!err.statusCode) {
@@ -254,7 +227,7 @@ exports.deletePost = async (req, res, next) => {
 }
 
 // TODO: Add image upload/download
-// const clearImage = filePath => {
-//   filePath = path.join(__dirname, '..', filePath);
-//   fs.unlink(filePath, err => console.log(err));
-// };
+const clearImage = filePath => {
+  filePath = path.join(__dirname, '..', filePath);
+  fs.unlink(filePath, err => console.log(err));
+};
