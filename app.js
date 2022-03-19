@@ -1,5 +1,5 @@
 require('dotenv').config();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 const express = require('express');
 const bodyParser = require('body-parser');
 const swaggerUI = require('swagger-ui-express');
@@ -42,7 +42,7 @@ const options = {
         },
         servers: [
             {
-                url: 'http://localhost:8080'
+                url: '-'
             }
         ],
     },
