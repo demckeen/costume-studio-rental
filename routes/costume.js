@@ -86,8 +86,8 @@ router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
 /**
  * @swagger
  * tags:
- *  name: Shop
- *  description: The shop managing api
+ *  name: Rentals
+ *  description: The rental managing api
  * 
  */
 
@@ -98,7 +98,7 @@ router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
  * /costumes:
  *      get:
  *          summary: Gets a list of all the costumes
- *          tags: [Shop]
+ *          tags: [Rentals]
  *          responses:
  *              200:
  *                  description: List of costumes
@@ -112,7 +112,7 @@ router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
  * /costumes/{costumeId}:
  *      get:
  *          summary: Gets the details of the costume with the id
- *          tags: [Shop]
+ *          tags: [Rentals]
  *          parameters:
  *            - in: path
  *              name: costumeId
@@ -133,7 +133,7 @@ router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
  * /cart:
  *      get:
  *          summary: Get the user's cart information for added costumes currently in the cart
- *          tags: [Shop]
+ *          tags: [Rentals]
  *          responses:
  *              200:
  *                  description: Get information about cart contents
@@ -147,7 +147,7 @@ router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
  * /rental/{rentalId}:
  *      get:
  *          summary: Gets the details of the rental with the rental id
- *          tags: [Shop]
+ *          tags: [Rentals]
  *          parameters:
  *            - in: path
  *              name: rentalId
@@ -168,7 +168,7 @@ router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
  * /rentals:
  *      get:
  *          summary: Gets all rentals for a single user
- *          tags: [Shop]
+ *          tags: [Rentals]
  *          responses:
  *              200:
  *                  description: Get list of rentals
@@ -192,7 +192,7 @@ router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
  * /cart:
  *      post:
  *          summary: add costume to cart for potential rental
- *          tags: [Shop]
+ *          tags: [Rentals]
  *          requestBody:
  *              required: true
  *              content:
@@ -212,7 +212,7 @@ router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
  * /cart-delete-item:
  *      post:
  *          summary: remove costume from cart
- *          tags: [Shop]
+ *          tags: [Rentals]
  *          requestBody:
  *              required: true
  *              content:
@@ -232,7 +232,7 @@ router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
  * /create-rental:
  *      post:
  *          summary: submit costumes and create rental order
- *          tags: [Shop]
+ *          tags: [Rentals]
  *          requestBody:
  *              required: true
  *              content:
@@ -252,7 +252,7 @@ router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
  * /cancel-rental:
  *      post:
  *          summary: submit cancellation request for rental that has not yet begun
- *          tags: [Shop]
+ *          tags: [Rentals]
  *          requestBody:
  *              required: true
  *              content:

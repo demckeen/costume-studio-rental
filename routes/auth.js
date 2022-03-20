@@ -46,7 +46,7 @@ const router = express.Router();
  * @swagger
  * tags:
  *  name: Auth
- *  description: The shop managing api
+ *  description: The authorization managing api
  * 
  */
 
@@ -67,26 +67,6 @@ const router = express.Router();
  *          responses:
  *              200:
  *                  description: The costume was successfully added to the cart
- *                  content:
- *                      application/json:
- *                          schema:
- *                              $ref: '#/components/schemas/User'
- *              500:
- *                  description: There was a server error
- * 
- * auth/signup:
- *      post:
- *          summary: create account with a user's name, email, and password
- *          tags: [Auth]
- *          requestBody:
- *              required: true
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/User'
- *          responses:
- *              200:
- *                  description: The costume was successfully deleted
  *                  content:
  *                      application/json:
  *                          schema:
@@ -133,6 +113,26 @@ const router = express.Router();
  *                              $ref: '#/components/schemas/Rental'
  *              500:
  *                  description: There was a server error
+ *  
+ * auth/reset/{token}:
+ *      post:
+ *          summary: reset password
+ *          tags: [Auth]
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Rental'
+ *          responses:
+ *              200:
+ *                  description: The password was reset
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Rental'
+ *              500:
+ *                  description: There was a server error
  * 
  * auth/new-password:
  *      post:
@@ -151,6 +151,31 @@ const router = express.Router();
  *                      application/json:
  *                          schema:
  *                              $ref: '#/components/schemas/Rental'
+ *              500:
+ *                  description: There was a server error
+ */
+
+/**
+ * PUT routes
+ * @swagger
+ * 
+ * auth/signup:
+ *      put:
+ *          summary: create account with a user's name, email, and password
+ *          tags: [Auth]
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/User'
+ *          responses:
+ *              200:
+ *                  description: The costume was successfully deleted
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/User'
  *              500:
  *                  description: There was a server error
  */
