@@ -161,7 +161,7 @@ exports.getOrders = async (req, res, next) => {
     });
 
     res.status(200)({
-      pageTitle: 'Your Orders',
+      pageTitle: 'Your Rentals',
       orders: orders
     })
   } catch (err) {

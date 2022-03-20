@@ -204,26 +204,6 @@ router.delete('/delete-costume/:costumeId', isAuth, adminController.deleteCostum
  *              500:
  *                  description: There was a server error
  * 
- * admin/delete-costume:
- *      post:
- *          summary: submit costumes and create rental order
- *          tags: [Admin]
- *          requestBody:
- *              required: true
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Rental'
- *          responses:
- *              200:
- *                  description: The costume was successfully deleted from the database
- *                  content:
- *                      application/json:
- *                          schema:
- *                              $ref: '#/components/schemas/Costume'
- *              500:
- *                  description: There was a server error
- * 
  * /cancel-rental:
  *      post:
  *          summary: submit cancellation request for rental that has not yet begun
