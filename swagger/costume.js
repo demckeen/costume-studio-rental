@@ -205,7 +205,7 @@
  *                          $ref: '#/components/schemas/Rentals'
  *          responses:
  *              200:
- *                  description: The tental was successfully created
+ *                  description: The rental was successfully created
  *                  content:
  *                      application/json:
  *                          schema:
