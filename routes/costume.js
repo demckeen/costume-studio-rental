@@ -161,7 +161,7 @@ router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
  *                  content:
  *                      application/json:
  *                          schema:
- *                              $ref: '#/components/schemas/Rental'
+ *                              $ref: '#/components/schemas/Rentals'
  *              404:
  *                  description: The rental was not found
  * 
@@ -177,7 +177,7 @@ router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
  *                          schema:
  *                          type: array
  *                          items:
- *                              $ref: '#/components/schemas/Rental'
+ *                              $ref: '#/components/schemas/Rentals'
  * 
  * 
  * 
@@ -238,14 +238,14 @@ router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Rental'
+ *                          $ref: '#/components/schemas/Rentals'
  *          responses:
  *              200:
  *                  description: The tental was successfully created
  *                  content:
  *                      application/json:
  *                          schema:
- *                              $ref: '#/components/schemas/Rental'
+ *                              $ref: '#/components/schemas/Rentals'
  *              500:
  *                  description: There was a server error
  * 
@@ -258,14 +258,14 @@ router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Rental'
+ *                          $ref: '#/components/schemas/Rentals'
  *          responses:
  *              200:
  *                  description: The cancellation request was successfully submitted
  *                  content:
  *                      application/json:
  *                          schema:
- *                              $ref: '#/components/schemas/Rental'
+ *                              $ref: '#/components/schemas/Rentals'
  *              500:
  *                  description: There was a server error
  */
