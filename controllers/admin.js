@@ -116,14 +116,14 @@ exports.postEditCostume = async (req, res, next) => {
   const updatedSize = req.body.size;
   const updatedImage = req.body.image;
   const updatedDescription = req.body.description;
-  // if (req.file) {
-  //   imageUrl = req.file.path.replace("\\","/");
-  // }
-  // if (!imageUrl) {
-  //   const error = new Error('No file picked.');
-  //   error.statusCode = 422;
-  //   throw error;
-  // }
+  if (req.file) {
+    imageUrl = req.file.path.replace("\\","/");
+  }
+  if (!imageUrl) {
+    const error = new Error('No file picked.');
+    error.statusCode = 422;
+    throw error;
+  }
 
   try {
     const costume = await Costume.findById(costId);
@@ -132,14 +132,14 @@ exports.postEditCostume = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
-    // if (costume.creator._id.toString() !== req.userId) {
-    //   const error = new Error('Not authorized!');
-    //   error.statusCode = 403;
-    //   throw error;
-    // }
-    // if (imageUrl !== post.imageUrl) {
-    //   clearImage(post.imageUrl);
-    // }
+    if (costume.creator._id.toString() !== req.userId) {
+      const error = new Error('Not authorized!');
+      error.statusCode = 403;
+      throw error;
+    }
+    if (imageUrl !== post.imageUrl) {
+      clearImage(post.imageUrl);
+    }
     costume.category = updatedCategory,
     costume.costumeName = updatedCostumeName,
     costume.rentalFee = updatedRentalFee,
@@ -148,7 +148,7 @@ exports.postEditCostume = async (req, res, next) => {
     costume.description = updatedDescription
     const result = await costume.save()
     // TODO: Stretch: add websockets
-    // io.getIO().emit('posts', { action: 'update', post: result });
+    io.getIO().emit('posts', { action: 'update', post: result });
     res.status(201).json({
       message: 'Costume edited',
       costumeId: result._id

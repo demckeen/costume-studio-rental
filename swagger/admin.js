@@ -49,7 +49,7 @@
  * GET routes
  * @swagger
  * 
- * admin/costumes:
+ * /admin/costumes:
  *      get:
  *          summary: Gets a list of all the costumes
  *          tags: [Admin]
@@ -63,7 +63,7 @@
  *                          items:
  *                              $ref: '#/components/schemas/Costume'
  * 
- * admin/edit-costume/{costumeId}:
+ * /admin/edit-costume/{costumeId}:
  *      get:
  *          summary: Get single costume detail for logged in user that created that costume
  *          tags: [Admin]
@@ -90,7 +90,7 @@
  * POST routes
  * @swagger
  * 
- * admin/edit-costume:
+ * /admin/edit-costume:
  *      post:
  *          summary: edit details of existing costume that the user has created
  *          tags: [Admin]
@@ -110,7 +110,7 @@
  *              500:
  *                  description: There was a server error
  * 
- * admin/add-costume:
+ * /admin/add-costume:
  *      post:
  *          summary: create new costume entry in database
  *          tags: [Admin]
@@ -155,7 +155,7 @@
  * DELETE routes
  * @swagger
  * 
- * admin/delete-costume/{costumeId}:
+ * /admin/delete-costume/{costumeId}:
  *      delete:
  *          summary: delete costume that admin has created by id
  *          tags: [Admin]

@@ -59,7 +59,7 @@
  * GET routes
  * @swagger
  * 
- * /costumes:
+ * /costume/costumes:
  *      get:
  *          summary: Gets a list of all the costumes
  *          tags: [Rentals]
@@ -73,7 +73,7 @@
  *                          items:
  *                              $ref: '#/components/schemas/Costume'
  * 
- * /costumes/{costumeId}:
+ * /costume/costumes/{costumeId}:
  *      get:
  *          summary: Gets the details of the costume with the id
  *          tags: [Rentals]

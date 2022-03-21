@@ -42,7 +42,7 @@ const options = {
         },
         servers: [
             {
-                url: '-'
+                url: 'http://localhost:8080'
             }
         ],
     },
@@ -74,7 +74,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/costume', inventoryRoutes);
+app.use('/costume/', inventoryRoutes);
 app.use('/admin', adminRoutes);
 app.use('/auth', authRoutes);
 

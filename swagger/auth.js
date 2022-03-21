@@ -10,6 +10,7 @@
  *              -firstName
  *              -lastName
  *              -email
+ *              -password
  *          properties:
  *              userId:
  *                  type: string
@@ -23,11 +24,15 @@
  *              email:
  *                  type: string
  *                  description: The user's email address
+ *              password:
+ *                  type: string
+ *                  description: The user's password
  *          example:
  *              userId: 87686587
- *              firstName: John
+ *              name: John
  *              lastName: Smith
- *              email: johnsmith@email.com          
+ *              email: johnsmith@email.com
+ *              password: thegreatjohnsmith          
  *                  
  *          
  */
@@ -44,7 +49,7 @@
  * POST routes
  * @swagger
  * 
- * auth/login:
+ * /auth/login:
  *      post:
  *          summary: submit user email and password to authenicate and log in
  *          tags: [Auth]
@@ -64,7 +69,7 @@
  *              500:
  *                  description: There was a server error
  * 
- * auth/logout:
+ * /auth/logout:
  *      post:
  *          summary: ???
  *          tags: [Auth]
@@ -84,7 +89,7 @@
  *              500:
  *                  description: There was a server error
  * 
- * auth/reset:
+ * /auth/reset:
  *      post:
  *          summary: reset password
  *          tags: [Auth]
@@ -104,7 +109,7 @@
  *              500:
  *                  description: There was a server error
  *  
- * auth/reset/{token}:
+ * /auth/reset/{token}:
  *      post:
  *          summary: reset password
  *          tags: [Auth]
@@ -124,7 +129,7 @@
  *              500:
  *                  description: There was a server error
  * 
- * auth/new-password:
+ * /auth/new-password:
  *      post:
  *          summary: set new password
  *          tags: [Auth]
@@ -149,7 +154,7 @@
  * PUT routes
  * @swagger
  * 
- * auth/signup:
+ * /auth/signup:
  *      put:
  *          summary: create account with a user's name, email, and password
  *          tags: [Auth]
