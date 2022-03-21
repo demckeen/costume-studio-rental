@@ -65,7 +65,7 @@
  *          tags: [Rentals]
  *          responses:
  *              200:
- *                  description: List of costumes
+ *                  description: List of costumes displayed
  *                  content:
  *                      application/json:
  *                          schema:
@@ -86,7 +86,7 @@
  *              description: This is the costume id
  *          responses:
  *              200:
- *                  description: Get costume information by Id
+ *                  description: Costume information by costumeId
  *                  content:
  *                      application/json:
  *                          schema:
@@ -100,7 +100,7 @@
  *          tags: [Rentals]
  *          responses:
  *              200:
- *                  description: Get information about cart contents
+ *                  description: Information about cart contents displayed
  *                  content:
  *                      application/json:
  *                          schema:
@@ -135,7 +135,7 @@
  *          tags: [Rentals]
  *          responses:
  *              200:
- *                  description: Get list of rentals
+ *                  description: Display list of rentals
  *                  content:
  *                      application/json:
  *                          schema:
@@ -155,7 +155,7 @@
  * 
  * /cart:
  *      post:
- *          summary: add costume to cart for potential rental
+ *          summary: Add costume to cart for potential rental
  *          tags: [Rentals]
  *          requestBody:
  *              required: true
@@ -175,7 +175,7 @@
  * 
  * /cart-delete-item:
  *      post:
- *          summary: remove costume from cart
+ *          summary: Remove costume from cart
  *          tags: [Rentals]
  *          requestBody:
  *              required: true
@@ -195,7 +195,7 @@
  * 
  * /create-rental:
  *      post:
- *          summary: submit costumes and create rental order
+ *          summary: Submit costumes and create rental order
  *          tags: [Rentals]
  *          requestBody:
  *              required: true
@@ -205,7 +205,7 @@
  *                          $ref: '#/components/schemas/Rentals'
  *          responses:
  *              200:
- *                  description: The tental was successfully created
+ *                  description: The rental was successfully created
  *                  content:
  *                      application/json:
  *                          schema:
@@ -215,7 +215,7 @@
  * 
  * /cancel-rental:
  *      post:
- *          summary: submit cancellation request for rental that has not yet begun
+ *          summary: Submit cancellation request for rental that has not yet begun
  *          tags: [Rentals]
  *          requestBody:
  *              required: true

@@ -33,7 +33,7 @@ router.get('/checkout', isAuth, inventoryController.getCheckout);
 // router.post('/checkout/cancel', isAuth, inventoryController.cancelCheckout);
 
 //
-router.get('/orders', isAuth, inventoryController.getOrders);
+router.get('/rentals', isAuth, inventoryController.getRentals);
 
 //Post routes
 
