@@ -51,7 +51,7 @@
  * 
  * /auth/login:
  *      post:
- *          summary: submit user email and password to authenicate and log in
+ *          summary: Submit user email and password to authenicate and log in
  *          tags: [Auth]
  *          requestBody:
  *              required: true
@@ -61,7 +61,7 @@
  *                          $ref: '#/components/schemas/User'
  *          responses:
  *              200:
- *                  description: The costume was successfully added to the cart
+ *                  description: Login was successfull
  *                  content:
  *                      application/json:
  *                          schema:
@@ -71,7 +71,7 @@
  * 
  * /auth/logout:
  *      post:
- *          summary: ???
+ *          summary: Logout
  *          tags: [Auth]
  *          requestBody:
  *              required: true
@@ -81,7 +81,7 @@
  *                          $ref: '#/components/schemas/User'
  *          responses:
  *              200:
- *                  description: Log out was successful
+ *                  description: Logout was successful
  *                  content:
  *                      application/json:
  *                          schema:
@@ -91,7 +91,7 @@
  * 
  * /auth/reset:
  *      post:
- *          summary: reset password
+ *          summary: Reset password
  *          tags: [Auth]
  *          requestBody:
  *              required: true
@@ -111,7 +111,7 @@
  *  
  * /auth/reset/{token}:
  *      post:
- *          summary: reset password
+ *          summary: Reset password
  *          tags: [Auth]
  *          requestBody:
  *              required: true
@@ -131,7 +131,7 @@
  * 
  * /auth/new-password:
  *      post:
- *          summary: set new password
+ *          summary: Set new password
  *          tags: [Auth]
  *          requestBody:
  *              required: true
@@ -141,7 +141,7 @@
  *                          $ref: '#/components/schemas/Rental'
  *          responses:
  *              200:
- *                  description: new password has been set
+ *                  description: New password has been set
  *                  content:
  *                      application/json:
  *                          schema:
@@ -156,7 +156,7 @@
  * 
  * /auth/signup:
  *      put:
- *          summary: create account with a user's name, email, and password
+ *          summary: Create account with a user's name, email, and password
  *          tags: [Auth]
  *          requestBody:
  *              required: true
@@ -166,7 +166,7 @@
  *                          $ref: '#/components/schemas/User'
  *          responses:
  *              200:
- *                  description: The costume was successfully deleted
+ *                  description: The user was successfully signed up
  *                  content:
  *                      application/json:
  *                          schema:

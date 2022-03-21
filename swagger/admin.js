@@ -92,7 +92,7 @@
  * 
  * /admin/edit-costume:
  *      post:
- *          summary: edit details of existing costume that the user has created
+ *          summary: Edit details of existing costume that the user has created
  *          tags: [Admin]
  *          requestBody:
  *              required: true
@@ -112,7 +112,7 @@
  * 
  * /admin/add-costume:
  *      post:
- *          summary: create new costume entry in database
+ *          summary: Create a new costume entry in database
  *          tags: [Admin]
  *          requestBody:
  *              required: true
@@ -130,25 +130,6 @@
  *              500:
  *                  description: There was a server error
  * 
- * /cancel-rental:
- *      post:
- *          summary: submit cancellation request for rental that has not yet begun
- *          tags: [Admin]
- *          requestBody:
- *              required: true
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Rental'
- *          responses:
- *              200:
- *                  description: The cancellation request was successfully submitted
- *                  content:
- *                      application/json:
- *                          schema:
- *                              $ref: '#/components/schemas/Rental'
- *              500:
- *                  description: There was a server error
  */
 
 /**
@@ -157,7 +138,7 @@
  * 
  * /admin/delete-costume/{costumeId}:
  *      delete:
- *          summary: delete costume that admin has created by id
+ *          summary: Delete costume that admin has created by id
  *          tags: [Admin]
  *          parameters:
  *            - in: path

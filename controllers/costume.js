@@ -119,10 +119,10 @@ exports.getCheckout = async (req, res, next) => {
   let total = 0;
 
   try {
-    const user = await req.user.populate('cart.items.productId').execPopulate()
-    const products = user.cart.items;
-    const checkoutTotal = products.forEach(p => {
-      total += p.quantity * p.productId.price;
+    const user = await req.user.populate('cart.items.costumeId').execPopulate()
+    const costumes = user.cart.items;
+    const checkoutTotal = costumes.forEach(p => {
+      total += p.quantity * p.costumeId.price;
     });
 
     // - Dana here -- I still need to do the payments unit, I don't see where the total of
@@ -130,11 +130,11 @@ exports.getCheckout = async (req, res, next) => {
 
     const paymentResult = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: products.map(p => {
+      line_items: costumes.map(p => {
         return {
-          name: p.productId.title,
-          description: p.productId.description,
-          amount: p.productId.price * 100,
+          name: p.costumeId.title,
+          description: p.costumeId.description,
+          amount: p.costumeId.price * 100,
           currency: 'usd',
           quantity: p.quantity
         };
@@ -154,15 +154,15 @@ exports.getCheckout = async (req, res, next) => {
   }
 };
 
-exports.getOrders = async (req, res, next) => {
+exports.getRentals = async (req, res, next) => {
   try {
-    const orders = Order.find({
+    const rentals = rental.find({
       'user.userId': req.user._id
     });
 
     res.status(200)({
       pageTitle: 'Your Rentals',
-      orders: orders
+      rentals: rentals
     })
   } catch (err) {
     const error = new Error(err);

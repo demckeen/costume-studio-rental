@@ -1,0 +1,8 @@
+{
+  "env": {
+    "MONGO_URI": "",
+    "STRIPE_KEY": "",
+    "SENDGRID_KEY": ""
+  }
+
+}
