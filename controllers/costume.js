@@ -156,7 +156,7 @@ exports.getCheckout = async (req, res, next) => {
 
 exports.getRentals = async (req, res, next) => {
   try {
-    const rentals = rental.find({
+    const rentals = Rental.find({
       'user.userId': req.user._id
     });
 
