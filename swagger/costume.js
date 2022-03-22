@@ -1,4 +1,6 @@
 /**
+ * Schemas and routes for costume - includes cart and rentals
+ * 
  * Define a schema for costume inventory
  * @swagger
  * components:

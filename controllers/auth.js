@@ -1,3 +1,5 @@
+// AUTH CONTROLLER
+
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -6,6 +8,7 @@ const User = require('../models/user');
 
 //Place Controller functions here - exports.get/post/etc
 
+//Create a User
 exports.signup = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -35,6 +38,7 @@ exports.signup = async (req, res, next) => {
   }
 };
 
+//
 exports.login = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -63,7 +67,7 @@ exports.login = async (req, res, next) => {
       'KateJenDanaHaileyJamieJennifer', 
       { expiresIn: '1h' }
     );
-    res.status(200).json({ message: 'Logged in successfully.', token: token, userId: loadedUser._id.toStrin(), isAdmin: loadedUser.isAdmin });
+    res.status(200).json({ message: 'Logged in successfully.', token: token, userId: loadedUser._id.toString(), isAdmin: loadedUser.isAdmin });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -80,6 +84,7 @@ exports.login = async (req, res, next) => {
 //     res.redirect('/');
 //   });
 // };
+
 
 exports.postReset = async (req, res, next) => {
     try {
@@ -142,6 +147,7 @@ exports.isPassLinkAuth = async (req, res, next) => {
     }
   };
 
+//Create new password
 exports.postNewPassword = async (req, res, next) => {
   const newPassword = req.body.password;
   const userId = req.body.userId;

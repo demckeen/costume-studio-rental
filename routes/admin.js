@@ -1,3 +1,5 @@
+// ADMIN ROUTES
+
 const path = require('path');
 const express = require('express');
 const {
@@ -10,13 +12,20 @@ const isAuth = require('../middleware/is-auth');
 
 const router = express.Router();
 
-//Place routes here
+
+// ---GET Routes---
 
 // /admin/costumes => GET
 router.get('/costumes', isAuth, adminController.getCostumes);
 
 // /admin/add-costume => GET
 // router.get('/add-costume', isAuth, adminController.getAddCostume);
+
+// /admin/edit-costume/:costumeId => GET
+router.get('/edit-costume/:costumeId', isAuth, adminController.getEditCostume);
+
+
+// ---POST Routes---
 
 // /admin/add-costume => POST
 router.post(
@@ -53,8 +62,6 @@ router.post(
 	adminController.postAddCostume
 );
 
-// /admin/edit-costume/:costumeId => GET
-router.get('/edit-costume/:costumeId', isAuth, adminController.getEditCostume);
 
 // /admin/edit-costume => POST
 router.post(
@@ -90,6 +97,9 @@ router.post(
 	isAuth,
 	adminController.postEditCostume
 );
+
+
+// ---DELETE Routes---
 
 // /admin/delete-costume => DELETE
 router.delete('/delete-costume/:costumeId', isAuth, adminController.deleteCostume);

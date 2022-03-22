@@ -1,3 +1,5 @@
+// COSTUME ROUTES
+
 const path = require('path');
 
 const express = require('express');
@@ -12,9 +14,10 @@ const isAuth = require('../middleware/is-auth');
 
 const router = express.Router();
 
-//Place routes here
 
-//get costumes
+// ---GET routes---
+
+//
 router.get('/costumes', costumeController.getCostumes);
 
 //
@@ -29,13 +32,13 @@ router.get('/checkout', isAuth, costumeController.getCheckout);
 //
 // router.get('/checkout/success', isAuth, costumeController.getCheckoutSuccess);
 
-//
-// router.post('/checkout/cancel', isAuth, costumeController.cancelCheckout);
-
-//
 router.get('/rentals', isAuth, costumeController.getRentals);
 
-//Post routes
+
+// ---POST routes---
+
+//
+// router.post('/checkout/cancel', isAuth, costumeController.cancelCheckout);
 
 //
 router.post('/cart', isAuth, costumeController.postCart);

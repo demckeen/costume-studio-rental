@@ -1,3 +1,5 @@
+// AUTH ROUTES
+
 const express = require('express');
 const {
   body,
@@ -11,7 +13,10 @@ const isPassAuth = require('../middleware/is-pass-auth');
 
 const router = express.Router();
 
-//Place routes here
+// ---GET Routes---
+
+
+// ---PUT Routes---
 
 //
 router.put('/signup',
@@ -43,6 +48,9 @@ router.put('/signup',
   ],
   authController.signup
 );
+
+
+// ---POST Routes---
 
 //
 router.post('/login',

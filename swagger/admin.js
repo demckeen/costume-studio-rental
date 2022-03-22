@@ -1,4 +1,6 @@
 /**
+ * Schemas and routes for admin
+ * 
  * Define a schema for Rentals
  * @swagger
  * components:
