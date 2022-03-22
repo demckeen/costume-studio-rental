@@ -51,7 +51,7 @@ exports.postAddCostume = async (req, res, next) => {
     // TODO: Stretch: add websockets. This may need to be tweaked more.
     io.getIO().emit('costumes', {
       action: 'create',
-      costume: costId
+      costume: costumeId
     });
     res.status(201).json({
       message: 'Costume added!',
@@ -71,9 +71,9 @@ exports.getEditCostume = async (req, res, next) => {
   if (!editMode) {
     return res.redirect('/');
   }
-  const costId = req.params.costumeId;
+  const costumeId = req.params.costumeId;
   try {
-    const costume = await Costume.findById(costId);
+    const costume = await Costume.findById(costumeId);
     if (!costume) {
       const error = new Error('No costume found.');
       error.statusCode = 422;
@@ -101,7 +101,7 @@ exports.getEditCostume = async (req, res, next) => {
 // If the above "getEditCostume" isn't needed, this one will need to be modified more. 
 // TODO: Add image upload/download
 exports.postEditCostume = async (req, res, next) => {
-  const costId = req.body.costumeId;
+  const costumeId = req.body.costumeId;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Edit costume failed.');
@@ -125,7 +125,7 @@ exports.postEditCostume = async (req, res, next) => {
   }
 
   try {
-    const costume = await Costume.findById(costId);
+    const costume = await Costume.findById(costumeId);
     if (!costume) {
       const error = new Error('Could not find costume.');
       error.statusCode = 404;
@@ -194,9 +194,17 @@ exports.getCostumes = async (req, res, next) => {
 // This is similar to deletePost in the REST API backend feed controller
 // TODO: Stretch: add websockets
 exports.deleteCostume = async (req, res, next) => {
-  const costId = req.params.postId;
+  // const errors = validationResult(req);
+
+  // if (!errors.isEmpty()) {
+  //   const error = new Error('Validation failed.');
+  //   error.statusCode = 422;
+  //   error.data = errors.array();
+  //   throw error;
+  // }
+  const costumeId = req.params.costumeId;
   try {
-    const costume = await Costume.findById(costId)
+    const costume = await Costume.findById(costumeId)
     if (!costume) {
       const error = new Error('Could not find costume.');
       error.statusCode = 404;
@@ -207,17 +215,17 @@ exports.deleteCostume = async (req, res, next) => {
       error.statusCode = 403;
       throw error;
     }
+    // TODO: Add image upload/download
+    // clearImage(costume.image);
+    await Costume.findByIdAndRemove(costumeId);
     // Check logged in user
-    clearImage(costume.image);
-    await Costume.findByIdAndRemove(costId);
-
     const user = await User.findById(req.userId);
-    user.costumes.pull(costId);
+    user.costumes.pull(costumeId);
 
     await user.save();
-    io.getIO().emit('costumes', { action: 'delete', costume: costId });
+    io.getIO().emit('costumes', { action: 'delete', costume: costumeId });
     res.status(200).json({ message: 'Deleted post.' });
-  } catch {
+  } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
     }
@@ -226,7 +234,7 @@ exports.deleteCostume = async (req, res, next) => {
 }
 
 // TODO: Add image upload/download
-const clearImage = filePath => {
-  filePath = path.join(__dirname, '..', filePath);
-  fs.unlink(filePath, err => console.log(err));
-};
+// const clearImage = filePath => {
+//   filePath = path.join(__dirname, '..', filePath);
+//   fs.unlink(filePath, err => console.log(err));
+// };
