@@ -39,6 +39,7 @@ exports.login = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   let loadedUser;
+  let isAdmin;
   try {
     const user = await User.findOne({ email: email });
     if (!user) {
@@ -62,7 +63,7 @@ exports.login = async (req, res, next) => {
       'KateJenDanaHaileyJamieJennifer', 
       { expiresIn: '1h' }
     );
-    res.status(200).json({ message: 'Logged in successfully.', token: token, userId: loadedUser._id.toString() });
+    res.status(200).json({ message: 'Logged in successfully.', token: token, userId: loadedUser._id.toStrin(), isAdmin: loadedUser.isAdmin });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
