@@ -7,29 +7,29 @@
  *          type: object
  *          required:
  *              -rentalId
- *              -orderDate
+ *              -rentalDate
  *              -userId
  *              -rentals
  *              -returnDate
  *          properties:
  *              rentalId:
  *                  type: String
- *                  description: The auto-generated id of the order
- *              orderDate:
+ *                  description: The auto-generated id of the rental
+ *              rentalDate:
  *                  type: Date
- *                  description: date the order was placed
+ *                  description: date the rental was placed
  *              userId:
  *                  type: String
- *                  description: id of user who placed the order
+ *                  description: id of user who placed the rental
  *              rentals:
  *                  type: Array
- *                  description: list of rentals in order
+ *                  description: list of rentals in rental
  *              returnDate:
  *                  type: Date
  *                  description: date the rental is due
  *          example:
  *              rentalId: 4367489
- *              orderDate: 10/31/2022
+ *              rentalDate: 10/31/2022
  *              userId: 4326
  *              rentals: [Gandalf the Grey, Tin Man, Queen Elizabeth]
  *              returnDate: 11/31/2022

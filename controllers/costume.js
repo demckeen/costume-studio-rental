@@ -126,7 +126,7 @@ exports.getCheckout = async (req, res, next) => {
     });
 
     // - Dana here -- I still need to do the payments unit, I don't see where the total of
-    // the order cost is getting into the checkout session? Does it need to? Where should this go?
+    // the rental cost is getting into the checkout session? Does it need to? Where should this go?
 
     const paymentResult = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -171,7 +171,7 @@ exports.getRentals = async (req, res, next) => {
   }
 }
 
-exports.postOrder = async (req, res, next) => {
+exports.postRental = async (req, res, next) => {
   try {
     const user = await req.user.populate('cart.items.costumeId')
     const costumes = user.cart.items.map(i => {
@@ -183,17 +183,17 @@ exports.postOrder = async (req, res, next) => {
       };
 
     });
-    const order = new Order({
+    const rental = new Rental({
       user: {
         name: req.user.name,
         userId: req.userId
       },
       costumes: costumes
     });
-    await order.save();
-    const result = await req.user.clearCart();
+    await rental.save();
+    await req.user.clearCart();
     res.status(200).json({
-      message: 'Order placed successfully!'
+      message: 'Rental placed successfully!'
     })
   } catch (err) {
     const error = new Error(err);
@@ -204,17 +204,17 @@ exports.postOrder = async (req, res, next) => {
 
 
 // TODO: admin Delete function? need function to send message to admin to delete?
-exports.postCancelOrder = async (req, res, next) => {
-  const orderId = req.body.orderId;
+exports.postCancelRental = async (req, res, next) => {
+  const rentalId = req.body.rentalId;
 
   try {
-    await Order.deleteOne({
-      orderId: orderId,
+    await Rental.deleteOne({
+      rentalId: rentalId,
       userId: req.userId
     })
     res.status(200).json({
-      message: 'order has been deleted',
-      orderId: orderId,
+      message: 'Rental has been deleted',
+      rentalId: rentalId,
       userId: req.userId
     });
   } catch (err) {

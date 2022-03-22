@@ -1,5 +1,5 @@
 /**
- * Define a schema for inventory
+ * Define a schema for costume inventory
  * @swagger
  * components:
  *  schemas:
@@ -121,7 +121,7 @@
  *              description: This is the rental id
  *          responses:
  *              200:
- *                  description: Get rental information for a single past rental order
+ *                  description: Get rental information for a single past rental
  *                  content:
  *                      application/json:
  *                          schema:

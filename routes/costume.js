@@ -7,7 +7,7 @@ const {
     check
 } = require('express-validator');
 
-const inventoryController = require('../controllers/costume');
+const costumeController = require('../controllers/costume');
 const isAuth = require('../middleware/is-auth');
 
 const router = express.Router();
@@ -15,38 +15,38 @@ const router = express.Router();
 //Place routes here
 
 //get costumes
-router.get('/costumes', inventoryController.getCostumes);
+router.get('/costumes', costumeController.getCostumes);
 
 //
-router.get('/costumes/:costumeId', inventoryController.getCostume);
+router.get('/costumes/:costumeId', costumeController.getCostume);
 
 //
-router.get('/cart', isAuth, inventoryController.getCart);
+router.get('/cart', isAuth, costumeController.getCart);
 
 //
-router.get('/checkout', isAuth, inventoryController.getCheckout);
+router.get('/checkout', isAuth, costumeController.getCheckout);
 
 //
-// router.get('/checkout/success', isAuth, inventoryController.getCheckoutSuccess);
+// router.get('/checkout/success', isAuth, costumeController.getCheckoutSuccess);
 
 //
-// router.post('/checkout/cancel', isAuth, inventoryController.cancelCheckout);
+// router.post('/checkout/cancel', isAuth, costumeController.cancelCheckout);
 
 //
-router.get('/rentals', isAuth, inventoryController.getRentals);
+router.get('/rentals', isAuth, costumeController.getRentals);
 
 //Post routes
 
 //
-router.post('/cart', isAuth, inventoryController.postCart);
+router.post('/cart', isAuth, costumeController.postCart);
 
 //
-router.post('/cancel-rental', isAuth, inventoryController.postCartDeleteCostume);
+router.post('/cancel-rental', isAuth, costumeController.postCartDeleteCostume);
 
 //
-router.post('/create-rental', isAuth, inventoryController.postOrder);
+router.post('/create-rental', isAuth, costumeController.postRental);
 
 //
-router.post('/cancel-rental', isAuth, inventoryController.postCancelOrder);
+router.post('/cancel-rental', isAuth, costumeController.postCancelRental);
 
 module.exports = router;
