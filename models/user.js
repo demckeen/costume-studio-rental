@@ -74,33 +74,45 @@ const userSchema = new Schema ({
 //Do we need to include some methods here?  
 
 //Sample Method: 
-// userSchema.methods.addToCart = function (product, quantity) {
-//     console.log(quantity);
-//     if(parseInt(quantity) === 0) {
-//         return;
-//     }
-//     else {
-//     const cartProductIndex = this.cart.items.findIndex(cp => {
-//         return cp.productId.toString() === product._id.toString();
-//     });
-//     let newQuantity = quantity;
-//     const updatedCartItems = [...this.cart.items];
+userSchema.methods.addToCart = function (rental, quantity) {
+    console.log(quantity);
+    if(parseInt(quantity) === 0) {
+        return;
+    }
+    else {
+    const cartRentalIndex = this.cart.items.findIndex(cp => {
+        return cp.rentalId.toString() === rental._id.toString();
+    });
+    let newQuantity = quantity;
+    const updatedCartItems = [...this.cart.items];
 
-//     if (cartProductIndex >= 0) {
-//         newQuantity = parseInt(this.cart.items[cartProductIndex].quantity) + parseInt(newQuantity);
-//         updatedCartItems[cartProductIndex].quantity = newQuantity;
-//     } else {
-//         updatedCartItems.push({
-//             productId: product._id,
-//             quantity: newQuantity
-//         });
-//     }
-//     const updatedCart = {
-//         items: updatedCartItems
-//     };
-//     this.cart = updatedCart;
-//     return this.save();}
+    if (cartProductIndex >= 0) {
+        newQuantity = parseInt(this.cart.items[cartRentalIndex].quantity) + parseInt(newQuantity);
+        updatedCartItems[cartRentalIndex].quantity = newQuantity;
+    } else {
+        updatedCartItems.push({
+            rentalId: rental._id,
+            quantity: newQuantity
+        });
+    }
+    const updatedCart = {
+        items: updatedCartItems
+    };
+    this.cart = updatedCart;
+    return this.save();}
+}
 
-// }
+userSchema.methods.removeFromCart = function(rentaltId) {
+  const updatedCartItems = this.cart.items.filter(item => {
+    return item.rentalId.toString() !== rentalId.toString();
+  });
+  this.cart.items = updatedCartItems;
+  return this.save();
+}
+
+userSchema.methods.clearCart = function() {
+  this.cart = { items: [] };
+  return this.save();
+};
 
 module.exports = mongoose.model('User', userSchema);

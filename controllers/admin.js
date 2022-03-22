@@ -12,33 +12,33 @@ const Costume = require('../models/costume');
 // This is similar to createPost in the REST API backend feed controller
 // TODO: Add image upload/download
 exports.postAddCostume = async (req, res, next) => {
-  const errors = validationResult(req);
+  // const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    const error = new Error('Validation failed.');
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
-  }
+  // if (!errors.isEmpty()) {
+  //   const error = new Error('Validation failed.');
+  //   error.statusCode = 422;
+  //   error.data = errors.array();
+  //   throw error;
+  // }
   // if (!req.file) {
   //   const error = new Error('No image provided.');
   //   error.statusCode = 422;
   //   throw error;
   // }
-  // const imageUrl = req.file.path.replace("\\" ,"/");
   const category = req.body.category;
   const costumeName = req.body.costumeName;
   const rentalFee = req.body.rentalFee;
   const size = req.body.size;
-  const imageUrl = req.file.path.replace("\\" ,"/");
+  const imageUrl = req.body.imageUrl;
+  // const imageUrl = req.file.path.replace("\\" ,"/");
   const description = req.body.description;
 
   const costume = new Costume({
     category: category,
-    costumeName: costumeName,
+    name: costumeName,
     rentalFee: rentalFee,
     size: size,
-    image: imageUrl,
+    imageUrl: imageUrl,
     description: description,
     userId: req.userId
   });
@@ -55,7 +55,6 @@ exports.postAddCostume = async (req, res, next) => {
     });
     res.status(201).json({
       message: 'Costume added!',
-      costume: result._doc, userId: { _id: req.userId, name: user.name }
     });
   } catch (err) {
     if (!err.statusCode) {

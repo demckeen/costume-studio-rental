@@ -62,7 +62,7 @@ exports.login = async (req, res, next) => {
       'KateJenDanaHaileyJamieJennifer', 
       { expiresIn: '1h' }
     );
-    res.status(200).json({ token: token, userId: loadedUser._id.toString() });
+    res.status(200).json({ message: 'Logged in successfully.', token: token, userId: loadedUser._id.toString() });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;

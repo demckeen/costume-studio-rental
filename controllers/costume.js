@@ -67,7 +67,12 @@ exports.getCostume = async (req, res, next) => {
 
 exports.getCart = async (req, res, next) => {
   try {
-    const user = await req.user.populate('cart.items.productId')
+    const user = await req.user.populate('cart.items.rentalId')
+    if (!cart) {
+      const error = new Error('No items in cart!');
+      error.statusCode = 404;
+      throw error;
+    }
     const costumes = user.cart.items;
     res.status(200)({
       pageTitle: 'Your Cart',
@@ -82,9 +87,13 @@ exports.getCart = async (req, res, next) => {
 
 exports.postCart = async (req, res, next) => {
   const costumeId = req.body.costumeId;
-
+  if (!costumeId) {
+    const error = new Error('That costume does not exist');
+    error.statusCode = 404;
+    throw error;
+  }
   try {
-    const costume = await Product.findById(costumeId)
+    const costume = await Costume.findById(costumeId)
     await req.user.addToCart(costume);
     res.status(200).json({
       message: 'Costume added to cart',

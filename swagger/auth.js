@@ -161,7 +161,7 @@
  *                      schema:
  *                          $ref: '#/components/schemas/User'
  *          responses:
- *              200:
+ *              201:
  *                  description: The user was successfully signed up
  *                  content:
  *                      application/json:
