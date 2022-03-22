@@ -51,7 +51,7 @@ const options = {
 
 const specs = swaggerJsDoc(options);
 
-const inventoryRoutes = require('./routes/costume');
+const costumeRoutes = require('./routes/costume');
 const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
 
@@ -74,7 +74,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/costume/', inventoryRoutes);
+app.use('/costume/', costumeRoutes);
 app.use('/admin', adminRoutes);
 app.use('/auth', authRoutes);
 
