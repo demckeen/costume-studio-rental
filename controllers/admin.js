@@ -9,55 +9,38 @@ const User = require('../models/user');
 const Costume = require('../models/costume');
 // const user = require('../models/user');
 
-// TODO: Remove page rendering 
+// TODO: Remove any page rendering 
 
-// This is similar to createPost in the REST API backend feed controller
-// TODO: Add image upload/download
-exports.postAddCostume = async (req, res, next) => {
-  // const errors = validationResult(req);
+// Place Controller functions here:
 
-  // if (!errors.isEmpty()) {
-  //   const error = new Error('Validation failed.');
-  //   error.statusCode = 422;
-  //   error.data = errors.array();
-  //   throw error;
-  // }
-  // if (!req.file) {
-  //   const error = new Error('No image provided.');
-  //   error.statusCode = 422;
-  //   throw error;
-  // }
-  const category = req.body.category;
-  const costumeName = req.body.costumeName;
-  const rentalFee = req.body.rentalFee;
-  const size = req.body.size;
-  const imageUrl = req.body.imageUrl;
-  // const imageUrl = req.file.path.replace("\\" ,"/");
-  const description = req.body.description;
 
-  const costume = new Costume({
-    category: category,
-    name: costumeName,
-    rentalFee: rentalFee,
-    size: size,
-    imageUrl: imageUrl,
-    description: description,
-    userId: req.userId
-  });
+// GET EXPORTS:
+
+// This is similar to getPosts in the REST API backend feed controller
+// TODO: This route currently does not work. Is it just because of required authorization or more?
+// TODO: This one may not be needed in admin. It was only rendering a view prior to async/await changes and adds pagination
+// Displays costumes to user with admin capabilities
+exports.getCostumes = async (req, res, next) => {
+  // TODO: Stretch: add pagination?
+  // const currentPage = req.query.page || 1;
+  // const perPage = 3;
   try {
-    await costume.save();
-    // TODO: are the next 3 lines needed?
-    const user = await User.findById(req.userId);
-    user.costumes.push(costume);
-    await user.save();
-    // TODO: Stretch: add websockets. This may need to be tweaked more.
-    io.getIO().emit('costumes', {
-      action: 'create',
-      costume: costumeId
-    });
-    res.status(201).json({
-      message: 'Costume added!',
-    });
+    await Costume.find({ userId: req.user._id });
+    res.status(200).json({message: 'Retrieved costumes!'})
+
+    // TODO: Stretch: add pagination? - this may be what replaces the two lines above
+    // const totalItems = await Costume.find().countDocuments();
+    // if(!totalItems) {
+    //   return res.status(404).json({message: 'No costumes found!'})
+    // }
+    const costumes = await Costume.find()
+    //   .skip((currentPage - 1) * perPage)
+    //   .limit(perPage);
+    res.status(200).json({ 
+      message: 'Fetched costumes successfully.', 
+      costumes: costumes,
+      totalItems: totalItems
+    }); 
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -66,8 +49,10 @@ exports.postAddCostume = async (req, res, next) => {
   }
 };
 
-// This is similar to updatePost in the REST API backend feed controller but likely needs merged with the "postEditCostume" below. 
-// TODO: This one primarily renders a view - does it just need changed or is it not needed at all?
+// This is similar to updatePost in the REST API backend feed controller
+// TODO: This route currently does not work. Is it just because of required authorization or more?
+// TODO: This one primarily renders a view - does it just need changed or is it not needed at all? May need merged with "postEditCostume" below
+// Allows user that added costume to edit costume
 exports.getEditCostume = async (req, res, next) => {
   const editMode = req.query.edit;
   if (!editMode) {
@@ -99,9 +84,13 @@ exports.getEditCostume = async (req, res, next) => {
   }
 };
 
-// This is similar to updatePost in the REST API backend feed controller which is a PUT not a POST
-// If the above "getEditCostume" isn't needed, this one will need to be modified more. 
-// TODO: Add image upload/download
+
+// POST EXPORTS:
+
+// This is similar to updatePost in the REST API backend feed controller but is a PUT not a POST
+// TODO: This route currently does not work. Is it just because of required authorization or more?
+// TODO: If the above "getEditCostume" isn't needed, this one will need to be modified more and changed to PUT? 
+// Allows user that added costume to edit costume
 exports.postEditCostume = async (req, res, next) => {
   const costumeId = req.body.costumeId;
   const errors = validationResult(req);
@@ -117,11 +106,12 @@ exports.postEditCostume = async (req, res, next) => {
   const updatedSize = req.body.size;
   const updatedImage = req.body.image;
   const updatedDescription = req.body.description;
-  if (req.file) {
-    imageUrl = req.file.path.replace("\\","/");
-  }
+  // TODO: Add image upload/download?
+  // if (req.file) {
+  //   imageUrl = req.file.path.replace("\\","/");
+  // }
   if (!imageUrl) {
-    const error = new Error('No file picked.');
+    const error = new Error('No image specified.');
     error.statusCode = 422;
     throw error;
   }
@@ -148,8 +138,8 @@ exports.postEditCostume = async (req, res, next) => {
     costume.image = updatedImage,
     costume.description = updatedDescription
     const result = await costume.save()
-    // TODO: Stretch: add websockets
-    io.getIO().emit('posts', { action: 'update', post: result });
+    // TODO: Stretch: add websockets?
+    // io.getIO().emit('posts', { action: 'update', post: result });
     res.status(201).json({
       message: 'Costume edited',
       costumeId: result._id
@@ -162,29 +152,54 @@ exports.postEditCostume = async (req, res, next) => {
   }
 };
 
-// This is similar to getPosts in the REST API backend feed controller
-// TODO: This one may not be needed in admin. It was only rendering a view prior to async/await changes but may need for pagination
-exports.getCostumes = async (req, res, next) => {
-  // TODO: Stretch: add pagination
-  const currentPage = req.query.page || 1;
-  const perPage = 3;
-  try {
-    // await Costume.find({ userId: req.user._id });
-    // res.status(200).json({message: 'Retrieved costumes!'})
+// This is similar to createPost in the REST API backend feed controller
+// Adds new costumes
+exports.postAddCostume = async (req, res, next) => {
+  // TODO: When we know how to test with Authorization, uncomment out errors code (lines 17-23)
+  // const errors = validationResult(req);
+  // if (!errors.isEmpty()) {
+  //   const error = new Error('Validation failed.');
+  //   error.statusCode = 422;
+  //   error.data = errors.array();
+  //   throw error;
+  // }
 
-    // TODO: Stretch: add pagination - this may be what replaces the two lines above
-    const totalItems = await Costume.find().countDocuments();
-    if(!totalItems) {
-      return res.status(404).json({message: 'No costumes found!'})
-    }
-    const costumes = await Costume.find()
-      .skip((currentPage - 1) * perPage)
-      .limit(perPage);
-    res.status(200).json({ 
-      message: 'Fetched costumes successfully.', 
-      costumes: costumes,
-      totalItems: totalItems
-    }); 
+  // TODO: Add image upload/download? Lines 26-30, 36 (remove/comment out line 35)
+  // if (!req.file) {
+  //   const error = new Error('No image provided.');
+  //   error.statusCode = 422;
+  //   throw error;
+  // }
+  const category = req.body.category;
+  const costumeName = req.body.costumeName;
+  const rentalFee = req.body.rentalFee;
+  const size = req.body.size;
+  const imageUrl = req.body.imageUrl;
+  // const imageUrl = req.file.path.replace("\\" ,"/");
+  const description = req.body.description;
+
+  const costume = new Costume({
+    category: category,
+    name: costumeName,
+    rentalFee: rentalFee,
+    size: size,
+    imageUrl: imageUrl,
+    description: description,
+    userId: req.userId
+  });
+  try {
+    await costume.save();
+    const user = await User.findById(req.userId);
+    user.costumes.push(costume);
+    await user.save();
+    // TODO: Stretch: add websockets? This may need to be tweaked more.
+    // io.getIO().emit('costumes', {
+    //   action: 'create',
+    //   costume: costumeId
+    // });
+    res.status(201).json({
+      message: 'Costume added!',
+    });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -193,17 +208,21 @@ exports.getCostumes = async (req, res, next) => {
   }
 };
 
-// This is similar to deletePost in the REST API backend feed controller
-// TODO: Stretch: add websockets
-exports.deleteCostume = async (req, res, next) => {
-  // const errors = validationResult(req);
 
+// DELETE EXPORTS:
+
+// This is similar to deletePost in the REST API backend feed controller
+// Allows a costume to be deleted by user that added costume
+exports.deleteCostume = async (req, res, next) => {
+    // TODO: When we know how to test with Authorization, uncomment out errors code (lines 200-206)
+  // const errors = validationResult(req);
   // if (!errors.isEmpty()) {
   //   const error = new Error('Validation failed.');
   //   error.statusCode = 422;
   //   error.data = errors.array();
   //   throw error;
   // }
+
   const costumeId = req.params.costumeId;
   try {
     const costume = await Costume.findById(costumeId)
@@ -217,7 +236,8 @@ exports.deleteCostume = async (req, res, next) => {
       error.statusCode = 403;
       throw error;
     }
-    // TODO: Add image upload/download
+
+    // TODO: Add image upload/download? Line 223 and clearImage function below
     // clearImage(costume.image);
     await Costume.findByIdAndRemove(costumeId);
     // Check logged in user
@@ -235,7 +255,7 @@ exports.deleteCostume = async (req, res, next) => {
   }  
 }
 
-// TODO: Add image upload/download
+// TODO: Add image upload/download?
 // const clearImage = filePath => {
 //   filePath = path.join(__dirname, '..', filePath);
 //   fs.unlink(filePath, err => console.log(err));

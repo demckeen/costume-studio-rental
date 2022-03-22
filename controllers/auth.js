@@ -6,7 +6,10 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 
-//Place Controller functions here - exports.get/post/etc
+// Place Controller functions here:
+
+
+// PUT EXPORTS:
 
 //Create a User
 exports.signup = async (req, res, next) => {
@@ -38,7 +41,10 @@ exports.signup = async (req, res, next) => {
   }
 };
 
-//
+
+// POST EXPORTS:
+
+// User Login
 exports.login = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -76,7 +82,7 @@ exports.login = async (req, res, next) => {
   }
 }
 
-// Add to blacklist? 
+// TODO: Add to blacklist? 
 // https://medium.com/devgorilla/how-to-log-out-when-using-jwt-a8c7823e8a6
 // exports.postLogout = (req, res, next) => {
 //   req.session.destroy(err => {
@@ -85,7 +91,8 @@ exports.login = async (req, res, next) => {
 //   });
 // };
 
-
+// TODO: This route currently does not work. Is it just because of required authorization or more?
+// Reset Password
 exports.postReset = async (req, res, next) => {
     try {
       const user = await User.findOne({email: req.body.email});
@@ -115,7 +122,8 @@ exports.postReset = async (req, res, next) => {
     }
   }
 
-//prior to rendering reset password form, frontend is verifying status of url parameter, :tokenId
+// TODO: This route currently does not work. Is it just because of required authorization or more?
+// Prior to rendering reset password form, frontend is verifying status of url parameter, :tokenId
 exports.isPassLinkAuth = async (req, res, next) => {
   const token = tokenId;
   const userId  = await jwt.decode(token.userId);
@@ -147,6 +155,7 @@ exports.isPassLinkAuth = async (req, res, next) => {
     }
   };
 
+// TODO: This route currently does not work. Is it just because of required authorization or more?
 //Create new password
 exports.postNewPassword = async (req, res, next) => {
   const newPassword = req.body.password;
