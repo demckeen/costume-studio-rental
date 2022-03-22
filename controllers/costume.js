@@ -1,3 +1,5 @@
+// COSTUME CONTROLLER
+
 const fs = require('fs');
 const path = require('path');
 const {
@@ -10,6 +12,7 @@ const User = require('../models/user');
 
 //Place Controller functions here - exports.get/post/etc
 
+//Get the list of costumes
 exports.getCostumes = async (req, res, next) => {
   const page = +req.query.page || 1;
   const perPage = 3;
@@ -43,6 +46,7 @@ exports.getCostumes = async (req, res, next) => {
   }
 };
 
+//Get the details of the costume with the id
 exports.getCostume = async (req, res, next) => {
   const costumeId = req.params.costumeId;
 
@@ -65,6 +69,7 @@ exports.getCostume = async (req, res, next) => {
   }
 }
 
+//Get the user's cart info for added costumes in the cart
 exports.getCart = async (req, res, next) => {
   try {
     const user = await req.user.populate('cart.items.rentalId')
@@ -85,6 +90,7 @@ exports.getCart = async (req, res, next) => {
   }
 }
 
+//Add a costume to the cart
 exports.postCart = async (req, res, next) => {
   const costumeId = req.body.costumeId;
   if (!costumeId) {
@@ -107,6 +113,7 @@ exports.postCart = async (req, res, next) => {
   }
 };
 
+//Remove costume from cart
 exports.postCartDeleteCostume = async (req, res, next) => {
   const costumeId = req.body.costumeId;
   try {
@@ -124,6 +131,8 @@ exports.postCartDeleteCostume = async (req, res, next) => {
 };
 
 // TODO: Checkout needs fixed-please help:)
+
+//Get checkout information
 exports.getCheckout = async (req, res, next) => {
   let total = 0;
 
@@ -163,6 +172,7 @@ exports.getCheckout = async (req, res, next) => {
   }
 };
 
+//Get rentals for a user
 exports.getRentals = async (req, res, next) => {
   try {
     const rentals = Rental.find({
@@ -180,6 +190,7 @@ exports.getRentals = async (req, res, next) => {
   }
 }
 
+//Create an order
 exports.postRental = async (req, res, next) => {
   try {
     const user = await req.user.populate('cart.items.costumeId')
@@ -213,6 +224,8 @@ exports.postRental = async (req, res, next) => {
 
 
 // TODO: admin Delete function? need function to send message to admin to delete?
+
+//Cancel an order
 exports.postCancelRental = async (req, res, next) => {
   const rentalId = req.body.rentalId;
 

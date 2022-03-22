@@ -51,6 +51,7 @@ const options = {
 
 const specs = swaggerJsDoc(options);
 
+//import routes
 const costumeRoutes = require('./routes/costume');
 const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
@@ -86,6 +87,7 @@ app.use((error, req, res, next ) => {
     res.status(status).json({message: message, data: data});
 })
 
+// MongoDB connection
 mongoose.connect(MONGODB_URL)
     .then(result => {
         const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));

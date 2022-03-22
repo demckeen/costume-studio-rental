@@ -1,4 +1,6 @@
 /**
+ * Schemas and routes for auth
+ * 
  * Define a schema for users
  * @swagger
  * components:
