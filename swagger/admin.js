@@ -152,7 +152,7 @@
  *                  description: Deleted
  *              404:
  *                  description: id not found
- *              401:
+ *              403:
  *                  description: Unauthorized
  *              500:
  *                  description: there was a server error
