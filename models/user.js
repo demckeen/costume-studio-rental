@@ -3,8 +3,6 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema ({
     //Schema Definition for User Management
-    // Following is modeled from shop project - including address/etc - we can decide what 
-    // we really want to include or add from this point.
 
     name: {
         type: String,
@@ -18,60 +16,24 @@ const userSchema = new Schema ({
         type: String,
         required: true,
     },
-    cart: [{
-        type: Object,
-        required: false
-    }]
-    
-    // address: {
-    //     details: [{
-    //         firstname: {
-    //             type: String,
-    //             required: false,
-    //         },
-    //         lastname: {
-    //             type: String,
-    //             required: false,
-    //         },
-    //         street: {
-    //             type: String,
-    //             required: false,},
-    //         line2: {
-    //             type: String,
-    //             required: false,
-    //         },
-    //         city: {
-    //             type: String,
-    //             required: false,
-    //         },
-    //         state: {
-    //                 type: String,
-    //                 required: false,
-    //             },
-    //         zip: {
-    //                 type: String,
-    //                 required: false,
-    //             }
-    //         }]
-    // },
-    // resetToken: String,
-    // resetTokenExpiration: Date,
-    // cart: {
-    //     items: [{
-    //         productId: {
-    //             type: Schema.Types.ObjectId,
-    //             ref: 'Product',
-    //             required: true
-    //         },
-    //         quantity: {
-    //             type: Number,
-    //             required: true
-    //         }
-    //     }]
-    // }
+    admin: {
+        type: Boolean,
+        required: false,
+    },
+    cart: {
+        items: [{
+            costumeId: {
+                type: Schema.Types.ObjectId,
+                ref: 'Costume',
+                required: true
+            },
+            quantity: {
+                type: Number,
+                required: true
+            }
+        }]
+    }
 })
-
-//Do we need to include some methods here?  
 
 //Sample Method: 
 userSchema.methods.addToCart = function (rental, quantity) {
