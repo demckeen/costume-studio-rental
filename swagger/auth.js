@@ -9,8 +9,7 @@
  *          type: object
  *          required:
  *              -userId
- *              -firstName
- *              -lastName
+ *              -name
  *              -email
  *              -password
  *          properties:
@@ -19,7 +18,7 @@
  *                  description: The auto-generated id of the user
  *              name:
  *                  type: string
- *                  description: The user's first name
+ *                  description: The user's name
  *              email:
  *                  type: string
  *                  description: The user's email address
