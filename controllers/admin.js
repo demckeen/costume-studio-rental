@@ -10,9 +10,7 @@ const Costume = require('../models/costume');
 // const user = require('../models/user');
 
 // TODO: Remove any page rendering 
-
 // Place Controller functions here:
-
 
 // GET EXPORTS:
 
