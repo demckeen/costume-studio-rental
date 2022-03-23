@@ -170,17 +170,10 @@ exports.postAddCostume = async (req, res, next) => {
     userId: req.userId
   });
   try {
-    await costume.save();
-    const user = await User.findById(req.userId);
-    user.costumes.push(costume);
-    await user.save();
-    // TODO: Stretch: add websockets? This may need to be tweaked more.
-    // io.getIO().emit('costumes', {
-    //   action: 'create',
-    //   costume: costumeId
-    // });
+    const savedCostume = await costume.save();
     res.status(201).json({
       message: 'Costume added!',
+      costumeId: savedCostume._id
     });
   } catch (err) {
     if (!err.statusCode) {
