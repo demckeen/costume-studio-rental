@@ -1,9 +1,6 @@
 // ADMIN CONTROLLER
 
-const fs = require('fs');
-const path = require('path');
 const { validationResult } = require('express-validator');
-
 const io = require('../socket');
 const User = require('../models/user');
 const Costume = require('../models/costume');
@@ -99,7 +96,7 @@ exports.postEditCostume = async (req, res, next) => {
   const updatedCostumeName = req.body.costumeName;
   const updatedRentalFee = req.body.rentalFee;
   const updatedSize = req.body.size;
-  const updatedImage = req.body.image;
+  const updatedImage = req.body.imageUrl;
   const updatedDescription = req.body.description;
   if (!imageUrl) {
     const error = new Error('No image specified.');
@@ -126,7 +123,7 @@ exports.postEditCostume = async (req, res, next) => {
     costume.costumeName = updatedCostumeName,
     costume.rentalFee = updatedRentalFee,
     costume.size = updatedSize,
-    costume.image = updatedImage,
+    costume.imageUrl = updatedImage,
     costume.description = updatedDescription
     const result = await costume.save()
     // TODO: Stretch: add websockets?
@@ -239,9 +236,3 @@ exports.deleteCostume = async (req, res, next) => {
     next(err);
   }  
 }
-
-// TODO: Add image upload/download?
-// const clearImage = filePath => {
-//   filePath = path.join(__dirname, '..', filePath);
-//   fs.unlink(filePath, err => console.log(err));
-// };
