@@ -39,11 +39,15 @@ const userSchema = new Schema ({
 
 //Sample Method: 
 userSchema.methods.addToCart = function (costume, quantity) {
-    console.log(quantity);
+    console.log("made it to the method!", costume, quantity);
     if(parseInt(quantity) === 0) {
         return;
     }
     else {
+        if(!quantity) {
+        quantity = 1;
+        console.log(quantity)}
+
     const cartCostumeIndex = this.cart.items.findIndex(cp => {
         return cp.costumeId.toString() === costume._id.toString();
     });
