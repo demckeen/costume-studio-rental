@@ -67,7 +67,17 @@ exports.login = async (req, res, next) => {
       'KateJenDanaHaileyJamieJennifer', 
       { expiresIn: '1h' }
     );
-    res.status(200).json({ message: 'Logged in successfully.', token: token, userId: loadedUser._id.toString(), isAdmin: loadedUser.isAdmin });
+
+    if(loadedUser.admin) {
+      isAdmin = loadedUser.admin;
+    }
+    else {
+      isAdmin = false;
+    }
+    console.log(loadedUser.admin);
+
+    res.status(200).json({ message: 'Logged in successfully.', token: token, 
+      userId: loadedUser._id.toString(), isAdmin: isAdmin });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
