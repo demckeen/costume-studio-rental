@@ -50,11 +50,11 @@ router.post(
 			min: 1
 		})
 		.trim(),
-		body('image').isURL(),
+		body('imageUrl').isURL(),
 		body('description')
 		.isLength({
 			min: 5,
-			max: 400
+			max: 2038
 		})
 		.trim()
 	],
@@ -73,7 +73,7 @@ router.post(
 			min: 3
 		})
 		.trim(),
-		body('costumeName')
+		body('name')
 		.isString()
 		.isLength({
 			min: 3
@@ -86,7 +86,7 @@ router.post(
 			min: 1
 		})
 		.trim(),
-		body('image').isURL(),
+		body('imageUrl').isURL(),
 		body('description')
 		.isLength({
 			min: 5,

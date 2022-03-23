@@ -102,7 +102,7 @@ exports.postEditCostume = async (req, res, next) => {
   const updatedCostumeName = req.body.costumeName;
   const updatedRentalFee = req.body.rentalFee;
   const updatedSize = req.body.size;
-  const updatedImage = req.body.image;
+  const updatedImage = req.body.imageUrl;
   const updatedDescription = req.body.description;
   // TODO: Add image upload/download?
   // if (req.file) {
@@ -133,7 +133,7 @@ exports.postEditCostume = async (req, res, next) => {
     costume.costumeName = updatedCostumeName,
     costume.rentalFee = updatedRentalFee,
     costume.size = updatedSize,
-    costume.image = updatedImage,
+    costume.imageUrl = updatedImage,
     costume.description = updatedDescription
     const result = await costume.save()
     // TODO: Stretch: add websockets?
@@ -154,13 +154,13 @@ exports.postEditCostume = async (req, res, next) => {
 // Adds new costumes
 exports.postAddCostume = async (req, res, next) => {
   // TODO: When we know how to test with Authorization, uncomment out errors code (lines 17-23)
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   const error = new Error('Validation failed.');
-  //   error.statusCode = 422;
-  //   error.data = errors.array();
-  //   throw error;
-  // }
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
 
   // TODO: Add image upload/download? Lines 26-30, 36 (remove/comment out line 35)
   // if (!req.file) {
