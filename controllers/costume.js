@@ -111,7 +111,7 @@ exports.getCheckout = async (req, res, next) => {
       payment_method_types: ['card'],
       line_items: costumes.map(p => {
         return {
-          name: p.costumeId.title,
+          costumeName: p.costumeId.costumeName,
           description: p.costumeId.description,
           amount: p.costumeId.price * 100,
           currency: 'usd',
