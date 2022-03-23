@@ -7,16 +7,13 @@ const { validationResult } = require('express-validator');
 const io = require('../socket');
 const User = require('../models/user');
 const Costume = require('../models/costume');
-// const user = require('../models/user');
 
 // TODO: Remove any page rendering 
 // Place Controller functions here:
 
 // GET EXPORTS:
 
-// This is similar to getPosts in the REST API backend feed controller
-// TODO: This route currently does not work. Is it just because of required authorization or more?
-// TODO: This one may not be needed in admin. It was only rendering a view prior to async/await changes and adds pagination
+// TODO: Delete this route before turning in project
 // Displays costumes to user with admin capabilities
 exports.getCostumes = async (req, res, next) => {
   // TODO: Stretch: add pagination?
@@ -49,7 +46,7 @@ exports.getCostumes = async (req, res, next) => {
 
 // This is similar to updatePost in the REST API backend feed controller
 // TODO: This route currently does not work. Is it just because of required authorization or more?
-// TODO: This one primarily renders a view - does it just need changed or is it not needed at all? May need merged with "postEditCostume" below
+// TODO: Remove this one
 // Allows user that added costume to edit costume
 exports.getEditCostume = async (req, res, next) => {
   const editMode = req.query.edit;
@@ -104,10 +101,6 @@ exports.postEditCostume = async (req, res, next) => {
   const updatedSize = req.body.size;
   const updatedImage = req.body.imageUrl;
   const updatedDescription = req.body.description;
-  // TODO: Add image upload/download?
-  // if (req.file) {
-  //   imageUrl = req.file.path.replace("\\","/");
-  // }
   if (!imageUrl) {
     const error = new Error('No image specified.');
     error.statusCode = 422;
@@ -163,23 +156,17 @@ exports.postAddCostume = async (req, res, next) => {
     throw error;
   }
 
-  // TODO: Add image upload/download? Lines 168-172, 178 (remove/comment out line 177)
-  // if (!req.file) {
-  //   const error = new Error('No image provided.');
-  //   error.statusCode = 422;
-  //   throw error;
-  // }
+
   const category = req.body.category;
   const name = req.body.name;
   const rentalFee = req.body.rentalFee;
   const size = req.body.size;
   const imageUrl = req.body.imageUrl;
-  // const imageUrl = req.file.path.replace("\\" ,"/");
   const description = req.body.description;
 
   const costume = new Costume({
     category: category,
-    name: name,
+    costumeName: costumeName,
     rentalFee: rentalFee,
     size: size,
     imageUrl: imageUrl,
@@ -214,13 +201,13 @@ exports.postAddCostume = async (req, res, next) => {
 // Allows a costume to be deleted by user that added costume
 exports.deleteCostume = async (req, res, next) => {
     // TODO: When we know how to test with Authorization, uncomment out errors code (lines 200-206)
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   const error = new Error('Validation failed.');
-  //   error.statusCode = 422;
-  //   error.data = errors.array();
-  //   throw error;
-  // }
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
 
   const costumeId = req.params.costumeId;
   try {

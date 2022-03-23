@@ -38,24 +38,24 @@ const userSchema = new Schema ({
 })
 
 //Sample Method: 
-userSchema.methods.addToCart = function (rental, quantity) {
+userSchema.methods.addToCart = function (costume, quantity) {
     console.log(quantity);
     if(parseInt(quantity) === 0) {
         return;
     }
     else {
-    const cartRentalIndex = this.cart.items.findIndex(cp => {
-        return cp.rentalId.toString() === rental._id.toString();
+    const cartCostumeIndex = this.cart.items.findIndex(cp => {
+        return cp.costumeId.toString() === costume._id.toString();
     });
     let newQuantity = quantity;
     const updatedCartItems = [...this.cart.items];
 
-    if (cartProductIndex >= 0) {
-        newQuantity = parseInt(this.cart.items[cartRentalIndex].quantity) + parseInt(newQuantity);
-        updatedCartItems[cartRentalIndex].quantity = newQuantity;
+    if (cartCostumeIndex >= 0) {
+        newQuantity = parseInt(this.cart.items[cartCostumeIndex].quantity) + parseInt(newQuantity);
+        updatedCartItems[cartProductIndex].quantity = newQuantity;
     } else {
         updatedCartItems.push({
-            rentalId: rental._id,
+            costumeId: costume._id,
             quantity: newQuantity
         });
     }
@@ -66,9 +66,9 @@ userSchema.methods.addToCart = function (rental, quantity) {
     return this.save();}
 }
 
-userSchema.methods.removeFromCart = function(rentaltId) {
+userSchema.methods.removeFromCart = function(costumeId) {
   const updatedCartItems = this.cart.items.filter(item => {
-    return item.rentalId.toString() !== rentalId.toString();
+    return item.costumeId.toString() !== costumeId.toString();
   });
   this.cart.items = updatedCartItems;
   return this.save();

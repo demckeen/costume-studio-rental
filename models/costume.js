@@ -10,7 +10,7 @@ const costumeSchema = new Schema (
         type: String,
         required: true
       },
-      name: {
+      costumeName: {
         type: String,
         required: true
       },

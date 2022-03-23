@@ -37,7 +37,7 @@ router.post(
 			min: 3
 		})
 		.trim(),
-		body('name')
+		body('costumeName')
 		.isString()
 		.isLength({
 			min: 3
