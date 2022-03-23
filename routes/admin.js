@@ -50,7 +50,7 @@ router.post(
 			min: 1
 		})
 		.trim(),
-		body('image').isURL(),
+		body('imageUrl').isURL(),
 		body('description')
 		.isLength({
 			min: 5,
@@ -86,7 +86,7 @@ router.post(
 			min: 1
 		})
 		.trim(),
-		body('image').isURL(),
+		body('imageUrl').isURL(),
 		body('description')
 		.isLength({
 			min: 5,
