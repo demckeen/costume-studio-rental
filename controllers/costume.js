@@ -13,7 +13,7 @@ const User = require('../models/user');
 // Place Controller functions here: - exports.get/post/etc
 
 
-// GET EXPORTS:
+// GET EXPORTS:a
 
 //Get the list of costumes
 exports.getCostumes = async (req, res, next) => {
@@ -194,18 +194,31 @@ exports.getInvoice = async (req, res, next) => {}
 //Add a costume to the cart
 exports.postCart = async (req, res, next) => {
   const costumeId = req.body.costumeId;
-  if (!costumeId) {
-    const error = new Error('That costume does not exist');
-    error.statusCode = 404;
-    throw error;
-  }
+  const userId = req.body.userId;
+  let quantity;
   try {
-    const costume = await Costume.findById(costumeId)
-    await req.user.addToCart(costume);
+
+    const reqUser = await User.findById(userId);
+    if(!reqUser) {
+      const error = new Error('Cannot locate user for cart.');
+      error.statusCode = 404;
+      throw error;}
+
+    console.log(req.body);
+    const cartCostume = await Costume.findById(costumeId);
+    if (!cartCostume) {
+      console.log(costumeId)
+      const error = new Error('Cannot locate costume for cart.');
+      error.statusCode = 404;
+      throw error;}  
+
+    await reqUser.addToCart(cartCostume, quantity);
+
     res.status(200).json({
       message: 'Costume added to cart',
       costumeId: costumeId,
-      userId: req.userId
+      userId: req.userId,
+      cart: reqUser.cart.items
     })
   } catch (err) {
     const error = new Error(err);
@@ -219,7 +232,7 @@ exports.postCart = async (req, res, next) => {
 exports.postRental = async (req, res, next) => {
   try {
     const user = await req.user.populate('cart.items.costumeId')
-    const costumes = user.cart.items.map(i => {
+    const costumes = User.cart.items.map(i => {
       return {
         quantity: i.quantity,
         costume: {
