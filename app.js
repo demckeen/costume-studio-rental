@@ -1,6 +1,7 @@
 require('dotenv').config();
 const PORT = process.env.PORT || 8080;
 const express = require('express');
+const cors = require('cors'); 
 const bodyParser = require('body-parser');
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
@@ -31,6 +32,13 @@ const fileFilter = (req, file, cb) => {
     }
 }
 
+//import routes
+const costumeRoutes = require('./routes/costume');
+const adminRoutes = require('./routes/admin');
+const authRoutes = require('./routes/auth');
+
+const app = express();
+
 // Swagger set up
 const options = {
     definition: {
@@ -44,19 +52,12 @@ const options = {
             {
                 url: 'http://localhost:8080'
             }
-        ],
+        ]
     },
     apis: ['./swagger/*.js']
 };
 
 const specs = swaggerJsDoc(options);
-
-//import routes
-const costumeRoutes = require('./routes/costume');
-const adminRoutes = require('./routes/admin');
-const authRoutes = require('./routes/auth');
-
-const app = express();
 
 //view api contract at localhost:8080/api-docs
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
@@ -86,6 +87,12 @@ app.use((error, req, res, next ) => {
     const data = error.data;
     res.status(status).json({message: message, data: data});
 })
+
+const corsOptions = {
+  origin: process.env.HEROKU_APP,
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 
 // MongoDB connection
 mongoose.connect(MONGODB_URL)
