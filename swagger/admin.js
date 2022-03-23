@@ -35,7 +35,16 @@
  *              userId: 4326
  *              rentals: [Gandalf the Grey, Tin Man, Queen Elizabeth]
  *              returnDate: 11/31/2022
- *                 
+ *
+ *  securitySchemes:
+ *      bearerAuth:
+ *          type: http
+ *          scheme: bearer
+ *          bearerFormat: JWT
+ * 
+ * security:
+ *  - bearerAuth: []
+ *  - _id: []                 
  */
 
 /**
@@ -53,6 +62,8 @@
  * 
  * /admin/costumes:
  *      get:
+ *          security:
+ *              - bearerAuth: [] 
  *          summary: Gets a list of all the costumes
  *          tags: [Admin]
  *          responses:
@@ -67,6 +78,8 @@
  * 
  * /admin/edit-costume/{costumeId}:
  *      get:
+ *          security:
+ *              - bearerAuth: [] 
  *          summary: Get single costume detail for logged in user that created that costume
  *          tags: [Admin]
  *          parameters:
@@ -94,6 +107,8 @@
  * 
  * /admin/edit-costume:
  *      post:
+ *          security:
+ *              - bearerAuth: [] 
  *          summary: Edit details of existing costume that the user has created
  *          tags: [Admin]
  *          requestBody:
@@ -114,6 +129,8 @@
  * 
  * /admin/add-costume:
  *      post:
+ *          security:
+ *              - bearerAuth: [] 
  *          summary: Create a new costume entry in database
  *          tags: [Admin]
  *          requestBody:
@@ -140,6 +157,8 @@
  * 
  * /admin/delete-costume/{costumeId}:
  *      delete:
+ *          security:
+ *              - bearerAuth: [] 
  *          summary: Delete costume that admin has created by id
  *          tags: [Admin]
  *          parameters:
