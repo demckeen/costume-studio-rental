@@ -76,56 +76,11 @@
  *                          items:
  *                              $ref: '#/components/schemas/Costume'
  * 
- * /admin/edit-costume/{costumeId}:
- *      get:
- *          security:
- *              - bearerAuth: [] 
- *          summary: Get single costume detail for logged in user that created that costume
- *          tags: [Admin]
- *          parameters:
- *            - in: path
- *              name: costumeId
- *              schema:
- *                  type: string
- *              required: true
- *              description: This is the costume id
- *          responses:
- *              200:
- *                  description: Get costume information by Id for logged in user
- *                  content:
- *                      application/json:
- *                          schema:
- *                              $ref: '#/components/schemas/Costume'
- *              404:
- *                  description: The costume was not found
- * 
  */
 
 /**
  * POST routes
  * @swagger
- * 
- * /admin/edit-costume:
- *      post:
- *          security:
- *              - bearerAuth: [] 
- *          summary: Edit details of existing costume that the user has created
- *          tags: [Admin]
- *          requestBody:
- *              required: true
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Costume'
- *          responses:
- *              200:
- *                  description: The costume was successfully changed
- *                  content:
- *                      application/json:
- *                          schema:
- *                              $ref: '#/components/schemas/Costume'
- *              500:
- *                  description: There was a server error
  * 
  * /admin/add-costume:
  *      post:
@@ -149,6 +104,33 @@
  *              500:
  *                  description: There was a server error
  * 
+ */
+
+/**
+ * PUT routes
+ * @swagger
+ * 
+ * /admin/edit-costume:
+ *      put:
+ *          security:
+ *              - bearerAuth: [] 
+ *          summary: Edit details of existing costume that the user has created
+ *          tags: [Admin]
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Costume'
+ *          responses:
+ *              200:
+ *                  description: The costume was successfully changed
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Costume'
+ *              500:
+ *                  description: There was a server error
  */
 
 /**
