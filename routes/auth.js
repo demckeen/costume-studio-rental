@@ -68,9 +68,6 @@ router.post('/login',
   ],
   authController.login);
 
-// commenting out unless we want to handle blacklisting jwt
-// router.post('/logout', authController.postLogout);
-
 //
 router.post('/reset', isPassAuth, authController.postReset);
 

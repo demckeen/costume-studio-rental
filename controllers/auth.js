@@ -13,13 +13,6 @@ const User = require('../models/user');
 
 //Create a User
 exports.signup = async (req, res, next) => {
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   const error = new Error('Validation failed.');
-  //   error.statusCode = 422;
-  //   error.data = errors.array();
-  //   throw error;
-  // }
   const email = req.body.email;
   const name = req.body.name;
   const password = req.body.password;
@@ -91,15 +84,6 @@ exports.login = async (req, res, next) => {
     next(err);
   }
 }
-
-// TODO: Add to blacklist? 
-// https://medium.com/devgorilla/how-to-log-out-when-using-jwt-a8c7823e8a6
-// exports.postLogout = (req, res, next) => {
-//   req.session.destroy(err => {
-//     console.log(err);
-//     res.redirect('/');
-//   });
-// };
 
 // TODO: This route currently does not work. Is it just because of required authorization or more?
 // Reset Password

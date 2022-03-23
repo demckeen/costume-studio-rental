@@ -73,26 +73,6 @@
  *              500:
  *                  description: There was a server error
  * 
- * /auth/logout:
- *      post:
- *          summary: Logout
- *          tags: [Auth]
- *          requestBody:
- *              required: true
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/User'
- *          responses:
- *              200:
- *                  description: Logout was successful
- *                  content:
- *                      application/json:
- *                          schema:
- *                              $ref: '#/components/schemas/User'
- *              500:
- *                  description: There was a server error
- * 
  * /auth/reset:
  *      post:
  *          summary: Reset password
