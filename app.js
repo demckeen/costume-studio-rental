@@ -63,6 +63,7 @@ const specs = swaggerJsDoc(options);
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 
 // app.use(bodyParser.urlencoded({ extended: false })); // x-www-form-urlencoded <form>
+// app.use(bodyParser.json()); // application/json
 app.use(bodyParser.json({ type: 'application/*+json' })); // application/json
 app.use(multer({storage: storage, fileFilter: fileFilter})
     .single('image')
