@@ -10,7 +10,10 @@ const io = require('../socket');
 const Costume = require('../models/costume');
 const User = require('../models/user');
 
-//Place Controller functions here - exports.get/post/etc
+// Place Controller functions here: - exports.get/post/etc
+
+
+// GET EXPORTS:
 
 //Get the list of costumes
 exports.getCostumes = async (req, res, next) => {
@@ -22,7 +25,6 @@ exports.getCostumes = async (req, res, next) => {
       const error = new Error('No costumes found!');
       error.statusCode = 404;
       throw error;
-      // return res.status(404).json({message: 'No costumes found!'})
     }
     const costumes = await Costume.find()
       .skip((page - 1) * perPage)
@@ -31,7 +33,6 @@ exports.getCostumes = async (req, res, next) => {
       const error = new Error('No costumes found!');
       error.statusCode = 404;
       throw error;
-      // return res.status(404).json({message: 'No costumes found!'})
     }
     res.status(200).json({
       message: 'Fetched costumes successfully.',
@@ -46,7 +47,7 @@ exports.getCostumes = async (req, res, next) => {
   }
 };
 
-//Get the details of the costume with the id
+//Get the details of a single costume by costume id
 exports.getCostume = async (req, res, next) => {
   const costumeId = req.params.costumeId;
 
@@ -69,6 +70,7 @@ exports.getCostume = async (req, res, next) => {
   }
 }
 
+// TODO: This route currently does not work. Other routes need to be working before this one can really be tested. 
 //Get the user's cart info for added costumes in the cart
 exports.getCart = async (req, res, next) => {
   try {
@@ -90,48 +92,7 @@ exports.getCart = async (req, res, next) => {
   }
 }
 
-//Add a costume to the cart
-exports.postCart = async (req, res, next) => {
-  const costumeId = req.body.costumeId;
-  if (!costumeId) {
-    const error = new Error('That costume does not exist');
-    error.statusCode = 404;
-    throw error;
-  }
-  try {
-    const costume = await Costume.findById(costumeId)
-    await req.user.addToCart(costume);
-    res.status(200).json({
-      message: 'Costume added to cart',
-      costumeId: costumeId,
-      userId: req.userId
-    })
-  } catch (err) {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    throw error;
-  }
-};
-
-//Remove costume from cart
-exports.postCartDeleteCostume = async (req, res, next) => {
-  const costumeId = req.body.costumeId;
-  try {
-    await req.user.removeFromCart(costumeId);
-    res.status(200).json({
-      message: 'Costume deleted from cart',
-      costumeId: costumeId,
-      userId: userId
-    })
-  } catch (err) {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    throw error;
-  }
-};
-
 // TODO: Checkout needs fixed-please help:)
-
 //Get checkout information
 exports.getCheckout = async (req, res, next) => {
   let total = 0;
@@ -172,6 +133,15 @@ exports.getCheckout = async (req, res, next) => {
   }
 };
 
+// TODO: Checkout needs fixed-please help:)
+//Get checkout information
+exports.getCheckout = async (req, res, next) => {}
+
+// TODO: Stretch: Invoice?
+//Get invoice for rental
+exports.getInvoice = async (req, res, next) => {}
+
+
 //Get rentals for a user
 exports.getRentals = async (req, res, next) => {
   try {
@@ -190,6 +160,33 @@ exports.getRentals = async (req, res, next) => {
   }
 }
 
+// POST EXPORTS:
+
+// TODO: This route currently does not work. Is it just because of required authorization or more?
+//Add a costume to the cart
+exports.postCart = async (req, res, next) => {
+  const costumeId = req.body.costumeId;
+  if (!costumeId) {
+    const error = new Error('That costume does not exist');
+    error.statusCode = 404;
+    throw error;
+  }
+  try {
+    const costume = await Costume.findById(costumeId)
+    await req.user.addToCart(costume);
+    res.status(200).json({
+      message: 'Costume added to cart',
+      costumeId: costumeId,
+      userId: req.userId
+    })
+  } catch (err) {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    throw error;
+  }
+};
+
+// TODO: This route currently does not work. Other routes need to be working before this one can really be tested. 
 //Create an order
 exports.postRental = async (req, res, next) => {
   try {
@@ -223,8 +220,7 @@ exports.postRental = async (req, res, next) => {
 };
 
 
-// TODO: admin Delete function? need function to send message to admin to delete?
-
+// TODO: This route currently does not work. Other routes need to be working before this one can really be tested. 
 //Cancel an order
 exports.postCancelRental = async (req, res, next) => {
   const rentalId = req.body.rentalId;
@@ -243,5 +239,26 @@ exports.postCancelRental = async (req, res, next) => {
     const error = new Error(err);
     error.httpStatusCode = 500;
     return next(error);
+  }
+};
+
+
+// DELETE EXPORTS?
+
+// TODO: This route currently does not work. Should it be changed from POST to DELETE?
+//Remove costume from cart
+exports.postCartDeleteCostume = async (req, res, next) => {
+  const costumeId = req.body.costumeId;
+  try {
+    await req.user.removeFromCart(costumeId);
+    res.status(200).json({
+      message: 'Costume deleted from cart',
+      costumeId: costumeId,
+      userId: userId
+    })
+  } catch (err) {
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    throw error;
   }
 };

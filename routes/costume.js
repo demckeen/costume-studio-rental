@@ -15,7 +15,7 @@ const isAuth = require('../middleware/is-auth');
 const router = express.Router();
 
 
-// ---GET routes---
+// ---GET Routes---
 
 //
 router.get('/costumes', costumeController.getCostumes);
@@ -27,29 +27,29 @@ router.get('/costumes/:costumeId', costumeController.getCostume);
 router.get('/cart', isAuth, costumeController.getCart);
 
 //
-router.get('/checkout', isAuth, costumeController.getCheckout);
+// router.get('/checkout', isAuth, costumeController.getCheckout);
 
 //
 // router.get('/checkout/success', isAuth, costumeController.getCheckoutSuccess);
 
 router.get('/rentals', isAuth, costumeController.getRentals);
 
-
-// ---POST routes---
-
 //
-// router.post('/checkout/cancel', isAuth, costumeController.cancelCheckout);
+// router.get('/rentals/{rentalId}', isAuth, costumeController.getInvoice);
+
+
+// ---POST Routes---
 
 //
 router.post('/cart', isAuth, costumeController.postCart);
-
-//
-router.post('/cancel-rental', isAuth, costumeController.postCartDeleteCostume);
 
 //
 router.post('/create-rental', isAuth, costumeController.postRental);
 
 //
 router.post('/cancel-rental', isAuth, costumeController.postCancelRental);
+
+// Possibly should be a DELETE route
+router.post('/cancel-rental', isAuth, costumeController.postCartDeleteCostume);
 
 module.exports = router;
