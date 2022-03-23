@@ -18,12 +18,6 @@ const router = express.Router();
 // /admin/costumes => GET
 router.get('/costumes', isAuth, adminController.getCostumes);
 
-// /admin/add-costume => GET
-// router.get('/add-costume', isAuth, adminController.getAddCostume);
-
-// /admin/edit-costume/:costumeId => GET
-router.get('/edit-costume/:costumeId', isAuth, adminController.getEditCostume);
-
 
 // ---POST Routes---
 
@@ -63,8 +57,8 @@ router.post(
 );
 
 
-// /admin/edit-costume => POST
-router.post(
+// /admin/edit-costume => PUT
+router.put(
 	'/edit-costume',
 	[
 		body('category')
@@ -95,7 +89,7 @@ router.post(
 		.trim()
 	],
 	isAuth,
-	adminController.postEditCostume
+	adminController.editCostume
 );
 
 
