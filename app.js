@@ -62,7 +62,7 @@ const specs = swaggerJsDoc(options);
 //view api contract at localhost:8080/api-docs
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 
-app.use(bodyParser.urlencoded({ extended: false })); // x-www-form-urlencoded <form>
+// app.use(bodyParser.urlencoded({ extended: false })); // x-www-form-urlencoded <form>
 app.use(bodyParser.json()); // application/json
 app.use(multer({storage: storage, fileFilter: fileFilter})
     .single('image')

@@ -152,10 +152,47 @@
  *                          items:
  *                              $ref: '#/components/schemas/Rentals'
  * 
+ * /checkout:
+ *      get:
+ *          summary: Gets checkout process
+ *          tags: [Rentals]
+ *          responses:
+ *              200:
+ *                  description: Starts checkout process for user
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Rentals'
  * 
+ * /checkout/success:
+ *      get:
+ *          summary: Completes checkout and clears user cart
+ *          tags: [Rentals]
+ *          responses:
+ *              200:
+ *                  description: Checkout process completed
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Rentals' 
  * 
- * 
- * 
+ * /checkout/cancel:
+ *      get:
+ *          summary: Cancels checkout process
+ *          tags: [Rentals]
+ *          responses:
+ *              200:
+ *                  description: Checkout process canceled
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Rentals'
  */
 
 /**
@@ -182,26 +219,6 @@
  *              500:
  *                  description: There was a server error
  * 
- * /cart-delete-item:
- *      post:
- *          summary: Remove costume from cart
- *          tags: [Rentals]
- *          requestBody:
- *              required: true
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Costume'
- *          responses:
- *              200:
- *                  description: The costume was successfully deleted
- *                  content:
- *                      application/json:
- *                          schema:
- *                              $ref: '#/components/schemas/Costume'
- *              500:
- *                  description: There was a server error
- * 
  * /create-rental:
  *      post:
  *          summary: Submit costumes and create rental order
@@ -221,24 +238,29 @@
  *                              $ref: '#/components/schemas/Rentals'
  *              500:
  *                  description: There was a server error
+ */
+
+/**
+ * DELETE routes
+ * @swagger
  * 
- * /cancel-rental:
- *      post:
- *          summary: Submit cancellation request for rental that has not yet begun
+ * /cart-delete-item:
+ *      delete:
+ *          summary: Remove costume from cart
  *          tags: [Rentals]
  *          requestBody:
  *              required: true
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Rentals'
+ *                          $ref: '#/components/schemas/Costume'
  *          responses:
  *              200:
- *                  description: The cancellation request was successfully submitted
+ *                  description: The costume was successfully deleted
  *                  content:
  *                      application/json:
  *                          schema:
- *                              $ref: '#/components/schemas/Rentals'
+ *                              $ref: '#/components/schemas/Costume'
  *              500:
  *                  description: There was a server error
  */

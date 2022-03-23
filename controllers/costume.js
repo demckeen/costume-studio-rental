@@ -134,13 +134,36 @@ exports.getCheckout = async (req, res, next) => {
 };
 
 // TODO: Checkout needs fixed-please help:)
-//Get checkout information
-exports.getCheckout = async (req, res, next) => {}
-
-// TODO: Stretch: Invoice?
-//Get invoice for rental
-exports.getInvoice = async (req, res, next) => {}
-
+// Gets successful checkout and clears user cart
+exports.getCheckoutSuccess = (req, res, next) => {
+  req.user
+    .populate('cart.items.productId')
+    // .execPopulate()
+    .then(user => {
+      const products = user.cart.items.map(i => {
+        return { quantity: i.quantity, product: { ...i.productId._doc } };
+      });
+      const order = new Order({
+        user: {
+          email: req.user.email,
+          userId: req.user
+        },
+        products: products
+      });
+      return order.save();
+    })
+    .then(result => {
+      return req.user.clearCart();
+    })
+    .then(() => {
+      return res.redirect('/orders');
+    })
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+};
 
 //Get rentals for a user
 exports.getRentals = async (req, res, next) => {
@@ -159,6 +182,11 @@ exports.getRentals = async (req, res, next) => {
     return next(error);
   }
 }
+
+// TODO: Stretch: Invoice?
+//Get invoice for rental
+exports.getInvoice = async (req, res, next) => {}
+
 
 // POST EXPORTS:
 
@@ -233,32 +261,9 @@ exports.postRental = async (req, res, next) => {
 };
 
 
+// DELETE EXPORTS
+
 // TODO: This route currently does not work. Other routes need to be working before this one can really be tested. 
-//Cancel an order
-exports.postCancelRental = async (req, res, next) => {
-  const rentalId = req.body.rentalId;
-
-  try {
-    await Rental.deleteOne({
-      rentalId: rentalId,
-      userId: req.userId
-    })
-    res.status(200).json({
-      message: 'Rental has been deleted',
-      rentalId: rentalId,
-      userId: req.userId
-    });
-  } catch (err) {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    return next(error);
-  }
-};
-
-
-// DELETE EXPORTS?
-
-// TODO: This route currently does not work. Should it be changed from POST to DELETE?
 //Remove costume from cart
 exports.postCartDeleteCostume = async (req, res, next) => {
   const costumeId = req.body.costumeId;

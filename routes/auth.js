@@ -13,9 +13,6 @@ const isPassAuth = require('../middleware/is-pass-auth');
 
 const router = express.Router();
 
-// ---GET Routes---
-
-
 // ---PUT Routes---
 
 //
@@ -67,9 +64,6 @@ router.post('/login',
     .trim()
   ],
   authController.login);
-
-// commenting out unless we want to handle blacklisting jwt
-// router.post('/logout', authController.postLogout);
 
 //
 router.post('/reset', isPassAuth, authController.postReset);
