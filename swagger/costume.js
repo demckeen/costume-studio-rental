@@ -46,7 +46,14 @@
  *              imageUrl: https://images.unsplash.com/photo-1515599985634-73dc308d766f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80
  *              description: Summon your inner wizard with this realistic version of Gandalf's Costume.         
  *                  
- *          
+ *  securitySchemes:
+ *      bearerAuth:
+ *          type: http
+ *          scheme: bearer
+ *          bearerFormat: JWT
+ * 
+ * security:
+ *  - bearerAuth: []                 
  */
 
 /**

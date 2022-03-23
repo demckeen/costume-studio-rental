@@ -32,7 +32,14 @@
  *              email: johnsmith@email.com
  *              password: thegreatjohnsmith          
  *                  
- *          
+ *  securitySchemes:
+ *      bearerAuth:
+ *          type: http
+ *          scheme: bearer
+ *          bearerFormat: JWT
+ * 
+ * security:
+ *  - bearerAuth: []                 
  */
 
 /**

@@ -23,8 +23,8 @@ exports.getCostumes = async (req, res, next) => {
   // const currentPage = req.query.page || 1;
   // const perPage = 3;
   try {
-    await Costume.find({ userId: req.user._id });
-    res.status(200).json({message: 'Retrieved costumes!'})
+    // await Costume.find({ userId: req.user._id });
+    // res.status(200).json({message: 'Retrieved costumes!'})
 
     // TODO: Stretch: add pagination? - this may be what replaces the two lines above
     // const totalItems = await Costume.find().countDocuments();
@@ -37,7 +37,7 @@ exports.getCostumes = async (req, res, next) => {
     res.status(200).json({ 
       message: 'Fetched costumes successfully.', 
       costumes: costumes,
-      totalItems: totalItems
+      // totalItems: totalItems
     }); 
   } catch (err) {
     if (!err.statusCode) {
@@ -153,16 +153,16 @@ exports.postEditCostume = async (req, res, next) => {
 // This is similar to createPost in the REST API backend feed controller
 // Adds new costumes
 exports.postAddCostume = async (req, res, next) => {
-  // TODO: When we know how to test with Authorization, uncomment out errors code (lines 17-23)
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   const error = new Error('Validation failed.');
-  //   error.statusCode = 422;
-  //   error.data = errors.array();
-  //   throw error;
-  // }
+  // TODO: When we know how to test with Authorization, uncomment out errors code (lines 159-165)
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
 
-  // TODO: Add image upload/download? Lines 26-30, 36 (remove/comment out line 35)
+  // TODO: Add image upload/download? Lines 168-172, 178 (remove/comment out line 177)
   // if (!req.file) {
   //   const error = new Error('No image provided.');
   //   error.statusCode = 422;
