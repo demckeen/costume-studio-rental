@@ -50,6 +50,31 @@
  */
 
 /**
+ * PUT routes
+ * @swagger
+ * 
+ * /auth/signup:
+ *      put:
+ *          summary: Create account with a user's name, email, and password
+ *          tags: [Auth]
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/User'
+ *          responses:
+ *              201:
+ *                  description: The user was successfully signed up
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/User'
+ *              500:
+ *                  description: There was a server error
+ */
+
+/**
  * POST routes
  * @swagger
  * 
@@ -130,31 +155,6 @@
  *                      application/json:
  *                          schema:
  *                              $ref: '#/components/schemas/Rental'
- *              500:
- *                  description: There was a server error
- */
-
-/**
- * PUT routes
- * @swagger
- * 
- * /auth/signup:
- *      put:
- *          summary: Create account with a user's name, email, and password
- *          tags: [Auth]
- *          requestBody:
- *              required: true
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/User'
- *          responses:
- *              201:
- *                  description: The user was successfully signed up
- *                  content:
- *                      application/json:
- *                          schema:
- *                              $ref: '#/components/schemas/User'
  *              500:
  *                  description: There was a server error
  */

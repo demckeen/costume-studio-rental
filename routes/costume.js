@@ -32,6 +32,10 @@ router.get('/cart', isAuth, costumeController.getCart);
 //
 // router.get('/checkout/success', isAuth, costumeController.getCheckoutSuccess);
 
+//
+// router.get('/checkout/cancel', isAuth, costumeController.getCheckout);
+
+//
 router.get('/rentals', isAuth, costumeController.getRentals);
 
 //
@@ -46,10 +50,10 @@ router.post('/cart', isAuth, costumeController.postCart);
 //
 router.post('/create-rental', isAuth, costumeController.postRental);
 
-//
-router.post('/cancel-rental', isAuth, costumeController.postCancelRental);
 
-// Possibly should be a DELETE route
-router.post('/cancel-rental', isAuth, costumeController.postCartDeleteCostume);
+// ---DELETE Routes---
+
+//
+router.delete('/cancel-rental', isAuth, costumeController.postCartDeleteCostume);
 
 module.exports = router;

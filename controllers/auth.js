@@ -8,7 +8,6 @@ const User = require('../models/user');
 
 // Place Controller functions here:
 
-
 // PUT EXPORTS:
 
 //Create a User

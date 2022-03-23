@@ -13,9 +13,6 @@ const isPassAuth = require('../middleware/is-pass-auth');
 
 const router = express.Router();
 
-// ---GET Routes---
-
-
 // ---PUT Routes---
 
 //
