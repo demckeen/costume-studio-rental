@@ -13,25 +13,12 @@ const Costume = require('../models/costume');
 // TODO: Delete this route before turning in project
 // Displays costumes to user with admin capabilities
 exports.getCostumes = async (req, res, next) => {
-  // TODO: Stretch: add pagination?
-  // const currentPage = req.query.page || 1;
-  // const perPage = 3;
-  try {
-    // await Costume.find({ userId: req.user._id });
-    // res.status(200).json({message: 'Retrieved costumes!'})
 
-    // TODO: Stretch: add pagination? - this may be what replaces the two lines above
-    // const totalItems = await Costume.find().countDocuments();
-    // if(!totalItems) {
-    //   return res.status(404).json({message: 'No costumes found!'})
-    // }
+  try {
     const costumes = await Costume.find()
-    //   .skip((currentPage - 1) * perPage)
-    //   .limit(perPage);
     res.status(200).json({ 
       message: 'Fetched costumes successfully.', 
       costumes: costumes,
-      // totalItems: totalItems
     }); 
   } catch (err) {
     if (!err.statusCode) {
@@ -92,12 +79,12 @@ exports.postEditCostume = async (req, res, next) => {
     error.data = errors.array();
     throw error;
   }
-  const updatedCategory = req.body.category;
-  const updatedCostumeName = req.body.costumeName;
-  const updatedRentalFee = req.body.rentalFee;
-  const updatedSize = req.body.size;
-  const updatedImage = req.body.imageUrl;
-  const updatedDescription = req.body.description;
+  const category = req.body.category;
+  const costumeName = req.body.costumeName;
+  const rentalFee = req.body.rentalFee;
+  const size = req.body.size;
+  const imageUrl = req.body.imageUrl;
+  const description = req.body.description;
   if (!imageUrl) {
     const error = new Error('No image specified.');
     error.statusCode = 422;
@@ -119,12 +106,12 @@ exports.postEditCostume = async (req, res, next) => {
     if (imageUrl !== post.imageUrl) {
       clearImage(post.imageUrl);
     }
-    costume.category = updatedCategory,
-    costume.costumeName = updatedCostumeName,
-    costume.rentalFee = updatedRentalFee,
-    costume.size = updatedSize,
-    costume.imageUrl = updatedImage,
-    costume.description = updatedDescription
+    costume.category = category,
+    costume.costumeName = costumeName,
+    costume.rentalFee = rentalFee,
+    costume.size = size,
+    costume.imageUrl = imageUrl,
+    costume.description = description
     const result = await costume.save()
     // TODO: Stretch: add websockets?
     // io.getIO().emit('posts', { action: 'update', post: result });
@@ -172,7 +159,7 @@ exports.postAddCostume = async (req, res, next) => {
   try {
     await costume.save();
     const user = await User.findById(req.userId);
-    user.costumes.push(costume);
+    // user.costumes.push(costume);
     await user.save();
     // TODO: Stretch: add websockets? This may need to be tweaked more.
     // io.getIO().emit('costumes', {
@@ -219,16 +206,13 @@ exports.deleteCostume = async (req, res, next) => {
       throw error;
     }
 
-    // TODO: Add image upload/download? Line 223 and clearImage function below
-    // clearImage(costume.image);
     await Costume.findByIdAndRemove(costumeId);
     // Check logged in user
     const user = await User.findById(req.userId);
-    user.costumes.pull(costumeId);
 
     await user.save();
     io.getIO().emit('costumes', { action: 'delete', costume: costumeId });
-    res.status(200).json({ message: 'Deleted post.' });
+    res.status(200).json({ message: 'Deleted costume.' });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
