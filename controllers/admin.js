@@ -169,7 +169,7 @@ exports.postAddCostume = async (req, res, next) => {
   //   throw error;
   // }
   const category = req.body.category;
-  const costumeName = req.body.costumeName;
+  const name = req.body.name;
   const rentalFee = req.body.rentalFee;
   const size = req.body.size;
   const imageUrl = req.body.imageUrl;
@@ -178,7 +178,7 @@ exports.postAddCostume = async (req, res, next) => {
 
   const costume = new Costume({
     category: category,
-    name: costumeName,
+    name: name,
     rentalFee: rentalFee,
     size: size,
     imageUrl: imageUrl,
