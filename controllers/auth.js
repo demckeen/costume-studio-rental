@@ -83,29 +83,30 @@ exports.login = async (req, res, next) => {
   }
 }
 
-// TODO: This route currently does not work.
+// TODO: This route works if not using the is-pass-auth middleware
 // Reset Password
 exports.postReset = async (req, res, next) => {
+  let loadedUser;
     try {
       const user = await User.findOne({email: req.body.email});
       if (!user) {
         const error = new Error('User not found.');
         error.statusCode = 404;
         throw error;
-      } 
-      const currentPass = user.password;
+      }
+      loadedUser = user; 
       const token = jwt.sign(
         { 
           email: loadedUser.email, 
           userId: loadedUser._id.toString()
         }, 
-        `secretpasswordsauce${currentPass}`, 
+        `secretpasswordsauce`, 
         { expiresIn: '20m' }
       );
 
       //send email? link provided will be http://localhost:3000/reset/${token}
 
-      res.status(200).json({ message: 'Password reset request authorized', userId: loadedUser._id.toString() });
+      res.status(200).json({ message: 'Password reset request authorized', token: token, userId: loadedUser._id.toString() });
     } catch (err) {
       if (!err.statusCode) {
         err.statusCode = 500;
@@ -114,37 +115,37 @@ exports.postReset = async (req, res, next) => {
     }
   }
 
-// TODO: This route currently does not work.
-// Prior to rendering reset password form, frontend is verifying status of url parameter, :tokenId
-exports.isPassLinkAuth = async (req, res, next) => {
-  const token = tokenId;
-  const userId  = await jwt.decode(token.userId);
-  try {
-    const passUser = await User.findById(userId);
-    if(!passUser) {
-      const error = new Error('No user found.');
-      error.statusCode = 404;
-      throw error;
-    }
-    const currentPass = passUser.password;
-    const decodedToken = jwt.verify(token, `secretpasswordsauce${currentPass}`)
-    if(!decodedToken) {
-      const error = new Error('Not authenticated.');
-      error.statusCode = 401;
-      throw error;
-    }
-    //authentication reply allows frontend to render "set password" form with added layer of security
-    res.status(200).json({message: 'User authenticated.', userId: req.userId.toString()})}
+// // TODO: This route currently does not work. Do we even really need it if it is for the frontend? 
+// // Prior to rendering reset password form, frontend is verifying status of url parameter, :tokenId
+// exports.isPassLinkAuth = async (req, res, next) => {
+//   const token = tokenId;
+//   const userId  = await jwt.decode(token.userId);
+//   try {
+//     const passUser = await User.findById(userId);
+//     if(!passUser) {
+//       const error = new Error('No user found.');
+//       error.statusCode = 404;
+//       throw error;
+//     }
+//     const currentPass = passUser.password;
+//     const decodedToken = jwt.verify(token, `secretpasswordsauce${currentPass}`)
+//     if(!decodedToken) {
+//       const error = new Error('Not authenticated.');
+//       error.statusCode = 401;
+//       throw error;
+//     }
+//     //authentication reply allows frontend to render "set password" form with added layer of security
+//     res.status(200).json({message: 'User authenticated.', userId: req.userId.toString()})}
     
-    catch {
-      if (!err.statusCode) {
-        err.statusCode = 500;
-      }
-      next(err);
-    }
-  };
+//     catch {
+//       if (!err.statusCode) {
+//         err.statusCode = 500;
+//       }
+//       next(err);
+//     }
+//   };
 
-// TODO: This route currently does not work.
+// TODO: This route works if not using the is-pass-auth middleware
 //Create new password
 exports.postNewPassword = async (req, res, next) => {
   const newPassword = req.body.password;

@@ -105,7 +105,7 @@
  *                          $ref: '#/components/schemas/User'
  *          responses:
  *              200:
- *                  description: Login was successfull
+ *                  description: Login was successful
  *                  content:
  *                      application/json:
  *                          schema:
