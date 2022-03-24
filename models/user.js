@@ -38,25 +38,17 @@ const userSchema = new Schema ({
 })
 
 //Sample Method: 
-userSchema.methods.addToCart = function (costume, quantity) {
-    console.log("made it to the method!", costume, quantity);
-    if(parseInt(quantity) === 0) {
-        return;
-    }
-    else {
-        if(!quantity) {
-        quantity = 1;
-        console.log(quantity)}
-
+userSchema.methods.addToCart = function (costume) {
+    console.log("made it to the method!", costume);
     const cartCostumeIndex = this.cart.items.findIndex(cp => {
         return cp.costumeId.toString() === costume._id.toString();
     });
-    let newQuantity = quantity;
+    let newQuantity = 1;
     const updatedCartItems = [...this.cart.items];
 
     if (cartCostumeIndex >= 0) {
-        newQuantity = parseInt(this.cart.items[cartCostumeIndex].quantity) + parseInt(newQuantity);
-        updatedCartItems[cartProductIndex].quantity = newQuantity;
+        newQuantity = parseInt(this.cart.items[cartCostumeIndex].quantity) + 1;
+        updatedCartItems[cartCostumeIndex].quantity = newQuantity;
     } else {
         updatedCartItems.push({
             costumeId: costume._id,
@@ -67,8 +59,8 @@ userSchema.methods.addToCart = function (costume, quantity) {
         items: updatedCartItems
     };
     this.cart = updatedCart;
-    return this.save();}
-}
+    return this.save();
+};
 
 userSchema.methods.removeFromCart = function(costumeId) {
   const updatedCartItems = this.cart.items.filter(item => {
