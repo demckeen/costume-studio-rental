@@ -225,7 +225,6 @@ exports.getInvoice = async (req, res, next) => {}
 exports.postCart = async (req, res, next) => {
   const costumeId = req.body.costumeId;
   const userId = req.body.userId;
-  let quantity;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.');
@@ -249,7 +248,7 @@ exports.postCart = async (req, res, next) => {
       error.statusCode = 404;
       throw error;}  
 
-    await reqUser.addToCart(cartCostume, quantity);
+    await reqUser.addToCart(cartCostume);
 
     res.status(200).json({
       message: 'Costume added to cart',
