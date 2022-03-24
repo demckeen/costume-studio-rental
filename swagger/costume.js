@@ -111,6 +111,8 @@
  * 
  * /cart:
  *      get:
+ *          security:
+ *              - bearerAuth: [] 
  *          summary: Get the user's cart information for added costumes currently in the cart
  *          tags: [Rentals]
  *          responses:
@@ -122,9 +124,27 @@
  *                          type: array
  *                          items:
  *                              $ref: '#/components/schemas/Costume'
+ *
+ * /rentals:
+ *      get:
+ *          security:
+ *              - bearerAuth: [] 
+ *          summary: Gets all rentals for a single user
+ *          tags: [Rentals]
+ *          responses:
+ *              200:
+ *                  description: Display list of rentals
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Rentals'
  * 
  * /rental/{rentalId}:
  *      get:
+ *          security:
+ *              - bearerAuth: [] 
  *          summary: Gets the details of the rental with the rental id
  *          tags: [Rentals]
  *          parameters:
@@ -144,22 +164,10 @@
  *              404:
  *                  description: The rental was not found
  * 
- * /rentals:
- *      get:
- *          summary: Gets all rentals for a single user
- *          tags: [Rentals]
- *          responses:
- *              200:
- *                  description: Display list of rentals
- *                  content:
- *                      application/json:
- *                          schema:
- *                          type: array
- *                          items:
- *                              $ref: '#/components/schemas/Rentals'
- * 
  * /checkout:
  *      get:
+ *          security:
+ *              - bearerAuth: [] 
  *          summary: Gets checkout process
  *          tags: [Rentals]
  *          responses:
@@ -174,6 +182,8 @@
  * 
  * /checkout/success:
  *      get:
+ *          security:
+ *              - bearerAuth: [] 
  *          summary: Completes checkout and clears user cart
  *          tags: [Rentals]
  *          responses:
@@ -188,6 +198,8 @@
  * 
  * /checkout/cancel:
  *      get:
+ *          security:
+ *              - bearerAuth: [] 
  *          summary: Cancels checkout process
  *          tags: [Rentals]
  *          responses:
@@ -207,6 +219,8 @@
  * 
  * /cart:
  *      post:
+ *          security:
+ *              - bearerAuth: [] 
  *          summary: Add costume to cart for potential rental
  *          tags: [Rentals]
  *          requestBody:
@@ -227,6 +241,8 @@
  * 
  * /create-rental:
  *      post:
+ *          security:
+ *              - bearerAuth: [] 
  *          summary: Submit costumes and create rental order
  *          tags: [Rentals]
  *          requestBody:
@@ -252,6 +268,8 @@
  * 
  * /cart-delete-item:
  *      delete:
+ *          security:
+ *              - bearerAuth: [] 
  *          summary: Remove costume from cart
  *          tags: [Rentals]
  *          requestBody:

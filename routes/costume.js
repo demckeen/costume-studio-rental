@@ -19,6 +19,12 @@ router.get('/costumes/:costumeId', costumeController.getCostume);
 // /cart => GET
 router.get('/cart', isAuth, costumeController.getCart);
 
+// /rentals => GET
+router.get('/rentals', isAuth, costumeController.getRentals);
+
+// /rentals/:rentalId => GET
+// router.get('/rentals/:rentalId', isAuth, costumeController.getInvoice);
+
 // /checkout => GET
 // router.get('/checkout', isAuth, costumeController.getCheckout);
 
@@ -27,13 +33,6 @@ router.get('/cart', isAuth, costumeController.getCart);
 
 // /checkout/cancel => GET
 // router.get('/checkout/cancel', isAuth, costumeController.getCheckout);
-
-// /rentals => GET
-router.get('/rentals', isAuth, costumeController.getRentals);
-
-// /rentals/:rentalId => GET
-// router.get('/rentals/:rentalId', isAuth, costumeController.getInvoice);
-
 
 // ---POST Routes---
 

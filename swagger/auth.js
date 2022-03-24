@@ -115,6 +115,8 @@
  * 
  * /auth/reset:
  *      post:
+ *          security:
+ *              - bearerAuth: [] 
  *          summary: Reset password
  *          tags: [Auth]
  *          requestBody:
@@ -155,6 +157,8 @@
  * 
  * /auth/new-password:
  *      post:
+ *          security:
+ *              - bearerAuth: [] 
  *          summary: Set new password
  *          tags: [Auth]
  *          requestBody:
