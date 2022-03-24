@@ -1,10 +1,8 @@
 // ADMIN ROUTES
 
-const path = require('path');
 const express = require('express');
 const {
-	body,
-	check
+	body
 } = require('express-validator');
 
 const adminController = require('../controllers/admin');

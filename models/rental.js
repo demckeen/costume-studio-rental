@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
+// TODO: Build out schema and update schema in Swagger
 const rentalSchema = new Schema({
     //Modeled from "orders" model in Nodejs project - will require modification
     costume: [{
@@ -16,6 +17,7 @@ const rentalSchema = new Schema({
     }
 });
 
+// TODO: Add methods, if needed
 //Do we need rental methods? 
 
 module.exports = mongoose.model('Rental', rentalSchema);

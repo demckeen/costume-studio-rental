@@ -6,11 +6,11 @@ const Schema = mongoose.Schema;
 const costumeSchema = new Schema (
     //Schema Definition for Costume Model Inventory Management
     {
-      category: {
+      costumeName: {
         type: String,
         required: true
       },
-      costumeName: {
+      category: {
         type: String,
         required: true
       },
@@ -37,6 +37,7 @@ const costumeSchema = new Schema (
       }
     })
 
+// TODO: Add costume methods, if needed
 //Do we need costume methods?
 
 module.exports = mongoose.model('Costume', costumeSchema);
