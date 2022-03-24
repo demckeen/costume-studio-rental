@@ -58,7 +58,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/costume/', costumeRoutes);
+app.use('/costume', costumeRoutes);
 app.use('/admin', adminRoutes);
 app.use('/auth', authRoutes);
 
