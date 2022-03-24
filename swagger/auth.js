@@ -124,14 +124,14 @@
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Rental'
+ *                          $ref: '#/components/schemas/User'
  *          responses:
  *              200:
  *                  description: The password was reset
  *                  content:
  *                      application/json:
  *                          schema:
- *                              $ref: '#/components/schemas/Rental'
+ *                              $ref: '#/components/schemas/User'
  *              500:
  *                  description: There was a server error
  *  
@@ -144,14 +144,14 @@
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Rental'
+ *                          $ref: '#/components/schemas/User'
  *          responses:
  *              200:
  *                  description: The password was reset
  *                  content:
  *                      application/json:
  *                          schema:
- *                              $ref: '#/components/schemas/Rental'
+ *                              $ref: '#/components/schemas/User'
  *              500:
  *                  description: There was a server error
  * 
@@ -166,14 +166,14 @@
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Rental'
+ *                          $ref: '#/components/schemas/User'
  *          responses:
  *              200:
  *                  description: New password has been set
  *                  content:
  *                      application/json:
  *                          schema:
- *                              $ref: '#/components/schemas/Rental'
+ *                              $ref: '#/components/schemas/User'
  *              500:
  *                  description: There was a server error
  */
