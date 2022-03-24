@@ -5,32 +5,10 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
+const csrf = require('csurf');
 
 const mongoose = require('mongoose');
-const MONGODB_URL = process.env.MONGODB_URI;
-const path = require('path');
-const multer = require('multer');
-
-//For WINDOWS image handling
-const { v4: uuidv4 } = require('uuid');
- 
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'images');
-    },
-    filename: function(req, file, cb) {
-        cb(null, uuidv4())
-    }
-});
-
-const fileFilter = (req, file, cb) => {
-    if(file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || 
-    file.mimetype === 'image/jpeg') {
-        cb(null, true);
-    } else {
-        cb(null, false);
-    }
-}
+const MONGODB_URI = process.env.MONGODB_URI;
 
 //import routes
 const costumeRoutes = require('./routes/costume');
@@ -38,9 +16,10 @@ const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
 
 const app = express();
+const csrfProtection = csrf();
 
 // Swagger set up
-const options = {
+const swagger_options = {
     definition: {
         openapi: '3.0.0',
         info: {
@@ -50,24 +29,22 @@ const options = {
         },
         servers: [
             {
-                url: 'http://localhost:8080'
+                url: 'http://localhost:8080',
+                // url: process.env.HEROKU_APP
             }
         ]
     },
     apis: ['./swagger/*.js']
 };
 
-const specs = swaggerJsDoc(options);
+const specs = swaggerJsDoc(swagger_options);
 
 //view api contract at localhost:8080/api-docs
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 
 // app.use(bodyParser.urlencoded({ extended: false })); // x-www-form-urlencoded <form>
 app.use(bodyParser.json()); // application/json
-app.use(multer({storage: storage, fileFilter: fileFilter})
-    .single('image')
-    )
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use(csrfProtection);
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -94,8 +71,19 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+const options = {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+  family: 4
+};
+
+const MONGODB_URL = process.env.MONGODB_URL || MONGODB_URI;
+
 // MongoDB connection
-mongoose.connect(MONGODB_URL)
+mongoose
+  .connect(
+    MONGODB_URL, options
+    )
     .then(result => {
         const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
         const io = require('./socket').init(server, {
