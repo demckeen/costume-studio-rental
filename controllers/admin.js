@@ -5,7 +5,7 @@ const io = require('../socket');
 const User = require('../models/user');
 const Costume = require('../models/costume');
 
-// TODO: Remove any page rendering 
+
 // Place Controller functions here:
 
 // GET EXPORTS:
@@ -13,7 +13,6 @@ const Costume = require('../models/costume');
 // TODO: Delete this route before turning in project
 // Displays costumes to user with admin capabilities
 exports.getCostumes = async (req, res, next) => {
-
   try {
     const costumes = await Costume.find()
     res.status(200).json({ 
@@ -31,10 +30,8 @@ exports.getCostumes = async (req, res, next) => {
 
 // POST EXPORTS:
 
-// This is similar to createPost in the REST API backend feed controller
 // Adds new costumes
 exports.postAddCostume = async (req, res, next) => {
-  // TODO: When we know how to test with Authorization, uncomment out errors code (lines 159-165)
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.');
@@ -42,8 +39,6 @@ exports.postAddCostume = async (req, res, next) => {
     error.data = errors.array();
     throw error;
   }
-
-
   const category = req.body.category;
   const costumeName = req.body.costumeName;
   const rentalFee = req.body.rentalFee;
@@ -63,7 +58,6 @@ exports.postAddCostume = async (req, res, next) => {
   try {
     await costume.save();
     const user = await User.findById(req.userId);
-    // user.costumes.push(costume);
     await user.save();
     // TODO: Stretch: add websockets? This may need to be tweaked more.
     // io.getIO().emit('costumes', {
@@ -84,7 +78,6 @@ exports.postAddCostume = async (req, res, next) => {
 
 // PUT EXPORTS:
 
-// This is similar to updatePost in the REST API backend feed controller
 // Allows user that added costume to edit costume
 exports.editCostume = async (req, res, next) => {
   const costumeId = req.body.costumeId;
@@ -114,12 +107,12 @@ exports.editCostume = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
-    // if (costume.creator._id.toString() !== req.userId) {
+    // TODO: Add this back if/when correct
+    // if (!req.userId) {
     //   const error = new Error('Not authorized!');
     //   error.statusCode = 403;
     //   throw error;
     // }
-
     costume.category = category,
     costume.costumeName = costumeName,
     costume.rentalFee = rentalFee,
@@ -145,10 +138,8 @@ exports.editCostume = async (req, res, next) => {
 
 // DELETE EXPORTS:
 
-// This is similar to deletePost in the REST API backend feed controller
 // Allows a costume to be deleted by user that added costume
 exports.deleteCostume = async (req, res, next) => {
-    // TODO: When we know how to test with Authorization, uncomment out errors code (lines 200-206)
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.');
@@ -156,7 +147,6 @@ exports.deleteCostume = async (req, res, next) => {
     error.data = errors.array();
     throw error;
   }
-
   const costumeId = req.params.costumeId;
   try {
     const costume = await Costume.findById(costumeId)

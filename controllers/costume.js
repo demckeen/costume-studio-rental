@@ -1,7 +1,5 @@
 // COSTUME CONTROLLER
 
-const fs = require('fs');
-const path = require('path');
 const {
   validationResult
 } = require('express-validator');
@@ -70,9 +68,16 @@ exports.getCostume = async (req, res, next) => {
   }
 }
 
-// TODO: This route currently does not work. Other routes need to be working before this one can really be tested. 
+// TODO: This route currently does not work.
 //Get the user's cart info for added costumes in the cart
 exports.getCart = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
   try {
     const user = await req.user.populate('cart.items.rentalId')
     if (!cart) {
@@ -86,15 +91,23 @@ exports.getCart = async (req, res, next) => {
       costumes: costumes
     });
   } catch (err) {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    return next(error);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
 }
 
 // TODO: Checkout needs fixed-please help:)
 //Get checkout information
 exports.getCheckout = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
   let total = 0;
 
   try {
@@ -127,15 +140,24 @@ exports.getCheckout = async (req, res, next) => {
       result: paymentResult
     })
   } catch (err) {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    return next(error);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
 };
 
-// TODO: Checkout needs fixed-please help:)
+// TODO: Checkout needs fixed-please help:) 
+// TODO: Convert to async/await
 // Gets successful checkout and clears user cart
 exports.getCheckoutSuccess = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
   req.user
     .populate('cart.items.productId')
     // .execPopulate()
@@ -167,6 +189,13 @@ exports.getCheckoutSuccess = (req, res, next) => {
 
 //Get rentals for a user
 exports.getRentals = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
   try {
     const rentals = Rental.find({
       'user.userId': req.user._id
@@ -177,9 +206,10 @@ exports.getRentals = async (req, res, next) => {
       rentals: rentals
     })
   } catch (err) {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    return next(error);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
 }
 
@@ -190,12 +220,19 @@ exports.getInvoice = async (req, res, next) => {}
 
 // POST EXPORTS:
 
-// TODO: This route currently does not work. Is it just because of required authorization or more?
+// TODO: This route currently does not work.
 //Add a costume to the cart
 exports.postCart = async (req, res, next) => {
   const costumeId = req.body.costumeId;
   const userId = req.body.userId;
   let quantity;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
   try {
 
     const reqUser = await User.findById(userId);
@@ -221,15 +258,23 @@ exports.postCart = async (req, res, next) => {
       cart: reqUser.cart.items
     })
   } catch (err) {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    throw error;
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
 };
 
 // TODO: This route currently does not work. Other routes need to be working before this one can really be tested. 
 //Create an order
 exports.postRental = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
   try {
     const user = await req.user.populate('cart.items.costumeId')
     const costumes = User.cart.items.map(i => {
@@ -254,9 +299,10 @@ exports.postRental = async (req, res, next) => {
       message: 'Rental placed successfully!'
     })
   } catch (err) {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    return next(error);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
 };
 
@@ -267,6 +313,13 @@ exports.postRental = async (req, res, next) => {
 //Remove costume from cart
 exports.postCartDeleteCostume = async (req, res, next) => {
   const costumeId = req.body.costumeId;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
+  }
   try {
     await req.user.removeFromCart(costumeId);
     res.status(200).json({
@@ -275,8 +328,9 @@ exports.postCartDeleteCostume = async (req, res, next) => {
       userId: userId
     })
   } catch (err) {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    throw error;
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
 };

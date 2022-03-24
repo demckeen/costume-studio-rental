@@ -1,6 +1,5 @@
 // AUTH CONTROLLER
 
-const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -84,7 +83,7 @@ exports.login = async (req, res, next) => {
   }
 }
 
-// TODO: This route currently does not work. Is it just because of required authorization or more?
+// TODO: This route currently does not work.
 // Reset Password
 exports.postReset = async (req, res, next) => {
     try {
@@ -115,12 +114,11 @@ exports.postReset = async (req, res, next) => {
     }
   }
 
-// TODO: This route currently does not work. Is it just because of required authorization or more?
+// TODO: This route currently does not work.
 // Prior to rendering reset password form, frontend is verifying status of url parameter, :tokenId
 exports.isPassLinkAuth = async (req, res, next) => {
   const token = tokenId;
   const userId  = await jwt.decode(token.userId);
-  
   try {
     const passUser = await User.findById(userId);
     if(!passUser) {
@@ -128,7 +126,6 @@ exports.isPassLinkAuth = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
-
     const currentPass = passUser.password;
     const decodedToken = jwt.verify(token, `secretpasswordsauce${currentPass}`)
     if(!decodedToken) {
@@ -136,7 +133,6 @@ exports.isPassLinkAuth = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-
     //authentication reply allows frontend to render "set password" form with added layer of security
     res.status(200).json({message: 'User authenticated.', userId: req.userId.toString()})}
     
@@ -148,17 +144,15 @@ exports.isPassLinkAuth = async (req, res, next) => {
     }
   };
 
-// TODO: This route currently does not work. Is it just because of required authorization or more?
+// TODO: This route currently does not work.
 //Create new password
 exports.postNewPassword = async (req, res, next) => {
   const newPassword = req.body.password;
   const userId = req.body.userId;
-
   try {
     const resetUser = await User.findOne({
       _id: userId
     });
-
     const hashedPassword = await bcrypt.hash(newPassword, 12);
     resetUser.password = hashedPassword;
 

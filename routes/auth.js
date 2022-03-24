@@ -15,7 +15,7 @@ const router = express.Router();
 
 // ---PUT Routes---
 
-//
+// /auth/signup => PUT
 router.put('/signup',
   [
     body('email')
@@ -49,7 +49,7 @@ router.put('/signup',
 
 // ---POST Routes---
 
-//
+// /auth/login => POST
 router.post('/login',
   [
     body('email')
@@ -65,13 +65,13 @@ router.post('/login',
   ],
   authController.login);
 
-//
+// /auth/reset => POST
 router.post('/reset', isPassAuth, authController.postReset);
 
-//
+// /auth/reset/:token => POST
 router.post('/reset/:token', authController.isPassLinkAuth);
 
-//
+// /auth/new-password => POST
 router.post('/new-password', isPassAuth, authController.postNewPassword);
 
 module.exports = router;
