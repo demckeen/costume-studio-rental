@@ -8,8 +8,8 @@ const {
 
 const User = require('../models/user');
 const authController = require('../controllers/auth');
-// const isAuth = require('../middleware/is-auth');
-// const isPassAuth = require('../middleware/is-pass-auth');
+const isAuth = require('../middleware/is-auth');
+const isPassAuth = require('../middleware/is-pass-auth');
 
 const router = express.Router();
 
@@ -67,9 +67,6 @@ router.post('/login',
 
 // /auth/reset => POST
 router.post('/reset', authController.postReset);
-
-// // /auth/reset/:token => POST
-// router.post('/reset/:token', authController.isPassLinkAuth);
 
 // /auth/new-password => POST
 router.post('/new-password', authController.postNewPassword);

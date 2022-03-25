@@ -10,14 +10,6 @@ module.exports = async (req, res, next) => {
     throw error;
   }
   const token = authHeader.split(' ')[1];
-  const loadedUser = await User.findbyId(req.userId);
-  if(!loadedUser) {
-    const error = new Error('No user found.');
-    error.statusCode = 404;
-    throw error;
-  }
-  const currentPass = loadedUser.password;
-
   let decodedToken;
   try {
     decodedToken = jwt.verify(token, `secretpasswordsauce${currentPass}`)
