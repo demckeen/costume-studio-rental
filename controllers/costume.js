@@ -9,7 +9,7 @@ const Costume = require('../models/costume');
 const User = require('../models/user');
 const Rental = require('../models/rental');
 
-// Place Controller functions here: - exports.get/post/etc
+// Place Controller functions here:
 
 
 // GET EXPORTS:
@@ -72,6 +72,7 @@ exports.getCostume = async (req, res, next) => {
 // TODO: This route currently does not work.
 //Get the user's cart info for added costumes in the cart
 exports.getCart = async (req, res, next) => {
+  const user = req.body.userId;
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.');
@@ -80,7 +81,7 @@ exports.getCart = async (req, res, next) => {
     throw error;
   }
   try {
-    const user = await req.user.populate('cart.items.costumeId')
+    user.populate('cart.items.costumeId')
     if (!cart) {
       const error = new Error('No items in cart!');
       error.statusCode = 404;
@@ -90,7 +91,7 @@ exports.getCart = async (req, res, next) => {
     res.status(200)({
       pageTitle: 'Your Cart',
       costumes: costumes
-    });
+    }); 
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -98,6 +99,21 @@ exports.getCart = async (req, res, next) => {
     next(err);
   }
 }
+
+// exports.getCart = (req, res, next) => {
+//   const user = req.body.userId;
+//   user
+//     .populate('cart.items.costumeId')
+//     // .execPopulate()
+//     .then(user => {
+//       const costumes = user.cart.items;
+//     })
+//     .catch(err => {
+//       const error = new Error(err);
+//       error.httpStatusCode = 500;
+//       return next(error);
+//     });
+// };
 
 // TODO: Checkout needs fixed-please help:)
 //Get checkout information
