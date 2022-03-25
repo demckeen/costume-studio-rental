@@ -72,7 +72,7 @@ exports.getCostume = async (req, res, next) => {
 //Get the user's cart info for added costumes in the cart
 exports.getCart = async (req, res, next) => {
   const userId = req.userId;
-  console.log(userId);
+  // console.log(userId);
   let cartUser = await User.findOne({_id: userId});
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -82,11 +82,11 @@ exports.getCart = async (req, res, next) => {
     throw error;
   }
   try {
-    console.log(cartUser);
-    console.log(cartUser.cart);
+    // console.log(cartUser);
+    // console.log(cartUser.cart);
     const cartCostumes = await cartUser.cart.populate('items.costumeId');
-    console.log('CART COSTUMES:',cartCostumes);
-    console.log('CART ITEMS POPULATED:', cartUser.cart.items);
+    // console.log('CART COSTUMES:',cartCostumes);
+    // console.log('CART ITEMS POPULATED:', cartUser.cart.items);
     if (!cartUser.cart) {
       const error = new Error('No items in cart!');
       error.statusCode = 404;
@@ -327,25 +327,22 @@ exports.postRental = async (req, res, next) => {
 
 
 // DELETE EXPORTS
-
-// TODO: This route currently does not work. Other routes need to be working before this one can really be tested. 
 //Remove costume from cart
 exports.deleteCostumeFromCart = async (req, res, next) => {
   const costumeId = req.body.costumeId;
+  console.log('REQUEST BODY:', req.body );
   console.log("made it to the controller!", costumeId);
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const error = new Error('Validation failed.');
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
+  if(!costumeId) {
+    return res.status(404).json({message:'No costumeId in request body!'});
   }
   try {
-    await req.user.removeFromCart(costumeId);
+    const cartUser = await User.findById(req.userId);
+    console.log('Found a user!', cartUser.email);
+    await cartUser.removeFromCart(costumeId);
     res.status(200).json({
       message: 'Costume deleted from cart',
       costumeId: costumeId,
-      userId: userId
+      userId: req.userId
     })
   } catch (err) {
     if (!err.statusCode) {
