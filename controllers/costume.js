@@ -7,6 +7,7 @@ const io = require('../socket');
 
 const Costume = require('../models/costume');
 const User = require('../models/user');
+const Rental = require('../models/rental');
 
 // Place Controller functions here: - exports.get/post/etc
 
