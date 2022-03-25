@@ -158,7 +158,7 @@ exports.postNewPassword = async (req, res, next) => {
   }
 };
 
-// OLD RESET PASSWORD METHODS USING TOKEN METHOD FROM THE SHOP VIDEOS - SEE BELOW FOR OTHER VERSIONS
+// OLD RESET PASSWORD METHODS USING TOKEN METHOD FROM THE SHOP VIDEOS
 
 // TODO: This route works using the token method used in shop instead of jwt/is-pass-auth middleware
 // Reset Password

@@ -115,6 +115,13 @@
  *              - bearerAuth: [] 
  *          summary: Get the user's cart information for added costumes currently in the cart
  *          tags: [Rentals]
+ *          parameters:
+ *            - in: path
+ *              name: userId
+ *              schema:
+ *                  type: string
+ *              required: true
+ *              description: This is the user id
  *          responses:
  *              200:
  *                  description: Information about cart contents displayed
@@ -266,7 +273,7 @@
  * DELETE routes
  * @swagger
  * 
- * /cart-delete-item:
+ * /cancel-rental:
  *      delete:
  *          security:
  *              - bearerAuth: [] 

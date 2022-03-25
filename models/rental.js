@@ -6,15 +6,29 @@ const Schema = mongoose.Schema;
 
 // TODO: Build out schema and update schema in Swagger
 const rentalSchema = new Schema({
-    //Modeled from "orders" model in Nodejs project - will require modification
-    costume: [{
-        // product: {type: Object, required: true},
-        // quantity: {type: Number, required: true,}
-    }],
-    user: {
-        // email: {type: String, required: true,},
-        // userId: {type: Schema.Types.ObjectId, ref: 'User', required: true}
+  costumes: [
+    {
+      costume: {
+        type: Object, 
+        required: true
+      },
+      quantity: {
+        type: Number, 
+        required: true,
+      }
     }
+  ],
+  user: {
+    email: {
+      type: String, 
+      required: true,
+    },
+    userId: {
+      type: Schema.Types.ObjectId, 
+      ref: 'User', 
+      required: true
+    }
+  }
 });
 
 // TODO: Add methods, if needed

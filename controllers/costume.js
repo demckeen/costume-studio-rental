@@ -7,11 +7,12 @@ const io = require('../socket');
 
 const Costume = require('../models/costume');
 const User = require('../models/user');
+const Rental = require('../models/rental');
 
 // Place Controller functions here: - exports.get/post/etc
 
 
-// GET EXPORTS:a
+// GET EXPORTS:
 
 //Get the list of costumes
 exports.getCostumes = async (req, res, next) => {
@@ -79,7 +80,7 @@ exports.getCart = async (req, res, next) => {
     throw error;
   }
   try {
-    const user = await req.user.populate('cart.items.rentalId')
+    const user = await req.user.populate('cart.items.costumeId')
     if (!cart) {
       const error = new Error('No items in cart!');
       error.statusCode = 404;
@@ -220,7 +221,6 @@ exports.getInvoice = async (req, res, next) => {}
 
 // POST EXPORTS:
 
-// TODO: This route currently does not work.
 //Add a costume to the cart
 exports.postCart = async (req, res, next) => {
   const costumeId = req.body.costumeId;
@@ -233,7 +233,6 @@ exports.postCart = async (req, res, next) => {
     throw error;
   }
   try {
-
     const reqUser = await User.findById(userId);
     if(!reqUser) {
       const error = new Error('Cannot locate user for cart.');
@@ -310,8 +309,9 @@ exports.postRental = async (req, res, next) => {
 
 // TODO: This route currently does not work. Other routes need to be working before this one can really be tested. 
 //Remove costume from cart
-exports.postCartDeleteCostume = async (req, res, next) => {
+exports.deleteCostumeFromCart = async (req, res, next) => {
   const costumeId = req.body.costumeId;
+  console.log("made it to the controller!", costumeId);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.');
@@ -332,4 +332,49 @@ exports.postCartDeleteCostume = async (req, res, next) => {
     }
     next(err);
   }
-};
+}; 
+
+// exports.deletePost = async (req, res, next) => {
+//   const postId = req.params.postId;
+//   try {
+//     const post = await Post.findById(postId)
+//     if (!post) {
+//       const error = new Error('Could not find post.');
+//       error.statusCode = 404;
+//       throw error;
+//     }
+//     if (post.creator.toString() !== req.userId) {
+//       const error = new Error('Not authorized!');
+//       error.statusCode = 403;
+//       throw error;
+//     }
+//     // Check logged in user
+//     await Post.findByIdAndRemove(postId);
+
+//     const user = await User.findById(req.userId);
+//     user.posts.pull(postId);
+
+//     await user.save();
+//     io.getIO().emit('posts', { action: 'delete', post: postId });
+//     res.status(200).json({ message: 'Deleted post.' });
+//   } catch {
+//     if (!err.statusCode) {
+//       err.statusCode = 500;
+//     }
+//     next(err);
+//   }  
+// }
+
+// exports.postCartDeleteProduct = (req, res, next) => {
+//   const prodId = req.body.productId;
+//   req.user
+//     .removeFromCart(prodId)
+//     .then(result => {
+//       res.redirect('/cart');
+//     })
+//     .catch(err => {
+//       const error = new Error(err);
+//       error.httpStatusCode = 500;
+//       return next(error);
+//     });
+// };

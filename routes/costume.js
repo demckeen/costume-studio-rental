@@ -49,6 +49,6 @@ router.post('/create-rental', isAuth, costumeController.postRental);
 // ---DELETE Routes---
 
 // /cancel-rental => DELETE
-router.delete('/cancel-rental', isAuth, costumeController.postCartDeleteCostume);
+router.delete('/cancel-rental', isAuth, costumeController.deleteCostumeFromCart);
 
 module.exports = router;
