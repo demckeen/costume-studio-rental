@@ -69,11 +69,11 @@ exports.getCostume = async (req, res, next) => {
   }
 }
 
-// TODO: This route currently does not work.
 //Get the user's cart info for added costumes in the cart
 exports.getCart = async (req, res, next) => {
   const userId = req.userId;
-  let cartUser = User.findById(userId);
+  console.log(userId);
+  let cartUser = await User.findOne({_id: userId});
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.');
@@ -82,14 +82,18 @@ exports.getCart = async (req, res, next) => {
     throw error;
   }
   try {
-    cartUser.populate('cart.items.costumeId')
+    console.log(cartUser);
+    console.log(cartUser.cart);
+    const cartCostumes = await cartUser.cart.populate('items.costumeId');
+    console.log('CART COSTUMES:',cartCostumes);
+    console.log('CART ITEMS POPULATED:', cartUser.cart.items);
     if (!cartUser.cart) {
       const error = new Error('No items in cart!');
       error.statusCode = 404;
       throw error;
     }
-    const costumes = user.cart.items;
-    res.status(200)({
+    const costumes = cartUser.cart.items;
+    res.status(200).json({
       pageTitle: 'Your Cart',
       costumes: costumes
     }); 
