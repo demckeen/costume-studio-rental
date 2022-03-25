@@ -10,10 +10,13 @@ const router = express.Router();
 
 // ---GET Routes---
 
+// / => GET
+router.get('/', costumeController.getCostumes);
+
 // /costumes => GET
 router.get('/costumes', costumeController.getCostumes);
 
-// /costume/costumes/:costumeId => GET
+// /costumes/:costumeId => GET
 router.get('/costumes/:costumeId', costumeController.getCostume);
 
 // /cart => GET
