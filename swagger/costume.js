@@ -74,7 +74,7 @@
  * GET routes
  * @swagger
  * 
- * /costume/costumes:
+ * /costumes:
  *      get:
  *          summary: Gets a list of all the costumes
  *          tags: [Rentals]
@@ -88,7 +88,7 @@
  *                          items:
  *                              $ref: '#/components/schemas/Costume'
  * 
- * /costume/costumes/{costumeId}:
+ * /costumes/{costumeId}:
  *      get:
  *          summary: Gets the details of the costume with the id
  *          tags: [Rentals]
@@ -109,7 +109,7 @@
  *              404:
  *                  description: The costume was not found
  * 
- * /costume/cart:
+ * /cart:
  *      get:
  *          security:
  *              - bearerAuth: [] 
@@ -125,7 +125,7 @@
  *                          items:
  *                              $ref: '#/components/schemas/Costume'
  *
- * /costume/rentals:
+ * /rentals:
  *      get:
  *          security:
  *              - bearerAuth: [] 
@@ -141,7 +141,7 @@
  *                          items:
  *                              $ref: '#/components/schemas/Rentals'
  * 
- * /costume/rental/{rentalId}:
+ * /rental/{rentalId}:
  *      get:
  *          security:
  *              - bearerAuth: [] 
@@ -164,7 +164,7 @@
  *              404:
  *                  description: The rental was not found
  * 
- * /costume/checkout:
+ * /checkout:
  *      get:
  *          security:
  *              - bearerAuth: [] 
@@ -180,7 +180,7 @@
  *                          items:
  *                              $ref: '#/components/schemas/Rentals'
  * 
- * /costume/checkout/success:
+ * /checkout/success:
  *      get:
  *          security:
  *              - bearerAuth: [] 
@@ -196,7 +196,7 @@
  *                          items:
  *                              $ref: '#/components/schemas/Rentals' 
  * 
- * /costume/checkout/cancel:
+ * /checkout/cancel:
  *      get:
  *          security:
  *              - bearerAuth: [] 
@@ -217,7 +217,7 @@
  * POST routes
  * @swagger
  * 
- * /costume/cart:
+ * /cart:
  *      post:
  *          security:
  *              - bearerAuth: [] 
@@ -239,7 +239,7 @@
  *              500:
  *                  description: There was a server error
  * 
- * /costume/create-rental:
+ * /create-rental:
  *      post:
  *          security:
  *              - bearerAuth: [] 
