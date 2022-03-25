@@ -72,7 +72,8 @@ exports.getCostume = async (req, res, next) => {
 // TODO: This route currently does not work.
 //Get the user's cart info for added costumes in the cart
 exports.getCart = async (req, res, next) => {
-  const user = req.body.userId;
+  const userId = req.userId;
+  let cartUser = User.findById(userId);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.');
@@ -81,8 +82,8 @@ exports.getCart = async (req, res, next) => {
     throw error;
   }
   try {
-    user.populate('cart.items.costumeId')
-    if (!cart) {
+    cartUser.populate('cart.items.costumeId')
+    if (!cartUser.cart) {
       const error = new Error('No items in cart!');
       error.statusCode = 404;
       throw error;
