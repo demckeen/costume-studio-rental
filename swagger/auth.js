@@ -115,8 +115,6 @@
  * 
  * /auth/reset:
  *      post:
- *          security:
- *              - bearerAuth: [] 
  *          summary: Reset password
  *          tags: [Auth]
  *          requestBody:
@@ -135,26 +133,6 @@
  *              500:
  *                  description: There was a server error
  *  
- * /auth/reset/{token}:
- *      post:
- *          summary: Reset password
- *          tags: [Auth]
- *          requestBody:
- *              required: true
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/User'
- *          responses:
- *              200:
- *                  description: The password was reset
- *                  content:
- *                      application/json:
- *                          schema:
- *                              $ref: '#/components/schemas/User'
- *              500:
- *                  description: There was a server error
- * 
  * /auth/new-password:
  *      post:
  *          security:

@@ -63,12 +63,13 @@ userSchema.methods.addToCart = function (costume) {
 };
 
 userSchema.methods.removeFromCart = function(costumeId) {
+  console.log("made it to the method!", costumeId);
   const updatedCartItems = this.cart.items.filter(item => {
     return item.costumeId.toString() !== costumeId.toString();
   });
   this.cart.items = updatedCartItems;
   return this.save();
-}
+};
 
 userSchema.methods.clearCart = function() {
   this.cart = { items: [] };
