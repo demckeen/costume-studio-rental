@@ -1,6 +1,5 @@
 // AUTH CONTROLLER
 
-const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -157,61 +156,3 @@ exports.postNewPassword = async (req, res, next) => {
     next(err);
   }
 };
-
-// TODO: Delete all of this before turning in project
-// OLD RESET PASSWORD METHODS USING TOKEN METHOD FROM THE SHOP VIDEOS
-
-// Reset Password
-// exports.postReset = (req, res, next) => {
-//   crypto.randomBytes(32, (err, buffer) => {
-//     const token = buffer.toString('hex');
-//     User.findOne({email: req.body.email})
-//       .then(user => {
-//         if (!user) {
-//           const error = new Error('User not found.');
-//           error.statusCode = 404;
-//           throw error;
-//         }
-//       user.resetToken = token;
-//       user.resetTokenExpiration = Date.now() + 3600000;
-//       return user.save();
-//       })
-//       .then(result => {
-//         //send email? link provided will be http://localhost:3000/reset/${token}
-//         res.status(200).json({ 
-//           message: 'Password reset request authorized', token: token 
-//         });
-//     })
-//     .catch (err => {
-//       if (!err.statusCode) {
-//         err.statusCode = 500;
-//       }
-//       return next(err);
-//     });
-//   });
-// };
-
-//Create new password
-// exports.postNewPassword = async (req, res, next) => {
-//   const newPassword = req.body.password;
-//   const userId = req.body.userId;
-//   const passwordToken = req.body.passwordToken;
-//   try {
-//     const resetUser = await User.findOne({
-//       resetToken: passwordToken, 
-//       resetTokenExpiration: { $gt: Date.now() },
-//       _id: userId
-//     });
-//     const hashedPassword = await bcrypt.hash(newPassword, 12);
-//     resetUser.password = hashedPassword;
-//     resetUser.resetToken = undefined;
-//     resetUser.resetTokenExpiration = undefined;
-//     await resetUser.save();
-//     res.status(200).json({ message: 'Password reset successfully', userId: resetUser._id.toString() });
-//   } catch {
-//     if (!err.statusCode) {
-//       err.statusCode = 500;
-//     }
-//     next(err);
-//   }
-// };

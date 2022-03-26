@@ -5,7 +5,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
-// const csrf = require('csurf');
 
 const mongoose = require('mongoose');
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -16,7 +15,6 @@ const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
 
 const app = express();
-// const csrfProtection = csrf();
 
 // Swagger set up
 const swagger_options = {
@@ -42,14 +40,7 @@ const specs = swaggerJsDoc(swagger_options);
 //view api contract at localhost:8080/api-docs
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
 
-// app.use(bodyParser.urlencoded({ extended: false })); // x-www-form-urlencoded <form>
-app.use(bodyParser.json()); // application/json
-// app.use(csrfProtection);
-
-// app.use((req, res, next) => {
-//   res.locals.csrfToken = req.csrfToken();
-//   next();
-// });
+app.use(bodyParser.json());
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
