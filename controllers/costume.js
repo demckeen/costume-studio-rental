@@ -171,6 +171,12 @@ exports.getCheckout = async (req, res, next) => {
       payment_method_types: ['card'],
       line_items: lineItems,   
       mode: 'payment', 
+
+//  *** TODOS *** req.get('host') should be reincorporated to accomodate other front end requests,
+//  *** url still needs to END with success?session_id={CHECKOUT_SESSION_ID} ! ***
+//       success_url: req.protocol + '://' + req.get('host') + '/checkout/success',
+//       cancel_url: req.protocol + '://' + req.get('host') + '/checkout/cancel'
+
       success_url: req.protocol + '://' + 'localhost:3000' + '/checkout/success?session_id={CHECKOUT_SESSION_ID}', // => http://localhost:3000
       cancel_url: req.protocol + '://' + 'localhost:3000' + '/checkout/cancel'})
 
