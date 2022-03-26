@@ -37,7 +37,4 @@ const costumeSchema = new Schema (
       }
     })
 
-// TODO: Add costume methods, if needed
-//Do we need costume methods?
-
 module.exports = mongoose.model('Costume', costumeSchema);

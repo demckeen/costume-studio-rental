@@ -35,7 +35,7 @@ router.get('/checkout', isAuth, costumeController.getCheckout);
 router.get('/checkout/success', costumeController.getCheckoutSuccess);
 
 // /checkout/cancel => GET
-router.get('/checkout/cancel', isAuth, costumeController.getCheckout);
+router.get('/checkout/cancel', costumeController.getCheckout);
 
 // ---POST Routes---
 

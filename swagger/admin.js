@@ -1,3 +1,5 @@
+
+// TODO: Update Rentals schema
 /**
  * Schemas and routes for admin
  * 
@@ -42,9 +44,9 @@
  *          scheme: bearer
  *          bearerFormat: JWT
  * 
- * security:
- *  - bearerAuth: []
- *  - _id: []                 
+ *  security:
+ *   - bearerAuth: []
+ *   - _id: []                 
  */
 
  /**

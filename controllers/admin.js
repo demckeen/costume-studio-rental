@@ -47,8 +47,8 @@ exports.postAddCostume = async (req, res, next) => {
   const description = req.body.description;
 
   const costume = new Costume({
-    category: category,
     costumeName: costumeName,
+    category: category,
     rentalFee: rentalFee,
     size: size,
     imageUrl: imageUrl,
@@ -59,7 +59,7 @@ exports.postAddCostume = async (req, res, next) => {
     await costume.save();
     const user = await User.findById(req.userId);
     await user.save();
-    // TODO: Stretch: add websockets? This may need to be tweaked more.
+    // TODO: Stretch: add websockets
     // io.getIO().emit('costumes', {
     //   action: 'create',
     //   costume: costumeId
@@ -107,7 +107,6 @@ exports.editCostume = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
-    // TODO: Add this back if/when correct
     if (!req.userId) {
       const error = new Error('Not authorized!');
       error.statusCode = 403;
@@ -121,8 +120,8 @@ exports.editCostume = async (req, res, next) => {
     costume.description = description
 
     const result = await costume.save()
-    // TODO: Stretch: add websockets?
-    // io.getIO().emit('posts', { action: 'update', post: result });
+    // TODO: Stretch: add websockets
+    // io.getIO().emit('costumes', { action: 'update', costume: result });
     res.status(201).json({
       message: 'Costume edited',
       costumeId: result._id

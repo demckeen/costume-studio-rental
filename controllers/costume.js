@@ -4,12 +4,11 @@ const {
   validationResult
 } = require('express-validator');
 const io = require('../socket');
+const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 const Costume = require('../models/costume');
 const User = require('../models/user');
 const Rental = require('../models/rental');
-
-const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 // Place Controller functions here:
 
@@ -18,18 +17,20 @@ const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 //Get the list of costumes
 exports.getCostumes = async (req, res, next) => {
-  const page = +req.query.page || 1;
-  const perPage = 3;
+  // Commented out pagination code that will be used with frontend
+
+  // const page = +req.query.page || 1;
+  // const perPage = 3;
   try {
-    const totalItems = await Costume.find().countDocuments()
-    if (!totalItems) {
-      const error = new Error('No costumes found!');
-      error.statusCode = 404;
-      throw error;
-    }
+    // const totalItems = await Costume.find().countDocuments()
+    // if (!totalItems) {
+    //   const error = new Error('No costumes found!');
+    //   error.statusCode = 404;
+    //   throw error;
+    // }
     const costumes = await Costume.find()
-      .skip((page - 1) * perPage)
-      .limit(perPage);
+      // .skip((page - 1) * perPage)
+      // .limit(perPage);
     if (!costumes) {
       const error = new Error('No costumes found!');
       error.statusCode = 404;
@@ -37,8 +38,8 @@ exports.getCostumes = async (req, res, next) => {
     }
     res.status(200).json({
       message: 'Fetched costumes successfully.',
-      costumes: costumes,
-      totalItems: totalItems
+      costumes: costumes
+      // totalItems: totalItems
     })
   } catch (err) {
     if (!err.statusCode) {
@@ -102,13 +103,9 @@ exports.getCart = async (req, res, next) => {
   }
 }
 
-
-// TODO: Checkout needs fixed-please help:)
 //Get checkout for payments
 exports.getCheckout = async (req, res, next) => {
-
   let host = 'localhost:8080';
-
   console.log(host);
   try {
     const checkoutUser = await User.findById(req.userId);    
@@ -176,9 +173,7 @@ exports.getCheckout = async (req, res, next) => {
       line_items: lineItems,   
       mode: 'payment', 
 
-//  *** req.get('host') necessary to accomodate other front end requests,
 //  *** url still needs to END with success?session_id={CHECKOUT_SESSION_ID} ! ***
-
       success_url: req.protocol + '://' + host + '/checkout/success?session_id={CHECKOUT_SESSION_ID}', // => http://localhost:3000 
       cancel_url: req.protocol + '://' + host + '/checkout/cancel'})
       console.log(paymentResult);
@@ -193,8 +188,6 @@ exports.getCheckout = async (req, res, next) => {
   }
 };
 
-// TODO: Checkout needs fixed-please help:) 
-// TODO: Convert to async/await
 // Gets successful checkout and clears user cart
 exports.getCheckoutSuccess = async (req, res, next) => {
   
@@ -242,84 +235,6 @@ exports.getCheckoutSuccess = async (req, res, next) => {
     }
 }
 
-// // Jennifer's checkout exports
-// // getCheckout is for payments
-// exports.getCheckout = (req, res, next) => {
-//   let products;
-//   let total = 0;
-//   req.user
-//   .populate('cart.items.productId')
-//   .then(user => {
-//     products = user.cart.items;
-//     total = 0;
-//     products.forEach(p => {
-//       total += p.quantity * p.productId.price;
-//     });
-
-//     return stripe.checkout.sessions.create({
-//       payment_method_types: ['card'], 
-//       line_items: products.map(p => {
-//         return {
-//           name: p.productId.title,
-//           description: p.productId.description,
-//           amount: p.productId.price * 100,
-//           currency: 'usd', 
-//           quantity: p.quantity
-//         };
-//       }),
-//       success_url: req.protocol + '://' + req.get('host') + '/checkout/success',
-//       cancel_url: req.protocol + '://' + req.get('host') + '/checkout/cancel'
-//     });
-//   })
-//   .then(session => {
-//     res.render('shop/checkout', {
-//       path: '/checkout',
-//       pageTitle: 'Checkout',
-//       products: products,
-//       totalSum: total,
-//       sessionId: session.id
-//     });
-//   })
-//   .catch(err => {
-//     const error = new Error(err);
-//     error.httpStatusCode = 500;
-//     return next(error);
-//   });
-// }
-
-
-// exports.getCheckoutSuccess = (req, res, next) => {
-//   req.user
-//     .populate('cart.items.productId')
-//     // .execPopulate()
-//     .then(user => {
-//       const products = user.cart.items.map(i => {
-//         return { quantity: i.quantity, product: { ...i.productId._doc } };
-//       });
-//       const order = new Order({
-//         user: {
-//           email: req.user.email,
-//           userId: req.user
-//         },
-//         products: products
-//       });
-//       return order.save();
-//     })
-//     .then(result => {
-//       return req.user.clearCart();
-//     })
-//     .then(() => {
-//       return res.redirect('/orders');
-//     })
-//     .catch(err => {
-//       const error = new Error(err);
-//       error.httpStatusCode = 500;
-//       return next(error);
-//     });
-// };
-// End Jennifer's checkout exports
-
-
 //Get rentals for a user
 exports.getRentals = async (req, res, next) => {
   const errors = validationResult(req);
@@ -346,8 +261,7 @@ exports.getRentals = async (req, res, next) => {
   }
 }
 
-// TODO: Stretch: Invoice?
-//Get invoice for rental
+//Get invoice for completed rental
 exports.getInvoice = async (req, res, next) => {
   const rentalId = req.params.rentalId
   try {
@@ -410,49 +324,9 @@ exports.postCart = async (req, res, next) => {
   }
 };
 
-// TODO: This route is not needed if using checkout process routes 
-// //Create an order
-// exports.postRental = async (req, res, next) => {
-//   const errors = validationResult(req);
-//   if (!errors.isEmpty()) {
-//     const error = new Error('Validation failed.');
-//     error.statusCode = 422;
-//     error.data = errors.array();
-//     throw error;
-//   }
-//   try {
-//     const user = await req.user.populate('cart.items.costumeId')
-//     const costumes = User.cart.items.map(i => {
-//       return {
-//         quantity: i.quantity,
-//         costume: {
-//           ...i.costumeId._doc
-//         }
-//       };
-
-//     });
-//     const rental = new Rental({
-//       user: {
-//         name: req.user.name,
-//         userId: req.userId
-//       },
-//       costumes: costumes
-//     });
-//     await rental.save();
-//     await req.user.clearCart();
-//     res.status(200).json({
-//       message: 'Rental placed successfully!'
-//     })
-//   } catch (err) {
-//     if (!err.statusCode) {
-//       err.statusCode = 500;
-//     }
-//     next(err);
-//   }
-// };
-
 
 // DELETE EXPORTS
+
 //Remove costume from cart
 exports.deleteCostumeFromCart = async (req, res, next) => {
   const costumeId = req.body.costumeId;
@@ -477,48 +351,3 @@ exports.deleteCostumeFromCart = async (req, res, next) => {
     next(err);
   }
 }; 
-
-// exports.deletePost = async (req, res, next) => {
-//   const postId = req.params.postId;
-//   try {
-//     const post = await Post.findById(postId)
-//     if (!post) {
-//       const error = new Error('Could not find post.');
-//       error.statusCode = 404;
-//       throw error;
-//     }
-//     if (post.creator.toString() !== req.userId) {
-//       const error = new Error('Not authorized!');
-//       error.statusCode = 403;
-//       throw error;
-//     }
-//     // Check logged in user
-//     await Post.findByIdAndRemove(postId);
-
-//     const user = await User.findById(req.userId);
-//     user.posts.pull(postId);
-
-//     await user.save();
-//     io.getIO().emit('posts', { action: 'delete', post: postId });
-//     res.status(200).json({ message: 'Deleted post.' });
-//   } catch {
-//     if (!err.statusCode) {
-//       err.statusCode = 500;
-//     }
-//     next(err);
-//   }  
-// }
-
-// exports.postCartDeleteProduct = (req, res, next) => {
-//   const prodId = req.body.productId;
-//   req.user
-//     .removeFromCart(prodId)
-//     .then(result => {
-//       res.redirect('/cart');
-//     })
-//     .catch(err => {
-//       const error = new Error(err);
-//       error.httpStatusCode = 500;
-//       return next(error);
-//     });
-// };

@@ -2,14 +2,12 @@
 
 const express = require('express');
 const {
-  body,
-  check
+  body
 } = require('express-validator');
 
 const User = require('../models/user');
 const authController = require('../controllers/auth');
 const isAuth = require('../middleware/is-auth');
-const isPassAuth = require('../middleware/is-pass-auth');
 
 const router = express.Router();
 
@@ -66,7 +64,7 @@ router.post('/login',
   authController.login);
 
 // /auth/reset => POST
-router.post('/reset', authController.postReset);
+router.post('/reset', isAuth, authController.postReset);
 
 // /auth/new-password => POST
 router.post('/new-password', authController.postNewPassword);
