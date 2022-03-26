@@ -27,8 +27,8 @@ const swagger_options = {
         },
         servers: [
             {
-                url: 'http://localhost:8080',
-                // url: process.env.HEROKU_APP
+                // url: 'http://localhost:8080'
+                url: process.env.HEROKU_APP
             }
         ]
     },

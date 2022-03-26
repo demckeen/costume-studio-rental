@@ -105,7 +105,8 @@ exports.getCart = async (req, res, next) => {
 
 //Get checkout for payments
 exports.getCheckout = async (req, res, next) => {
-  let host = 'localhost:8080';
+  // let host = 'localhost:8080';
+  let host = process.env.HEROKU_APP;
   console.log(host);
   try {
     const checkoutUser = await User.findById(req.userId);    
