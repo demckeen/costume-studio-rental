@@ -93,7 +93,7 @@
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Costume'
+ *                          $ref: '#/definitions/Costume'
  *          responses:
  *              200:
  *                  description: The costume was successfully added to the database
