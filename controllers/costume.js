@@ -117,6 +117,43 @@ exports.getCheckout = async (req, res, next) => {
     }
     const costumes = checkoutUser.cart.items;
 
+    let existingStripeCustomer;
+    let stripeCustomer;
+
+    try {
+      console.log('IN TRY RETRIEVE EXISTING USER BLOCK')
+      console.log('email filter:', checkoutUser.email)
+      existingStripeCustomerList = await stripe.customers.list({
+          email: checkoutUser.email
+      })
+      console.log('NO ERR?', existingStripeCustomerList.data)
+      stripeCustomer = existingStripeCustomerList.data.id;
+      console.log('STRIPE CUSTOMER:', stripeCustomer);
+    }
+    catch(err) {
+    console.log(err);
+    console.log("EXISTING CUSTOMER:", existingStripeCustomer);
+
+    if(!stripeCustomer) {
+      console.log('IN IF NOT EXISTING BLOCK')
+      stripeCustomer = await stripe.customers.create({
+        description: 'Test Customer (created for test Checkout)',
+        email: checkoutUser.email,
+        metadata: { userId: checkoutUser.userId }
+      });
+      }
+    }
+
+    if(!stripeCustomer) {
+      console.log('IN CHECK AFTER BLOCK')
+      stripeCustomer = await stripe.customers.create({
+        description: 'Test Customer (created for test Checkout)',
+        email: checkoutUser.email,
+        metadata: { userId: checkoutUser.userId }
+      });
+    }
+
+    console.log('STRIPE CUSTOMER SENDING TO CHECKOUT:',stripeCustomer);
     const lineItems = costumes.map( p => { 
       return { 
         price_data: {
@@ -130,16 +167,16 @@ exports.getCheckout = async (req, res, next) => {
       console.log(lineItems);
 
     const paymentResult = await stripe.checkout.sessions.create({
-      customer: `cus_LOFVQN9eFCDXMJ`,
+      customer: `${ stripeCustomer.id }`,
       payment_method_types: ['card'],
       line_items: lineItems,   
       mode: 'payment', 
-      success_url: req.protocol + '://' + 'localhost:3000' + '/checkout/success', // => http://localhost:3000
+      success_url: req.protocol + '://' + 'localhost:3000' + '/checkout/success?session_id={CHECKOUT_SESSION_ID}', // => http://localhost:3000
       cancel_url: req.protocol + '://' + 'localhost:3000' + '/checkout/cancel'})
 
       console.log(paymentResult);
     return res.status(200).json({
-      message: 'Payment session initiated', url: paymentResult.url})
+      message: 'Payment session initiated', url: paymentResult.url })
   } 
   catch (err) {
     if (!err.statusCode) {
@@ -153,9 +190,28 @@ exports.getCheckout = async (req, res, next) => {
 // TODO: Convert to async/await
 // Gets successful checkout and clears user cart
 exports.getCheckoutSuccess = async (req, res, next) => {
+
+  const authHeader = req.get('Authorization');
+  if (!authHeader) {
+    const error = new Error('Not authenticated.');
+    error.statusCode = 401;
+    throw error;
+  }
+
+  console.log(authHeader);
+  const session_id = authHeader.split(' ')[1];
+
+  console.log(session_id);
+
   try {
 
-  const checkoutUser = await User.findById(req.userId);
+  const session = await stripe.checkout.sessions.retrieve(session_id);
+  const customer = await stripe.customers.retrieve(session.customer);
+
+  console.log(customer);
+
+  const checkoutUser = await User.findOne({email: customer.email});
+
   console.log('FOUND USER:', checkoutUser.email);
   const cartItems = await  checkoutUser.cart.populate('items.costumeId');
   console.log('POPULATED CART:', cartItems.length);
@@ -168,7 +224,7 @@ exports.getCheckoutSuccess = async (req, res, next) => {
   const rental = new Rental({
         user: {
           email: checkoutUser.email,
-          userId: req.userId
+          userId: checkoutUser.userId
         },
         costumes: costumes
       });
