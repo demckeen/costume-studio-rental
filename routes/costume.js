@@ -26,7 +26,7 @@ router.get('/cart', isAuth, costumeController.getCart);
 router.get('/rentals', isAuth, costumeController.getRentals);
 
 // /rentals/:rentalId => GET
-// router.get('/rentals/:rentalId', isAuth, costumeController.getInvoice);
+router.get('/rentals/:rentalId', isAuth, costumeController.getInvoice);
 
 // /checkout => GET
 router.get('/checkout', isAuth, costumeController.getCheckout);

@@ -348,7 +348,22 @@ exports.getRentals = async (req, res, next) => {
 
 // TODO: Stretch: Invoice?
 //Get invoice for rental
-exports.getInvoice = async (req, res, next) => {}
+exports.getInvoice = async (req, res, next) => {
+  const rentalId = req.params.rentalId
+  try {
+    const rental = await Rental.findById(rentalId);
+
+    return res.status(200).json({
+      pageTitle: 'Rental '+ rental._id,
+      rental: rental
+    })
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+  }
+}
 
 
 // POST EXPORTS:
