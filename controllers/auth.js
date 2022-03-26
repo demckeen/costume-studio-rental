@@ -158,9 +158,9 @@ exports.postNewPassword = async (req, res, next) => {
   }
 };
 
+// TODO: Delete all of this before turning in project
 // OLD RESET PASSWORD METHODS USING TOKEN METHOD FROM THE SHOP VIDEOS
 
-// TODO: This route works using the token method used in shop instead of jwt/is-pass-auth middleware
 // Reset Password
 // exports.postReset = (req, res, next) => {
 //   crypto.randomBytes(32, (err, buffer) => {
@@ -191,7 +191,6 @@ exports.postNewPassword = async (req, res, next) => {
 //   });
 // };
 
-// TODO: This route works using the token method used in shop instead of jwt/is-pass-auth middleware
 //Create new password
 // exports.postNewPassword = async (req, res, next) => {
 //   const newPassword = req.body.password;

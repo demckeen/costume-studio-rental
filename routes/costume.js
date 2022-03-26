@@ -42,9 +42,6 @@ router.get('/rentals', isAuth, costumeController.getRentals);
 // /cart => POST
 router.post('/cart', isAuth, costumeController.postCart);
 
-// /create-rental => POST
-router.post('/create-rental', isAuth, costumeController.postRental);
-
 
 // ---DELETE Routes---
 

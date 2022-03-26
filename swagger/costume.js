@@ -239,27 +239,6 @@
  *              500:
  *                  description: There was a server error
  * 
- * /create-rental:
- *      post:
- *          security:
- *              - bearerAuth: [] 
- *          summary: Submit costumes and create rental order
- *          tags: [Rentals]
- *          requestBody:
- *              required: true
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Rentals'
- *          responses:
- *              200:
- *                  description: The rental was successfully created
- *                  content:
- *                      application/json:
- *                          schema:
- *                              $ref: '#/components/schemas/Rentals'
- *              500:
- *                  description: There was a server error
  */
 
 /**
