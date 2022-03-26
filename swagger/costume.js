@@ -64,6 +64,51 @@
 
 /**
  * @swagger
+ * definitions:
+ *      Costume:
+ *          type: object
+ *          required:
+ *              -category
+ *              -costumeName
+ *              -rentalFee
+ *              -size
+ *              -imageUrl
+ *              -description
+ *          properties:
+ *              category:
+ *                  type: string
+ *              costumeName:
+ *                  type: string
+ *              rentalFee:
+ *                  type: number
+ *              size:
+ *                  type: string
+ *              imageUrl:
+ *                  type: string
+ *              description:
+ *                  type: string 
+ *      Cart:
+ *          type: object
+ *          required:
+ *              -costumeId
+ *              -userId
+ *          properties:
+ *              costumeId:
+ *                  type: string
+ *              userId:
+ *                  type: string 
+ * 
+ *      cancelRental:
+ *          type: object
+ *          required:
+ *              -costumeId
+ *          properties:
+ *              costumeId:
+ *                  type: string
+ */
+
+/**
+ * @swagger
  * tags:
  *  name: Rentals
  *  description: The rental managing api
@@ -141,7 +186,7 @@
  *                          items:
  *                              $ref: '#/components/schemas/Rentals'
  * 
- * /rental/{rentalId}:
+ * /rentals/{rentalId}:
  *      get:
  *          security:
  *              - bearerAuth: [] 
@@ -180,22 +225,6 @@
  *                          items:
  *                              $ref: '#/components/schemas/Rentals'
  * 
- * /checkout/success:
- *      get:
- *          security:
- *              - bearerAuth: [] 
- *          summary: Completes checkout and clears user cart
- *          tags: [Rentals]
- *          responses:
- *              200:
- *                  description: Checkout process completed
- *                  content:
- *                      application/json:
- *                          schema:
- *                          type: array
- *                          items:
- *                              $ref: '#/components/schemas/Rentals' 
- * 
  * /checkout/cancel:
  *      get:
  *          security:
@@ -228,7 +257,7 @@
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Costume'
+ *                          $ref: '#/definitions/Cart'
  *          responses:
  *              200:
  *                  description: The costume was successfully added to the cart
@@ -256,7 +285,7 @@
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Costume'
+ *                          $ref: '#/definitions/cancelRental'
  *          responses:
  *              200:
  *                  description: The costume was successfully deleted

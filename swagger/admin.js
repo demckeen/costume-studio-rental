@@ -47,6 +47,36 @@
  *  - _id: []                 
  */
 
+ /**
+ * @swagger
+ * definitions:
+ *      editCostume:
+ *          type: object
+ *          required:
+ *              -costumeId
+ *              -category
+ *              -costumeName
+ *              -rentalFee
+ *              -size
+ *              -imageUrl
+ *              -description
+ *          properties:
+ *              costumeId:
+ *                  type: string
+ *              category:
+ *                  type: string
+ *              costumeName:
+ *                  type: string
+ *              rentalFee:
+ *                  type: number
+ *              size:
+ *                  type: string
+ *              imageUrl:
+ *                  type: string
+ *              description:
+ *                  type: string                
+ */
+
 /**
  * @swagger
  * tags:
@@ -54,7 +84,6 @@
  *  description: The Admin managing api
  * 
  */
-
 
 /**
  * GET routes
@@ -93,7 +122,7 @@
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Costume'
+ *                         $ref: '#/definitions/Costume'
  *          responses:
  *              200:
  *                  description: The costume was successfully added to the database
@@ -121,7 +150,7 @@
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Costume'
+ *                          $ref: '#/definitions/editCostume'
  *          responses:
  *              200:
  *                  description: The costume was successfully changed
