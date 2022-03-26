@@ -29,13 +29,13 @@ router.get('/rentals', isAuth, costumeController.getRentals);
 // router.get('/rentals/:rentalId', isAuth, costumeController.getInvoice);
 
 // /checkout => GET
-// router.get('/checkout', isAuth, costumeController.getCheckout);
+router.get('/checkout', isAuth, costumeController.getCheckout);
 
 // /checkout/success => GET
-// router.get('/checkout/success', isAuth, costumeController.getCheckoutSuccess);
+router.get('/checkout/success', costumeController.getCheckoutSuccess);
 
 // /checkout/cancel => GET
-// router.get('/checkout/cancel', isAuth, costumeController.getCheckout);
+router.get('/checkout/cancel', costumeController.getCheckout);
 
 // ---POST Routes---
 
