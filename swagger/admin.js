@@ -55,17 +55,17 @@
  *      editCostume:
  *          type: object
  *          required:
- *              -costumeId
  *              -category
+ *              -costumeId
  *              -costumeName
  *              -rentalFee
  *              -size
  *              -imageUrl
  *              -description
  *          properties:
- *              costumeId:
- *                  type: string
  *              category:
+ *                  type: string
+ *              costumeId:
  *                  type: string
  *              costumeName:
  *                  type: string
