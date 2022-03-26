@@ -330,11 +330,11 @@ exports.getRentals = async (req, res, next) => {
     throw error;
   }
   try {
-    const rentals = Rental.find({
-      'user.userId': req.user._id
+    const rentals = await Rental.find({
+      'user.userId': req.userId
     });
 
-    res.status(200)({
+    return res.status(200).json({
       pageTitle: 'Your Rentals',
       rentals: rentals
     })
