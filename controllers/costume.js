@@ -9,6 +9,8 @@ const Costume = require('../models/costume');
 const User = require('../models/user');
 const Rental = require('../models/rental');
 
+const stripe = require('stripe')(process.env.STRIPE_KEY);
+
 // Place Controller functions here:
 
 
@@ -104,42 +106,42 @@ exports.getCart = async (req, res, next) => {
 // TODO: Checkout needs fixed-please help:)
 //Get checkout for payments
 exports.getCheckout = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const error = new Error('Validation failed.');
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
-  }
-  let total = 0;
-
   try {
-    const user = await req.user.populate('cart.items.costumeId').execPopulate()
-    const costumes = user.cart.items;
-    const checkoutTotal = costumes.forEach(p => {
-      total += p.quantity * p.costumeId.price;
-    });
+    const checkoutUser = await User.findById(req.userId);    
+
+    await checkoutUser.cart.populate('items.costumeId');
+    if (!checkoutUser.cart) {
+      const error = new Error('No items in cart!');
+      error.statusCode = 404;
+      throw error;
+    }
+    const costumes = checkoutUser.cart.items;
+
+    const lineItems = costumes.map( p => { 
+      return { 
+        price_data: {
+        currency: 'usd',
+        product_data: {
+         name: p.costumeId.costumeName},
+        unit_amount: p.costumeId.rentalFee * 100},
+        quantity: p.quantity,}
+      })
+
+      console.log(lineItems);
 
     const paymentResult = await stripe.checkout.sessions.create({
+      customer: `cus_LOFVQN9eFCDXMJ`,
       payment_method_types: ['card'],
-      line_items: costumes.map(p => {
-        return {
-          costumeName: p.costumeId.costumeName,
-          description: p.costumeId.description,
-          amount: p.costumeId.price * 100,
-          currency: 'usd',
-          quantity: p.quantity
-        };
-      }),
-      success_url: req.protocol + '://' + req.get('host') + '/checkout/success', // => http://localhost:3000
-      cancel_url: req.protocol + '://' + req.get('host') + '/checkout/cancel'
-    })
+      line_items: lineItems,   
+      mode: 'payment', 
+      success_url: req.protocol + '://' + 'localhost:3000' + '/checkout/success', // => http://localhost:3000
+      cancel_url: req.protocol + '://' + 'localhost:3000' + '/checkout/cancel'})
 
-    res.status(200).json({
-      message: 'Payment processed',
-      result: paymentResult
-    })
-  } catch (err) {
+      console.log(paymentResult);
+    return res.status(200).json({
+      message: 'Payment session initiated', url: paymentResult.url})
+  } 
+  catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
     }
@@ -150,119 +152,116 @@ exports.getCheckout = async (req, res, next) => {
 // TODO: Checkout needs fixed-please help:) 
 // TODO: Convert to async/await
 // Gets successful checkout and clears user cart
-exports.getCheckoutSuccess = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const error = new Error('Validation failed.');
-    error.statusCode = 422;
-    error.data = errors.array();
-    throw error;
-  }
-  req.user
-    .populate('cart.items.productId')
-    // .execPopulate()
-    .then(user => {
-      const products = user.cart.items.map(i => {
-        return { quantity: i.quantity, product: { ...i.productId._doc } };
+exports.getCheckoutSuccess = async (req, res, next) => {
+  try {
+
+  const checkoutUser = await User.findById(req.userId);
+  console.log('FOUND USER:', checkoutUser.email);
+  const cartItems = await  checkoutUser.cart.populate('items.costumeId');
+  console.log('POPULATED CART:', cartItems.length);
+  const costumes = checkoutUser.cart.items.map(i => {
+        return { quantity: i.quantity, costume: { ...i.costumeId._doc } };
       });
-      const order = new Order({
+
+  console.log('MAPPED COSTUMES:', costumes);
+  
+  const rental = new Rental({
         user: {
-          email: req.user.email,
-          userId: req.user
+          email: checkoutUser.email,
+          userId: req.userId
         },
-        products: products
+        costumes: costumes
       });
-      return order.save();
-    })
-    .then(result => {
-      return req.user.clearCart();
-    })
-    .then(() => {
-      return res.redirect('/orders');
-    })
-    .catch(err => {
+
+  console.log('CREATED RENTAL ORDER:', rental);
+  
+  const completedRental = await rental.save();
+  await checkoutUser.clearCart();
+
+  return res.status(200).json({message: 'Rental placed successfully!', rental: completedRental._doc });
+  }
+    catch(err) {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
-    });
-};
-
-// Jennifer's checkout exports
-// getCheckout is for payments
-exports.getCheckout = (req, res, next) => {
-  let products;
-  let total = 0;
-  req.user
-  .populate('cart.items.productId')
-  // .execPopulate()
-  .then(user => {
-    products = user.cart.items;
-    total = 0;
-    products.forEach(p => {
-      total += p.quantity * p.productId.price;
-    });
-
-    return stripe.checkout.sessions.create({
-      payment_method_types: ['card'], 
-      line_items: products.map(p => {
-        return {
-          name: p.productId.title,
-          description: p.productId.description,
-          amount: p.productId.price * 100,
-          currency: 'usd', 
-          quantity: p.quantity
-        };
-      }),
-      success_url: req.protocol + '://' + req.get('host') + '/checkout/success',
-      cancel_url: req.protocol + '://' + req.get('host') + '/checkout/cancel'
-    });
-  })
-  .then(session => {
-    res.render('shop/checkout', {
-      path: '/checkout',
-      pageTitle: 'Checkout',
-      products: products,
-      totalSum: total,
-      sessionId: session.id
-    });
-  })
-  .catch(err => {
-    const error = new Error(err);
-    error.httpStatusCode = 500;
-    return next(error);
-  });
+    }
 }
 
+// // Jennifer's checkout exports
+// // getCheckout is for payments
+// exports.getCheckout = (req, res, next) => {
+//   let products;
+//   let total = 0;
+//   req.user
+//   .populate('cart.items.productId')
+//   .then(user => {
+//     products = user.cart.items;
+//     total = 0;
+//     products.forEach(p => {
+//       total += p.quantity * p.productId.price;
+//     });
 
-exports.getCheckoutSuccess = (req, res, next) => {
-  req.user
-    .populate('cart.items.productId')
-    // .execPopulate()
-    .then(user => {
-      const products = user.cart.items.map(i => {
-        return { quantity: i.quantity, product: { ...i.productId._doc } };
-      });
-      const order = new Order({
-        user: {
-          email: req.user.email,
-          userId: req.user
-        },
-        products: products
-      });
-      return order.save();
-    })
-    .then(result => {
-      return req.user.clearCart();
-    })
-    .then(() => {
-      return res.redirect('/orders');
-    })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    });
-};
+//     return stripe.checkout.sessions.create({
+//       payment_method_types: ['card'], 
+//       line_items: products.map(p => {
+//         return {
+//           name: p.productId.title,
+//           description: p.productId.description,
+//           amount: p.productId.price * 100,
+//           currency: 'usd', 
+//           quantity: p.quantity
+//         };
+//       }),
+//       success_url: req.protocol + '://' + req.get('host') + '/checkout/success',
+//       cancel_url: req.protocol + '://' + req.get('host') + '/checkout/cancel'
+//     });
+//   })
+//   .then(session => {
+//     res.render('shop/checkout', {
+//       path: '/checkout',
+//       pageTitle: 'Checkout',
+//       products: products,
+//       totalSum: total,
+//       sessionId: session.id
+//     });
+//   })
+//   .catch(err => {
+//     const error = new Error(err);
+//     error.httpStatusCode = 500;
+//     return next(error);
+//   });
+// }
+
+
+// exports.getCheckoutSuccess = (req, res, next) => {
+//   req.user
+//     .populate('cart.items.productId')
+//     // .execPopulate()
+//     .then(user => {
+//       const products = user.cart.items.map(i => {
+//         return { quantity: i.quantity, product: { ...i.productId._doc } };
+//       });
+//       const order = new Order({
+//         user: {
+//           email: req.user.email,
+//           userId: req.user
+//         },
+//         products: products
+//       });
+//       return order.save();
+//     })
+//     .then(result => {
+//       return req.user.clearCart();
+//     })
+//     .then(() => {
+//       return res.redirect('/orders');
+//     })
+//     .catch(err => {
+//       const error = new Error(err);
+//       error.httpStatusCode = 500;
+//       return next(error);
+//     });
+// };
 // End Jennifer's checkout exports
 
 
