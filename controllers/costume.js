@@ -106,6 +106,10 @@ exports.getCart = async (req, res, next) => {
 // TODO: Checkout needs fixed-please help:)
 //Get checkout for payments
 exports.getCheckout = async (req, res, next) => {
+
+  let host = 'localhost:8080';
+
+  console.log(host);
   try {
     const checkoutUser = await User.findById(req.userId);    
 
@@ -175,9 +179,8 @@ exports.getCheckout = async (req, res, next) => {
 //  *** req.get('host') necessary to accomodate other front end requests,
 //  *** url still needs to END with success?session_id={CHECKOUT_SESSION_ID} ! ***
 
-      success_url: req.protocol + '://' + req.get('host') + '/checkout/success?session_id={CHECKOUT_SESSION_ID}', // => http://localhost:3000 
-      cancel_url: req.protocol + '://' + req.get('host') + '/checkout/cancel'})
-
+      success_url: req.protocol + '://' + host + '/checkout/success?session_id={CHECKOUT_SESSION_ID}', // => http://localhost:3000 
+      cancel_url: req.protocol + '://' + host + '/checkout/cancel'})
       console.log(paymentResult);
     return res.status(200).json({
       message: 'Payment session initiated', url: paymentResult.url })
@@ -194,22 +197,13 @@ exports.getCheckout = async (req, res, next) => {
 // TODO: Convert to async/await
 // Gets successful checkout and clears user cart
 exports.getCheckoutSuccess = async (req, res, next) => {
-
-  const authHeader = req.get('Authorization');
-  if (!authHeader) {
-    const error = new Error('Not authenticated.');
-    error.statusCode = 401;
-    throw error;
-  }
-
-  console.log(authHeader);
-  const session_id = authHeader.split(' ')[1];
-
-  console.log(session_id);
+  
+  const sessionId = req.query.session_id;
+  console.log ('REQ.QUERY.SESSION_ID', sessionId);
 
   try {
 
-  const session = await stripe.checkout.sessions.retrieve(session_id);
+  const session = await stripe.checkout.sessions.retrieve(sessionId);
   const customer = await stripe.customers.retrieve(session.customer);
 
   console.log(customer);
