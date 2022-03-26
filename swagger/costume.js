@@ -3,6 +3,31 @@
  * 
  * Define a schema for costume inventory
  * @swagger
+ * 
+ * definitions:
+ *      Costume:
+ *          type: object
+ *          required:
+ *              -category
+ *              -costumeName
+ *              -rentalFee
+ *              -size
+ *              -imageUrl
+ *              -description
+ *          properties:
+ *              category:
+ *                  type: string
+ *              costumeName:
+ *                  type: string
+ *              rentalFee:
+ *                  type: number
+ *              size:
+ *                  type: string
+ *              imageUrl:
+ *                  type: string
+ *              description:
+ *                  type: string 
+ * 
  * components:
  *  schemas:
  *      Costume:
@@ -74,7 +99,7 @@
  * GET routes
  * @swagger
  * 
- * /costumes:
+ * /costume/costumes:
  *      get:
  *          summary: Gets a list of all the costumes
  *          tags: [Rentals]
@@ -88,7 +113,7 @@
  *                          items:
  *                              $ref: '#/components/schemas/Costume'
  * 
- * /costumes/{costumeId}:
+ * /costume/costumes/{costumeId}:
  *      get:
  *          summary: Gets the details of the costume with the id
  *          tags: [Rentals]
@@ -109,7 +134,7 @@
  *              404:
  *                  description: The costume was not found
  * 
- * /cart:
+ * /costume/cart:
  *      get:
  *          security:
  *              - bearerAuth: [] 
@@ -125,7 +150,7 @@
  *                          items:
  *                              $ref: '#/components/schemas/Costume'
  *
- * /rentals:
+ * /costume/rentals:
  *      get:
  *          security:
  *              - bearerAuth: [] 
@@ -141,7 +166,7 @@
  *                          items:
  *                              $ref: '#/components/schemas/Rentals'
  * 
- * /rental/{rentalId}:
+ * /costume/rental/{rentalId}:
  *      get:
  *          security:
  *              - bearerAuth: [] 
@@ -164,7 +189,7 @@
  *              404:
  *                  description: The rental was not found
  * 
- * /checkout:
+ * /costume/checkout:
  *      get:
  *          security:
  *              - bearerAuth: [] 
@@ -180,7 +205,7 @@
  *                          items:
  *                              $ref: '#/components/schemas/Rentals'
  * 
- * /checkout/success:
+ * /costume/checkout/success:
  *      get:
  *          security:
  *              - bearerAuth: [] 
@@ -196,7 +221,7 @@
  *                          items:
  *                              $ref: '#/components/schemas/Rentals' 
  * 
- * /checkout/cancel:
+ * /costume/checkout/cancel:
  *      get:
  *          security:
  *              - bearerAuth: [] 
@@ -217,7 +242,7 @@
  * POST routes
  * @swagger
  * 
- * /cart:
+ * /costume/cart:
  *      post:
  *          security:
  *              - bearerAuth: [] 
@@ -239,13 +264,34 @@
  *              500:
  *                  description: There was a server error
  * 
+ * /costume/create-rental:
+ *      post:
+ *          security:
+ *              - bearerAuth: [] 
+ *          summary: Submit costumes and create rental order
+ *          tags: [Rentals]
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Rentals'
+ *          responses:
+ *              200:
+ *                  description: The rental was successfully created
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/Rentals'
+ *              500:
+ *                  description: There was a server error
  */
 
 /**
  * DELETE routes
  * @swagger
  * 
- * /cancel-rental:
+ * /cart-delete-item:
  *      delete:
  *          security:
  *              - bearerAuth: [] 

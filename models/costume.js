@@ -6,11 +6,11 @@ const Schema = mongoose.Schema;
 const costumeSchema = new Schema (
     //Schema Definition for Costume Model Inventory Management
     {
-      costumeName: {
+      category: {
         type: String,
         required: true
       },
-      category: {
+      costumeName: {
         type: String,
         required: true
       },
