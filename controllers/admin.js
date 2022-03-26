@@ -108,11 +108,11 @@ exports.editCostume = async (req, res, next) => {
       throw error;
     }
     // TODO: Add this back if/when correct
-    // if (!req.userId) {
-    //   const error = new Error('Not authorized!');
-    //   error.statusCode = 403;
-    //   throw error;
-    // }
+    if (!req.userId) {
+      const error = new Error('Not authorized!');
+      error.statusCode = 403;
+      throw error;
+    }
     costume.category = category,
     costume.costumeName = costumeName,
     costume.rentalFee = rentalFee,
