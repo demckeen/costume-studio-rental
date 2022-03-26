@@ -141,7 +141,7 @@
  *                          items:
  *                              $ref: '#/components/schemas/Rentals'
  * 
- * /rental/{rentalId}:
+ * /rentals/{rentalId}:
  *      get:
  *          security:
  *              - bearerAuth: [] 
