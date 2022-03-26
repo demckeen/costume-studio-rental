@@ -220,11 +220,12 @@ exports.getCheckoutSuccess = async (req, res, next) => {
       });
 
   console.log('MAPPED COSTUMES:', costumes);
+  console.log(checkoutUser._id, checkoutUser);
   
   const rental = new Rental({
         user: {
           email: checkoutUser.email,
-          userId: checkoutUser.userId
+          userId: checkoutUser._id
         },
         costumes: costumes
       });
@@ -233,7 +234,7 @@ exports.getCheckoutSuccess = async (req, res, next) => {
   
   const completedRental = await rental.save();
   await checkoutUser.clearCart();
-
+  console.log('RENTAL COMPLETED:', completedRental._doc);
   return res.status(200).json({message: 'Rental placed successfully!', rental: completedRental._doc });
   }
     catch(err) {
