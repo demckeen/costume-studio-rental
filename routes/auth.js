@@ -64,7 +64,7 @@ router.post('/login',
   authController.login);
 
 // /auth/reset => POST
-router.post('/reset', isAuth, authController.postReset);
+router.post('/reset', authController.postReset);
 
 // /auth/new-password => POST
 router.post('/new-password', authController.postNewPassword);
