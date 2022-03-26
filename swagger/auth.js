@@ -58,6 +58,55 @@
 
 /**
  * @swagger
+ * definitions:
+ * 
+ *  Signup:
+ *      type: object
+ *      required:
+ *          -name
+ *          -email
+ *          -password
+ *      properties:
+ *          name:
+ *              type: string
+ *          email:
+ *              type: string
+ *          password:
+ *              type: string
+ * 
+ *  Login:
+ *      type: object
+ *      required:
+ *          -email
+ *          -password
+ *      properties:
+ *          email:
+ *              type: string
+ *          password:
+ *              type: string 
+ * 
+ *  Reset:
+ *      type: object
+ *      required:
+ *          -email
+ *      properties:
+ *          email:
+ *              type: string
+ * 
+ *  newPassword:
+ *      type: object
+ *      required:
+ *          -userId
+ *          -password
+ *      properties:
+ *          userId:
+ *              type: string
+ *          password:
+ *              type: string 
+ */
+
+/**
+ * @swagger
  * tags:
  *  name: Auth
  *  description: The authorization managing api
@@ -77,7 +126,7 @@
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/User'
+ *                          $ref: '#/definitions/Signup'
  *          responses:
  *              201:
  *                  description: The user was successfully signed up
@@ -102,7 +151,7 @@
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/User'
+ *                          $ref: '#/definitions/Login'
  *          responses:
  *              200:
  *                  description: Login was successful
@@ -122,7 +171,7 @@
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/User'
+ *                          $ref: '#/definitions/Reset'
  *          responses:
  *              200:
  *                  description: The password was reset
@@ -144,7 +193,7 @@
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/User'
+ *                          $ref: '#/definitions/newPassword'
  *          responses:
  *              200:
  *                  description: New password has been set
