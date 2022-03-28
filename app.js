@@ -64,7 +64,7 @@ app.use((error, req, res, next ) => {
 })
 
 const corsOptions = {
-  origin: `https://${process.env.HEROKU_APP}`,
+  origin: `https${process.env.HEROKU_APP}`,
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
