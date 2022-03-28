@@ -18,6 +18,14 @@ const rentalSchema = new Schema({
       }
     }
   ],
+  orderDate: {
+    type: Date,
+    default: new Date(Date.now())
+  },
+  returnDate: {
+    type: Date,
+    default: new Date(Date.now() + 12096e5)
+  },
   user: {
     email: {
       type: String, 
@@ -29,6 +37,8 @@ const rentalSchema = new Schema({
       required: true
     }
   }
-});
+},
+{ timestamps: true}
+);
 
 module.exports = mongoose.model('Rental', rentalSchema);
