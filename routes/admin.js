@@ -11,12 +11,6 @@ const isAuth = require('../middleware/is-auth');
 const router = express.Router();
 
 
-// ---GET Routes---
-
-// /admin/costumes => GET
-router.get('/costumes', isAuth, adminController.getCostumes);
-
-
 // ---POST Routes---
 
 // /admin/add-costume => POST

@@ -3,7 +3,6 @@
 const {
   validationResult
 } = require('express-validator');
-const io = require('../socket');
 const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 const Costume = require('../models/costume');

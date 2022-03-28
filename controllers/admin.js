@@ -1,7 +1,6 @@
 // ADMIN CONTROLLER
 
 const { validationResult } = require('express-validator');
-const io = require('../socket');
 const User = require('../models/user');
 const Costume = require('../models/costume');
 
