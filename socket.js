@@ -8,11 +8,5 @@ module.exports = {
             methods: ['GET', 'POST', 'DELTE', 'PUT']
            }});
         return io;
-    },
-    getIO: () => {
-        if(!io) {
-            throw new Error('Socket.io not initialized')
-        }
-        return io;
-    } 
+    }
 }

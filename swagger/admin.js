@@ -88,28 +88,6 @@
  */
 
 /**
- * GET routes
- * @swagger
- * 
- * /admin/costumes:
- *      get:
- *          security:
- *              - bearerAuth: [] 
- *          summary: Gets a list of all the costumes
- *          tags: [Admin]
- *          responses:
- *              200:
- *                  description: List of costumes
- *                  content:
- *                      application/json:
- *                          schema:
- *                          type: array
- *                          items:
- *                              $ref: '#/components/schemas/Costume'
- * 
- */
-
-/**
  * POST routes
  * @swagger
  * 

@@ -8,26 +8,6 @@ const Costume = require('../models/costume');
 
 // Place Controller functions here:
 
-// GET EXPORTS:
-
-// TODO: Delete this route before turning in project
-// Displays costumes to user with admin capabilities
-exports.getCostumes = async (req, res, next) => {
-  try {
-    const costumes = await Costume.find()
-    res.status(200).json({ 
-      message: 'Fetched costumes successfully.', 
-      costumes: costumes,
-    }); 
-  } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-};
-
-
 // POST EXPORTS:
 
 // Adds new costumes
@@ -59,11 +39,6 @@ exports.postAddCostume = async (req, res, next) => {
     await costume.save();
     const user = await User.findById(req.userId);
     await user.save();
-    // TODO: Stretch: add websockets
-    // io.getIO().emit('costumes', {
-    //   action: 'create',
-    //   costume: costumeId
-    // });
     res.status(201).json({
       message: 'Costume added!',
     });
@@ -120,8 +95,6 @@ exports.editCostume = async (req, res, next) => {
     costume.description = description
 
     const result = await costume.save()
-    // TODO: Stretch: add websockets
-    // io.getIO().emit('costumes', { action: 'update', costume: result });
     res.status(201).json({
       message: 'Costume edited',
       costumeId: result._id
@@ -165,7 +138,6 @@ exports.deleteCostume = async (req, res, next) => {
     const user = await User.findById(req.userId);
 
     await user.save();
-    io.getIO().emit('costumes', { action: 'delete', costume: costumeId });
     res.status(200).json({ message: 'Deleted costume.' });
   } catch (err) {
     if (!err.statusCode) {
