@@ -27,7 +27,7 @@ const swagger_options = {
     },
     servers: [
         {
-          url: process.env.HEROKU_APP
+          url: `https://${process.env.HEROKU_APP}`
         },
         {
           url: 'http://localhost:8080'
@@ -64,7 +64,7 @@ app.use((error, req, res, next ) => {
 })
 
 const corsOptions = {
-  origin: process.env.HEROKU_APP,
+  origin: `https://${process.env.HEROKU_APP}`,
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
