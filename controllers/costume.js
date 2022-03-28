@@ -175,7 +175,7 @@ exports.getCheckout = async (req, res, next) => {
 
 //  *** url still needs to END with success?session_id={CHECKOUT_SESSION_ID} ! ***
       success_url: req.protocol + host + '/checkout/success?session_id={CHECKOUT_SESSION_ID}', // => http://localhost:3000 
-      cancel_url: req.protocol + '://' + host + '/checkout/cancel'})
+      cancel_url: req.protocol + host + '/checkout/cancel'})
       console.log(paymentResult);
     return res.status(200).json({
       message: 'Payment session initiated', url: paymentResult.url })
