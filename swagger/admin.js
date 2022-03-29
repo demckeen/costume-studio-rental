@@ -70,19 +70,19 @@
  *      editCostume:
  *          type: object
  *          required:
- *              -category
  *              -costumeId
  *              -costumeName
+ *              -category
  *              -rentalFee
  *              -size
  *              -imageUrl
  *              -description
  *          properties:
- *              category:
- *                  type: string
  *              costumeId:
  *                  type: string
  *              costumeName:
+ *                  type: string
+ *              category:
  *                  type: string
  *              rentalFee:
  *                  type: number
