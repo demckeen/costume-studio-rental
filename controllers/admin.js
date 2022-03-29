@@ -3,7 +3,6 @@
 const { validationResult } = require('express-validator');
 const User = require('../models/user');
 const Costume = require('../models/costume');
-const { rect } = require('pdfkit');
 
 
 // Place Controller functions here:
@@ -166,12 +165,19 @@ catch(err) {
 
 // Allows a costume to be deleted by user that added costume
 exports.deleteCostume = async (req, res, next) => {
+  try {
   const errors = await validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.');
     error.statusCode = 422;
     error.data = errors.array();
     throw error;
+  }}
+  catch(err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
   const costumeId = req.params.costumeId;
   try {
