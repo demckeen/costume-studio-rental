@@ -3,6 +3,7 @@
 const { validationResult } = require('express-validator');
 const User = require('../models/user');
 const Costume = require('../models/costume');
+const { rect } = require('pdfkit');
 
 
 // Place Controller functions here:
@@ -126,7 +127,15 @@ exports.deleteCostume = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
-    if (costume.userId.toString() !== req.userId) {
+
+    const adminUser = await User.findById(req.userId);
+    let isAdmin;
+
+    if(adminUser.admin === true) {
+      isAdmin = true;
+    }
+
+    if (!isAdmin) {
       const error = new Error('Not authorized!');
       error.statusCode = 403;
       throw error;
