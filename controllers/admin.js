@@ -83,7 +83,7 @@ exports.postAddCostume = async (req, res, next) => {
 
 // Allows user that added costume to edit costume
 exports.editCostume = async (req, res, next) => {
-  const costumeId = req.body.costumeId;
+  const costumeId = req.params.costumeId;
 
   try {
   const errors =  await validationResult(req);
