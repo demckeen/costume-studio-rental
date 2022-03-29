@@ -142,12 +142,13 @@
  *              - bearerAuth: [] 
  *          summary: Edit details of existing costume that the user has created
  *          tags: [Admin]
- *          requestBody:
+ *          parameters:
+ *            - in: path
+ *              name: costumeId
+ *              schema:
+ *                  type: string
  *              required: true
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/definitions/editCostume'
+ *              description: This is the costume id
  *          responses:
  *              200:
  *                  description: The costume was successfully changed
