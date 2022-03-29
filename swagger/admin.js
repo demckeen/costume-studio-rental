@@ -149,6 +149,12 @@
  *                  type: string
  *              required: true
  *              description: This is the costume id
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                         $ref: '#/definitions/Costume'
  *          responses:
  *              200:
  *                  description: The costume was successfully changed
