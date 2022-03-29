@@ -5,11 +5,9 @@ const User = require('../models/user');
 const Costume = require('../models/costume');
 
 
-// Place Controller functions here:
-
 // POST EXPORTS:
 
-// Adds new costumes
+// Allows admin level users to add new costumes to the database
 exports.postAddCostume = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -54,9 +52,9 @@ exports.postAddCostume = async (req, res, next) => {
   });
   try {
     await costume.save();
-    // const user = await User.findById(req.userId);
-    // await user.save();
-    await admin.save();
+    // JEN - I don't think we need to save the admin - this was useful when there was 
+    //a product object on the user in the shop code, but not for us
+    // await admin.save();
     res.status(201).json({
       message: 'Costume added!',
     });
@@ -71,7 +69,7 @@ exports.postAddCostume = async (req, res, next) => {
 
 // PUT EXPORTS:
 
-// Allows user that added costume to edit costume
+// Allows admin level users to edit a costume's details
 exports.editCostume = async (req, res, next) => {
   const costumeId = req.body.costumeId;
   const errors = validationResult(req);
@@ -118,11 +116,6 @@ exports.editCostume = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
-    // if (!req.userId) {
-    //   const error = new Error('Not authorized!');
-    //   error.statusCode = 403;
-    //   throw error;
-    // }
     costume.costumeName = costumeName,
     costume.category = category,
     costume.rentalFee = rentalFee,
@@ -146,7 +139,7 @@ exports.editCostume = async (req, res, next) => {
 
 // DELETE EXPORTS:
 
-// Allows a costume to be deleted by user that added costume
+// Allows a costume to be deleted by admin level users only
 exports.deleteCostume = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -163,30 +156,35 @@ exports.deleteCostume = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
-    // if (costume.userId.toString() !== req.userId) {
-    //   const error = new Error('Not authorized!');
-    //   error.statusCode = 403;
-    //   throw error;
-    // }
-    const adminUser = await User.findById(req.userId);
-    let isAdmin;
 
-    if(adminUser.admin === true) {
-      isAdmin = true;
+    let admin;
+    try {
+      admin = await User.findById(req.userId);
+      if(!admin) {
+        return res.status(404).json({message: 'Unable to locate admin user'})
+      }
+      if(admin.admin !== true) {
+        return res.status(401).json({message: 'User is not authenticated as admin'})
+      }
+    } 
+    catch(err) {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
     }
-
-    if (!isAdmin) {
-      const error = new Error('Not authorized!');
-      error.statusCode = 403;
-      throw error;
+    try {
+      await Costume.findByIdAndRemove(costumeId);
     }
-    await Costume.findByIdAndRemove(costumeId);
-    // Check logged in user
-    const user = await User.findById(req.userId);
-
-    await user.save();
-    res.status(200).json({ message: 'User is not authenticated as admin.' });
-  } catch (err) {
+    catch(err) {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      return res.status(500).json({message: 'Something went wrong at the costume warehouse, costume was not deleted successfully.'}, err);
+    }
+    return res.status(200).json({message: 'Costume has been deleted successfully!', costumeId})
+  } 
+  catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
     }
