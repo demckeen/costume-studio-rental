@@ -185,7 +185,7 @@ exports.deleteCostume = async (req, res, next) => {
     const user = await User.findById(req.userId);
 
     await user.save();
-    res.status(200).json({ message: 'Deleted costume.' });
+    res.status(200).json({ message: 'User is not authenticated as admin.' });
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
