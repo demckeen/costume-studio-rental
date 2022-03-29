@@ -11,42 +11,13 @@ const Costume = require('../models/costume');
 
 // Adds new costumes
 exports.postAddCostume = async (req, res, next) => {
-  try {
-    const errors = await validationResult(req); 
-    if (!errors.isEmpty()) {
-      const error = new Error('Validation failed.');
-      error.statusCode = 422;
-      error.data = errors.array();
-      throw error;
-    }
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
   }
-  catch(err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-
-  let admin;
-
-  try {
-    admin = await User.findById(req.userId);
-
-  if(!admin) {
-    return res.status(404).json({message: 'Unable to locate admin user'})
-  }
-
-  if(admin.admin !== true) {
-    return res.status(401).json({message: 'User is not authenticated as admin'})
-  }}
-  
-  catch(err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-
   const costumeName = req.body.costumeName;
   const category = req.body.category;
   const rentalFee = req.body.rentalFee;
@@ -65,7 +36,8 @@ exports.postAddCostume = async (req, res, next) => {
   });
   try {
     await costume.save();
-    await admin.save();
+    const user = await User.findById(req.userId);
+    await user.save();
     res.status(201).json({
       message: 'Costume added!',
     });
@@ -83,43 +55,13 @@ exports.postAddCostume = async (req, res, next) => {
 // Allows user that added costume to edit costume
 exports.editCostume = async (req, res, next) => {
   const costumeId = req.body.costumeId;
-
-  try {
-  const errors =  await validationResult(req);
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Edit costume failed.');
     error.statusCode = 422;
     error.data = errors.array();
     throw error;
   }
-}
-  catch(err) {
-  if (!err.statusCode) {
-    err.statusCode = 500;
-  }
-  next(err);
-}
-
-let admin;
-
-try {
-  admin = await User.findById(req.userId);
-
-if(!admin) {
-  return res.status(404).json({message: 'Unable to locate admin user'})
-}
-
-if(admin.admin !== true) {
-  return res.status(401).json({message: 'User is not authenticated as admin'})
-}}
-
-catch(err) {
-  if (!err.statusCode) {
-    err.statusCode = 500;
-  }
-  next(err);
-}
-
   const costumeName = req.body.costumeName;
   const category = req.body.category;
   const rentalFee = req.body.rentalFee;
@@ -139,7 +81,11 @@ catch(err) {
       error.statusCode = 404;
       throw error;
     }
-
+    if (!req.userId) {
+      const error = new Error('Not authorized!');
+      error.statusCode = 403;
+      throw error;
+    }
     costume.costumeName = costumeName,
     costume.category = category,
     costume.rentalFee = rentalFee,
@@ -165,19 +111,12 @@ catch(err) {
 
 // Allows a costume to be deleted by user that added costume
 exports.deleteCostume = async (req, res, next) => {
-  try {
-  const errors = await validationResult(req);
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.');
     error.statusCode = 422;
     error.data = errors.array();
     throw error;
-  }}
-  catch(err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
   }
   const costumeId = req.params.costumeId;
   try {
@@ -187,20 +126,11 @@ exports.deleteCostume = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
-
-    const adminUser = await User.findById(req.userId);
-    let isAdmin;
-
-    if(adminUser.admin === true) {
-      isAdmin = true;
-    }
-
-    if (!isAdmin) {
+    if (costume.userId.toString() !== req.userId) {
       const error = new Error('Not authorized!');
       error.statusCode = 403;
       throw error;
     }
-
     await Costume.findByIdAndRemove(costumeId);
     // Check logged in user
     const user = await User.findById(req.userId);
