@@ -18,7 +18,7 @@ const rentalSchema = new Schema({
       }
     }
   ],
-  orderDate: {
+  rentalDate: {
     type: Date,
     default: new Date(Date.now())
   },

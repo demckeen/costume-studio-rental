@@ -18,8 +18,8 @@ exports.postAddCostume = async (req, res, next) => {
     error.data = errors.array();
     throw error;
   }
-  const category = req.body.category;
   const costumeName = req.body.costumeName;
+  const category = req.body.category;
   const rentalFee = req.body.rentalFee;
   const size = req.body.size;
   const imageUrl = req.body.imageUrl;
@@ -62,8 +62,8 @@ exports.editCostume = async (req, res, next) => {
     error.data = errors.array();
     throw error;
   }
-  const category = req.body.category;
   const costumeName = req.body.costumeName;
+  const category = req.body.category;
   const rentalFee = req.body.rentalFee;
   const size = req.body.size;
   let imageUrl = req.body.imageUrl;
@@ -86,8 +86,8 @@ exports.editCostume = async (req, res, next) => {
       error.statusCode = 403;
       throw error;
     }
-    costume.category = category,
     costume.costumeName = costumeName,
+    costume.category = category,
     costume.rentalFee = rentalFee,
     costume.size = size,
     costume.imageUrl = imageUrl,

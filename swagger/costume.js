@@ -9,22 +9,22 @@
  *          type: object
  *          required:
  *              -costumeId
- *              -category
  *              -costumeName
+ *              -category
  *              -rentalFee
  *              -size
  *              -image
  *              -description
  *          properties:
- *              category:
- *                  type: String
- *                  description: The costume category
  *              costumeId:
  *                  type: String
  *                  description: The auto-generated id of the costume
  *              costumeName:
  *                  type: String
  *                  description: The costume name
+ *              category:
+ *                  type: String
+ *                  description: The costume category
  *              rentalFee:
  *                  type: Number
  *                  description: The fee for costume rental
