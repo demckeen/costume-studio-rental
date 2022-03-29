@@ -10,22 +10,13 @@ const Costume = require('../models/costume');
 
 // Adds new costumes
 exports.postAddCostume = async (req, res, next) => {
-  try {
-    const errors = await validationResult(req); 
-    if (!errors.isEmpty()) {
-      const error = new Error('Validation failed.');
-      error.statusCode = 422;
-      error.data = errors.array();
-      throw error;
-    }
+  const errors = validationResult(req); 
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed.');
+    error.statusCode = 422;
+    error.data = errors.array();
+    throw error;
   }
-  catch(err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-
   let admin;
 
   try {
@@ -81,43 +72,33 @@ exports.postAddCostume = async (req, res, next) => {
 
 // Allows user that added costume to edit costume
 exports.editCostume = async (req, res, next) => {
-  const costumeId = req.params.costumeId;
-
-  try {
-  const errors =  await validationResult(req);
+  const costumeId = req.body.costumeId;
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Edit costume failed.');
     error.statusCode = 422;
     error.data = errors.array();
     throw error;
   }
-}
+  let admin;
+
+  try {
+    admin = await User.findById(req.userId);
+
+  if(!admin) {
+    return res.status(404).json({message: 'Unable to locate admin user'})
+  }
+
+  if(admin.admin !== true) {
+    return res.status(401).json({message: 'User is not authenticated as admin'})
+  }}
+
   catch(err) {
-  if (!err.statusCode) {
-    err.statusCode = 500;
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
-  next(err);
-}
-
-let admin;
-
-try {
-  admin = await User.findById(req.userId);
-
-if(!admin) {
-  return res.status(404).json({message: 'Unable to locate admin user'})
-}
-
-if(admin.admin !== true) {
-  return res.status(401).json({message: 'User is not authenticated as admin'})
-}}
-
-catch(err) {
-  if (!err.statusCode) {
-    err.statusCode = 500;
-  }
-  next(err);
-}
 
   const costumeName = req.body.costumeName;
   const category = req.body.category;
@@ -164,7 +145,7 @@ catch(err) {
 
 // Allows a costume to be deleted by user that added costume
 exports.deleteCostume = async (req, res, next) => {
-  const errors = await validationResult(req);
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.');
     error.statusCode = 422;

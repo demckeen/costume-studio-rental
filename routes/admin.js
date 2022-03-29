@@ -51,7 +51,7 @@ router.post(
 
 // /admin/edit-costume => PUT
 router.put(
-	'/edit-costume/:costumeId',
+	'/edit-costume',
 	[
 		body('category')
 		.isString()

@@ -72,17 +72,17 @@
  *      editCostume:
  *          type: object
  *          required:
- *              -category
  *              -costumeId
+ *              -category
  *              -costumeName
  *              -rentalFee
  *              -size
  *              -imageUrl
  *              -description
  *          properties:
- *              category:
- *                  type: string
  *              costumeId:
+ *                  type: string
+ *              category:
  *                  type: string
  *              costumeName:
  *                  type: string
@@ -142,19 +142,12 @@
  *              - bearerAuth: [] 
  *          summary: Edit details of existing costume that the user has created
  *          tags: [Admin]
- *          parameters:
- *            - in: path
- *              name: costumeId
- *              schema:
- *                  type: string
- *              required: true
- *              description: This is the costume id
  *          requestBody:
  *              required: true
  *              content:
  *                  application/json:
  *                      schema:
- *                         $ref: '#/definitions/Costume'
+ *                         $ref: '#/definitions/editCostume'
  *          responses:
  *              200:
  *                  description: The costume was successfully changed
