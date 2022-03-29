@@ -3,8 +3,6 @@
 const { validationResult } = require('express-validator');
 const User = require('../models/user');
 const Costume = require('../models/costume');
-const { rect } = require('pdfkit');
-
 
 // Place Controller functions here:
 
