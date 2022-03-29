@@ -1,5 +1,3 @@
-
-// TODO: Update Rentals schema
 /**
  * Schemas and routes for admin
  * 
@@ -72,17 +70,17 @@
  *      editCostume:
  *          type: object
  *          required:
- *              -costumeId
  *              -category
+ *              -costumeId
  *              -costumeName
  *              -rentalFee
  *              -size
  *              -imageUrl
  *              -description
  *          properties:
- *              costumeId:
- *                  type: string
  *              category:
+ *                  type: string
+ *              costumeId:
  *                  type: string
  *              costumeName:
  *                  type: string
@@ -147,7 +145,7 @@
  *              content:
  *                  application/json:
  *                      schema:
- *                         $ref: '#/definitions/editCostume'
+ *                          $ref: '#/definitions/editCostume'
  *          responses:
  *              200:
  *                  description: The costume was successfully changed

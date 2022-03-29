@@ -4,39 +4,20 @@ const { validationResult } = require('express-validator');
 const User = require('../models/user');
 const Costume = require('../models/costume');
 
+
 // Place Controller functions here:
 
 // POST EXPORTS:
 
 // Adds new costumes
 exports.postAddCostume = async (req, res, next) => {
-  const errors = validationResult(req); 
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed.');
     error.statusCode = 422;
     error.data = errors.array();
     throw error;
   }
-  let admin;
-
-  try {
-    admin = await User.findById(req.userId);
-
-  if(!admin) {
-    return res.status(404).json({message: 'Unable to locate admin user'})
-  }
-
-  if(admin.admin !== true) {
-    return res.status(401).json({message: 'User is not authenticated as admin'})
-  }}
-  
-  catch(err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-
   const costumeName = req.body.costumeName;
   const category = req.body.category;
   const rentalFee = req.body.rentalFee;
@@ -55,7 +36,8 @@ exports.postAddCostume = async (req, res, next) => {
   });
   try {
     await costume.save();
-    await admin.save();
+    const user = await User.findById(req.userId);
+    await user.save();
     res.status(201).json({
       message: 'Costume added!',
     });
@@ -80,26 +62,6 @@ exports.editCostume = async (req, res, next) => {
     error.data = errors.array();
     throw error;
   }
-  let admin;
-
-  try {
-    admin = await User.findById(req.userId);
-
-  if(!admin) {
-    return res.status(404).json({message: 'Unable to locate admin user'})
-  }
-
-  if(admin.admin !== true) {
-    return res.status(401).json({message: 'User is not authenticated as admin'})
-  }}
-
-  catch(err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-
   const costumeName = req.body.costumeName;
   const category = req.body.category;
   const rentalFee = req.body.rentalFee;
@@ -119,7 +81,11 @@ exports.editCostume = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
-
+    if (!req.userId) {
+      const error = new Error('Not authorized!');
+      error.statusCode = 403;
+      throw error;
+    }
     costume.costumeName = costumeName,
     costume.category = category,
     costume.rentalFee = rentalFee,
@@ -160,15 +126,7 @@ exports.deleteCostume = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
-
-    const adminUser = await User.findById(req.userId);
-    let isAdmin;
-
-    if(adminUser.admin === true) {
-      isAdmin = true;
-    }
-
-    if (!isAdmin) {
+    if (costume.userId.toString() !== req.userId) {
       const error = new Error('Not authorized!');
       error.statusCode = 403;
       throw error;
