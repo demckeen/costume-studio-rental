@@ -51,12 +51,10 @@ exports.postAddCostume = async (req, res, next) => {
     userId: req.userId
   });
   try {
-    await costume.save();
-    // JEN - I don't think we need to save the admin - this was useful when there was 
-    //a product object on the user in the shop code, but not for us
-    // await admin.save();
+    const result = await costume.save();
     res.status(201).json({
       message: 'Costume added!',
+      costume: result
     });
   } catch (err) {
     if (!err.statusCode) {
@@ -72,12 +70,19 @@ exports.postAddCostume = async (req, res, next) => {
 // Allows admin level users to edit a costume's details
 exports.editCostume = async (req, res, next) => {
   const costumeId = req.body.costumeId;
-  const errors = validationResult(req);
+  try {
+  const errors = await validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Edit costume failed.');
     error.statusCode = 422;
     error.data = errors.array();
     throw error;
+  }}
+  catch(err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
 
   let admin;
@@ -126,7 +131,7 @@ exports.editCostume = async (req, res, next) => {
     const result = await costume.save()
     res.status(201).json({
       message: 'Costume edited',
-      costumeId: result._id
+      costume: result
     });
   } catch (err) {
     if (!err.statusCode) {
