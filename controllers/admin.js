@@ -75,12 +75,19 @@ exports.postAddCostume = async (req, res, next) => {
 // Allows user that added costume to edit costume
 exports.editCostume = async (req, res, next) => {
   const costumeId = req.body.costumeId;
-  const errors = validationResult(req);
+  try {
+  const errors = await validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error('Edit costume failed.');
     error.statusCode = 422;
     error.data = errors.array();
     throw error;
+  }}
+  catch(err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
   }
 
   let admin;
