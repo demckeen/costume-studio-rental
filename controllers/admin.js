@@ -53,12 +53,13 @@ exports.postAddCostume = async (req, res, next) => {
     userId: req.userId
   });
   try {
-    await costume.save();
+    const result = await costume.save();
     // const user = await User.findById(req.userId);
     // await user.save();
     await admin.save();
     res.status(201).json({
       message: 'Costume added!',
+      costume: result
     });
   } catch (err) {
     if (!err.statusCode) {
@@ -133,7 +134,7 @@ exports.editCostume = async (req, res, next) => {
     const result = await costume.save()
     res.status(201).json({
       message: 'Costume edited',
-      costumeId: result._id
+      costume: result
     });
   } catch (err) {
     if (!err.statusCode) {
